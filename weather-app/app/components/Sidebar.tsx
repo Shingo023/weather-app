@@ -8,21 +8,23 @@ const Sidebar = () => {
     <div className={styles.sidebar}>
       <Link className={styles.link} href={"/"}>
         <Image
+          className={styles.img}
           src={"/weather-icon.svg"}
           alt="weather-icon"
           width={50}
           height={50}
         />
-        Weather
+        <span className={styles.name}>Weather</span>
       </Link>
       <Link className={styles.link} href={"/favorite-list"}>
         <Image
+          className={styles.img}
           src={"/favorite-list-icon.svg"}
           alt="favorite-list-icon"
           width={50}
           height={50}
         />
-        Favorite List
+        <span className={styles.name}>Favorite List</span>
       </Link>
     </div>
   );
