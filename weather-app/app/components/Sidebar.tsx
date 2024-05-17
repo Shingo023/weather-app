@@ -1,30 +1,62 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Sidebar.module.scss";
 
 const Sidebar = () => {
+  const [isWeatherActive, setIsWeatherActive] = useState<boolean>(true);
+  const [isFavoriteListActive, setIsFavoriteListActive] =
+    useState<boolean>(false);
+
+  const weatherIconHandler = () => {
+    if (!isWeatherActive) {
+      setIsWeatherActive(true);
+      setIsFavoriteListActive(false);
+    }
+  };
+
+  const favoriteListIconHandler = () => {
+    if (!isFavoriteListActive) {
+      setIsWeatherActive(false);
+      setIsFavoriteListActive(true);
+    }
+  };
+
   return (
     <div className={styles.sidebar}>
-      <Link className={styles.link} href={"/"}>
+      <Link className={styles.link} href={"/"} onClick={weatherIconHandler}>
         <Image
           className={styles.img}
-          src={"/weather-icon.svg"}
+          src={isWeatherActive ? "/weather-icon.svg" : "/weather-icon-pale.svg"}
           alt="weather-icon"
           width={50}
           height={50}
         />
-        <span className={styles.name}>Weather</span>
+        <span className={isWeatherActive ? styles.name : styles.namePale}>
+          Weather
+        </span>
       </Link>
-      <Link className={styles.link} href={"/favorite-list"}>
+      <Link
+        className={styles.link}
+        href={"/favorite-list"}
+        onClick={favoriteListIconHandler}
+      >
         <Image
           className={styles.img}
-          src={"/favorite-list-icon.svg"}
+          src={
+            isFavoriteListActive
+              ? "/favorite-list-icon.svg"
+              : "/favorite-list-icon-pale.svg"
+          }
           alt="favorite-list-icon"
           width={50}
           height={50}
         />
-        <span className={styles.name}>Favorite List</span>
+        <span className={isFavoriteListActive ? styles.name : styles.namePale}>
+          Favorite List
+        </span>
       </Link>
     </div>
   );
