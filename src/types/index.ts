@@ -1,31 +1,14 @@
-type WeatherHours = {
-  datetime: string;
-  datetimeEpoch: number;
-  temp: number;
-  feelslike: number;
-  humidity: number;
-  dew: number;
-  precip: number;
-  precipprob: number;
-  snow: number;
-  snowdepth: number;
-  preciptype: string[] | null;
-  windgust: number;
-  windspeed: number;
-  winddir: number;
-  pressure: number;
-  visibility: number;
-  cloudcover: number;
-  solarradiation: number;
-  solarenergy: number;
-  uvindex: number;
-  severerisk: number;
-  conditions: string;
-  icon: string;
-  stations: string[] | null;
-  source: string;
-};
-
+export type WeatherData = {
+  queryCost: number;
+  latitude: number;
+  longitude: number;
+  resolvedAddress: string;
+  address: string;
+  timezone: string;
+  tzoffset: number;
+  description: string;
+  days: WeatherDay[];
+}
 
 type WeatherDay = {
   datetime: string;
@@ -63,17 +46,33 @@ type WeatherDay = {
   icon: string;
   stations: string[] | null;
   source: string;
-  hours: WeatherHours[]
-}; 
+  hours: WeatherHour[];
+}
 
-export type WeatherData = {
-  queryCost: number;
-  latitude: number;
-  longitude: number;
-  resolvedAddress: string;
-  address: string;
-  timezone: string;
-  tzoffset: number;
-  description: string;
-  days: WeatherDay[]
-};
+type WeatherHour = {
+  datetime: string;
+  datetimeEpoch: number;
+  temp: number;
+  feelslike: number;
+  humidity: number;
+  dew: number;
+  precip: number;
+  precipprob: number;
+  snow: number;
+  snowdepth: number;
+  preciptype: string | null;
+  windgust: number;
+  windspeed: number;
+  winddir: number;
+  pressure: number;
+  visibility: number;
+  cloudcover: number;
+  solarradiation: number;
+  solarenergy: number;
+  uvindex: number;
+  severerisk: number;
+  conditions: string;
+  icon: string;
+  stations: string[] | null;
+  source: string;
+}
