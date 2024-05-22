@@ -1,0 +1,28 @@
+.WeeklyComponent {
+  background-color: #D9D9D9;
+  max-width: 350px;
+  padding: 20px;
+  border-radius: 10px;
+}
+.WeeklyComponent h2 {
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.WeeklyComponentList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.WeeklyComponentItem {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(188, 188, 188);
+}
+
+.WeeklyComponentDay {
+  width: 90px;
+}/*# sourceMappingURL=WeeklyComponent.css.map */

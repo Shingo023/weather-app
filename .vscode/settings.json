@@ -1,0 +1,29 @@
+{
+  "cSpell.words": [
+    "cloudcover",
+    "CWMM",
+    "CWWA",
+    "CWWK",
+    "datetime",
+    "fcst",
+    "feelslike",
+    "feelslikemax",
+    "feelslikemin",
+    "moonphase",
+    "precip",
+    "precipcover",
+    "precipprob",
+    "preciptype",
+    "severerisk",
+    "snowdepth",
+    "solarenergy",
+    "solarradiation",
+    "tempmax",
+    "tempmin",
+    "tzoffset",
+    "uvindex",
+    "winddir",
+    "windgust",
+    "windspeed"
+  ]
+}

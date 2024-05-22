@@ -1,3 +1,8 @@
+export type currentCityContextType = {
+  currentCity: WeatherData | null
+  updateCity: (newCity: WeatherData) => void
+}
+
 export type WeatherData = {
   queryCost: number;
   latitude: number;
@@ -21,16 +26,17 @@ type WeatherDay = {
   feelslike: number;
   dew: number;
   humidity: number;
-  precip: number;
+  precip: number | null;
   precipprob: number;
   precipcover: number;
   preciptype: string[] | null;
-  snow: number;
-  snowdepth: number;
+  snow: number | null;
+  snowdepth: number | null;
   windgust: number;
   windspeed: number;
   winddir: number;
   pressure: number;
+  description: string
   cloudcover: number;
   visibility: number;
   solarradiation: number;
@@ -56,11 +62,11 @@ type WeatherHour = {
   feelslike: number;
   humidity: number;
   dew: number;
-  precip: number;
+  precip: number | null;
   precipprob: number;
-  snow: number;
-  snowdepth: number;
-  preciptype: string | null;
+  snow: number | null;
+  snowdepth: number | null;
+  preciptype: string[] | null;
   windgust: number;
   windspeed: number;
   winddir: number;
