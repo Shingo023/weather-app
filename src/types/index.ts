@@ -15,7 +15,7 @@ export type WeatherData = {
   days: WeatherDay[];
 }
 
-type WeatherDay = {
+export type WeatherDay = {
   datetime: string;
   datetimeEpoch: number;
   tempmax: number;
