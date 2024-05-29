@@ -1,11 +1,11 @@
 import { useCurrentCity } from "@/contexts/currentCity";
 import { WeatherDay } from "@/types";
-import styles from "./WeeklyComponent.module.scss";
+import styles from "../style/components/WeeklyComponent.module.scss";
 
 export const WeeklyComponent = () => {
   const { currentCity } = useCurrentCity();
 
-  const weeklyWeather: WeatherDay[] | undefined = currentCity?.days.slice(0, 7)
+  const weeklyWeather: WeatherDay[] | undefined = currentCity?.days.slice(0, 7);
 
   const isCurrentDate = (dateString: string): boolean => {
     // Create a Date object from the date string
@@ -37,8 +37,6 @@ export const WeeklyComponent = () => {
 
     const dayIndex = date.getDay();
 
-    console.log(dateString);
-
     if (isCurrentDate(dateString)) {
       return "Today";
     }
@@ -51,14 +49,17 @@ export const WeeklyComponent = () => {
       <h2>Weekly Forecast</h2>
       <ul className={styles.WeeklyComponentList}>
         {weeklyWeather ? (
-          dailyWeather.map((day, index) => (
+          weeklyWeather.map((dailyWeather, index) => (
             <li className={styles.WeeklyComponentItem} key={index}>
-              <p className={styles.WeeklyComponentDay}>{getWeekday(day.datetime)}</p>
+              <p className={styles.WeeklyComponentDay}>
+                {getWeekday(dailyWeather.datetime)}
+              </p>
               <p>icon</p>
               <p>
-                {Math.ceil((day.tempmax - 30) / 2)}°/{Math.floor((day.tempmin - 30) / 2)}°
+                {Math.ceil((dailyWeather.tempmax - 30) / 2)}°/
+                {Math.floor((dailyWeather.tempmin - 30) / 2)}°
               </p>
-              <p>{Math.ceil(day.humidity)}%</p>
+              <p>{Math.ceil(dailyWeather.humidity)}%</p>
             </li>
           ))
         ) : (
