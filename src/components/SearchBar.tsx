@@ -2,11 +2,15 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useJsApiLoader, LoadScriptProps } from "@react-google-maps/api";
+import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
+import { getCityWeatherInfo } from "@/actions/weather";
 
 // "places" library: necessary for autocomplete for addresses and places
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
+  const { setDisplayedCityWeather } = useDisplayedCityWeather();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
 
@@ -23,19 +27,30 @@ const SearchBar = () => {
         inputRef.current,
         {
           types: ["(cities)"],
-          // fields: ["address_components", "geometry", "name"],
-          fields: ["name"],
+          fields: ["name"], // other options: "address_components", "geometry"
         }
       );
 
       // 'addListener' is used to add event listeners to Google Maps objects (e.g., 'autocomple').
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        console.log("Selected place:", place);
-        // Handle the selected place here. Set state that is shared through the context.
+      autocomplete.addListener("place_changed", async () => {
+        const cityData = autocomplete.getPlace();
+        const city = cityData.name;
+
+        if (city) {
+          try {
+            console.log("Selected place:", city);
+            // Handle the selected city's weather.
+            const selectedCityWeather = await getCityWeatherInfo(city);
+            setDisplayedCityWeather(selectedCityWeather);
+          } catch (error) {
+            console.error("Error fetching weather info", error);
+          }
+        } else {
+          console.error("City name is undefined.");
+        }
       });
     }
-  }, [isLoaded]);
+  }, [isLoaded, setDisplayedCityWeather]);
 
   if (loadError) {
     return <div>Error loading Google Maps</div>;
