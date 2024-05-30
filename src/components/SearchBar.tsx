@@ -52,6 +52,12 @@ const SearchBar = () => {
     }
   }, [isLoaded, setDisplayedCityWeather]);
 
+  const handleFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
   if (loadError) {
     return <div>Error loading Google Maps</div>;
   }
@@ -63,6 +69,7 @@ const SearchBar = () => {
         id="searchCity"
         type="text"
         placeholder="Enter a city"
+        onFocus={handleFocus}
       />
     </div>
   );
