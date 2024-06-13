@@ -46,7 +46,7 @@ export function CurrentCityProvider({ children }: { children: ReactNode }) {
         visibility: 9.5,
         solarradiation: 301.2,
         solarenergy: 26.2,
-        uvindex: 9.0,
+        uvindex: 5.0,
         severerisk: 10.0,
         sunrise: "05:20:01",
         sunriseEpoch: 1716380401,
