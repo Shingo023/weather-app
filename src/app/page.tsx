@@ -1,12 +1,13 @@
-"use client"
+"use client";
 import { WeeklyComponent } from "@/components/WeeklyComponent";
-import { CurrentCityProvider } from "../contexts/currentCity";
+import SearchBar from "@/components/SearchBar";
+import { DisplayedCityWeatherProvider } from "../contexts/DisplayedCityWeatherContext";
 
 export default function Home() {
   return (
-    <CurrentCityProvider>
-      <h1>Hello world</h1>
+    <DisplayedCityWeatherProvider>
+      <SearchBar />
       <WeeklyComponent />
-    </CurrentCityProvider>
+    </DisplayedCityWeatherProvider>
   );
 }
