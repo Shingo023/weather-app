@@ -31,7 +31,7 @@ const SearchBar = () => {
         }
       );
 
-      // 'addListener' is used to add event listeners to Google Maps objects (e.g., 'autocomple').
+      // 'addListener' is used to add event listeners to Google Maps objects (e.g., 'autocomplete').
       autocomplete.addListener("place_changed", async () => {
         const cityData = autocomplete.getPlace();
         const city = cityData.name;
