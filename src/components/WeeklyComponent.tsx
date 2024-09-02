@@ -1,11 +1,12 @@
-import { useCurrentCity } from "@/contexts/currentCity";
+import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { WeatherDay } from "@/types";
 import styles from "../style/components/WeeklyComponent.module.scss";
 
 export const WeeklyComponent = () => {
-  const { currentCity } = useCurrentCity();
+  const { displayedCityWeather } = useDisplayedCityWeather();
 
-  const weeklyWeather: WeatherDay[] | undefined = currentCity?.days.slice(0, 7);
+  const weeklyWeather: WeatherDay[] | undefined =
+    displayedCityWeather?.days.slice(0, 7);
 
   const isCurrentDate = (dateString: string): boolean => {
     // Create a Date object from the date string

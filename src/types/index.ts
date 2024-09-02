@@ -1,7 +1,10 @@
-export type currentCityContextType = {
-  currentCity: WeatherData | null
-  updateCity: (newCity: WeatherData) => void
-}
+import { Dispatch, SetStateAction } from "react";
+
+export type DisplayedCityWeatherContextType = {
+  displayedCityWeather: WeatherData | null;
+  setDisplayedCityWeather: Dispatch<SetStateAction<WeatherData | null>>;
+  updateCity: (newCity: WeatherData) => void;
+};
 
 export type WeatherData = {
   queryCost: number;
@@ -13,7 +16,7 @@ export type WeatherData = {
   tzoffset: number;
   description: string;
   days: WeatherDay[];
-}
+};
 
 export type WeatherDay = {
   datetime: string;
@@ -36,7 +39,7 @@ export type WeatherDay = {
   windspeed: number;
   winddir: number;
   pressure: number;
-  description: string
+  description: string;
   cloudcover: number;
   visibility: number;
   solarradiation: number;
@@ -53,7 +56,7 @@ export type WeatherDay = {
   stations: string[] | null;
   source: string;
   hours: WeatherHour[];
-}
+};
 
 type WeatherHour = {
   datetime: string;
@@ -81,4 +84,4 @@ type WeatherHour = {
   icon: string;
   stations: string[] | null;
   source: string;
-}
+};
