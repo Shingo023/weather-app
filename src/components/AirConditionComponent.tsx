@@ -9,7 +9,11 @@ import sun from "../public/heroicons_sun-solid.svg";
 export const AirConditionComponent = () => {
   const { currentCity } = useCurrentCity();
   const [totalUV, setTotalUV] = useState<number>(0);
-  const [sunPath, setSunPath] = useState<[string, string, number]>(["00:00", "00:00", 0]);
+  const [sunPath, setSunPath] = useState<[string, string, number]>([
+    "00:00",
+    "00:00",
+    0,
+  ]);
 
   function getHourFromTimeString(timeString: string): number {
     const [hours] = timeString.split(":");
@@ -56,62 +60,53 @@ export const AirConditionComponent = () => {
     <div className={styles.AirConditionComponent}>
       <h1>Air Condition</h1>
       <div className={styles.AirConditionContainer}>
-        {currentCity ? (
-          <>
-            <div className={styles.AirConditionContainerChildren}>
-              WindStatus
-            </div>
-            <div className={styles.AirConditionContainerChildren}>
-              UV index
-              <div className={styles.circles}>
-                <div className={styles.gauge}>
-                  <div className={styles.gaugeBody}>
-                    <div
-                      className={styles.gaugeFill}
-                      style={UVpercentage}
-                    ></div>
-                    <div className={styles.gaugeCover}>
-                      <p>{((totalUV * 100) / 10 / 180).toFixed(2)} UV</p>
-                    </div>
+        <>
+          <div className={styles.AirConditionContainerChildren}>WindStatus</div>
+          <div className={styles.AirConditionContainerChildren}>
+            UV index
+            <div className={styles.circles}>
+              <div className={styles.gauge}>
+                <div className={styles.gaugeBody}>
+                  <div className={styles.gaugeFill} style={UVpercentage}></div>
+                  <div className={styles.gaugeCover}>
+                    <p>{((totalUV * 100) / 10 / 180).toFixed(2)} UV</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className={styles.AirConditionContainerChildren}>
-              Sunrise & Sunset
-              <div className={styles.circles}>
-                <div className={styles.gaugeSun}>
-                  <div className={styles.gaugeBodySun}>
-                    <div
-                      className={styles.gaugeFillSun}
-                      style={sunPathPercentage}
-                    ></div>
-                    <div
-                      className={styles.gaugeCoverSun}
-                      style={sunIconPathPercentage}
-                    >
-                      <Image className={styles.sunIcon} src={sun} alt="" />
-                    </div>
+          </div>
+          <div className={styles.AirConditionContainerChildren}>
+            <p>Sunrise & Sunset</p>
+            <div className={styles.circles}>
+              <div className={styles.gaugeSun}>
+                <div className={styles.gaugeBodySun}>
+                  <div
+                    className={styles.gaugeFillSun}
+                    style={sunPathPercentage}
+                  ></div>
+                  <div
+                    className={styles.gaugeCoverSun}
+                    style={sunIconPathPercentage}
+                  >
+                    <Image className={styles.sunIcon} src={sun} alt="" />
                   </div>
                 </div>
-                <div className={styles.hoursContainer}>
-                  <p className={styles.dayTime}>
-                    <Image src={sunriseSVG} alt="" />
-                    <span>sunrise</span>
-                    {sunPath[0]}
-                  </p>
-                  <p className={styles.dayTime}>
-                    <Image src={sunsetSVG} alt="" />
-                    <span>sunset</span>
-                    {sunPath[1]}
-                  </p>
-                </div>
+              </div>
+              <div className={styles.hoursContainer}>
+                <p className={styles.dayTime}>
+                  <Image src={sunriseSVG} alt="" />
+                  <span>sunrise</span>
+                  {sunPath[0]}
+                </p>
+                <p className={styles.dayTime}>
+                  <Image src={sunsetSVG} alt="" />
+                  <span>sunset</span>
+                  {sunPath[1]}
+                </p>
               </div>
             </div>
-          </>
-        ) : (
-          <></>
-        )}
+          </div>
+        </>
       </div>
     </div>
   );

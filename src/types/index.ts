@@ -6,6 +6,11 @@ export type DisplayedCityWeatherContextType = {
   updateCity: (newCity: WeatherData) => void;
 };
 
+export type currentCityContextType = {
+  currentCity: WeatherData | null;
+  updateCity: (newCity: WeatherData) => void;
+};
+
 export type WeatherData = {
   queryCost: number;
   latitude: number;
