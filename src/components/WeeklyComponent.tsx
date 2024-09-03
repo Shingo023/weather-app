@@ -57,8 +57,10 @@ export const WeeklyComponent = () => {
               </p>
               <p>icon</p>
               <p>
-                {Math.ceil((dailyWeather.tempmax - 30) / 2)}°/
-                {Math.floor((dailyWeather.tempmin - 30) / 2)}°
+                {/* {Math.ceil((dailyWeather.tempmax - 30) / 2)}°/
+                {Math.floor((dailyWeather.tempmin - 30) / 2)}° */}
+                {Math.round(dailyWeather.tempmax)}°/
+                {Math.round(dailyWeather.tempmin)}°
               </p>
               <p>{Math.ceil(dailyWeather.humidity)}%</p>
             </li>
