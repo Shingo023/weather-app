@@ -4,6 +4,8 @@ export type DisplayedCityWeatherContextType = {
   displayedCityWeather: WeatherData | null;
   setDisplayedCityWeather: Dispatch<SetStateAction<WeatherData | null>>;
   updateCity: (newCity: WeatherData) => void;
+  cityToDisplay: string | null;
+  setCityToDisplay: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 export type WeatherData = {
@@ -16,6 +18,7 @@ export type WeatherData = {
   tzoffset: number;
   description: string;
   days: WeatherDay[];
+  currentConditions: { feelslike: number; icon: string; temp: number };
 };
 
 export type WeatherDay = {
@@ -85,3 +88,14 @@ type WeatherHour = {
   stations: string[] | null;
   source: string;
 };
+
+export type WeatherIcon =
+  | "clear-day"
+  | "clear-night"
+  | "rain"
+  | "snow"
+  | "wind"
+  | "fog"
+  | "cloudy"
+  | "partly-cloudy-day"
+  | "partly-cloudy-night";

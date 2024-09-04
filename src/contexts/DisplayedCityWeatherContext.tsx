@@ -12,6 +12,8 @@ const defaultValue: DisplayedCityWeatherContextType = {
   displayedCityWeather: null,
   setDisplayedCityWeather: () => {},
   updateCity: () => {},
+  cityToDisplay: null,
+  setCityToDisplay: () => {},
 };
 
 export const DisplayedCityWeatherContext =
@@ -25,6 +27,8 @@ export function DisplayedCityWeatherProvider({
   const [displayedCityWeather, setDisplayedCityWeather] =
     useState<WeatherData | null>(null);
 
+  const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchWeatherForCurrentLocation = async () => {
       if (navigator.geolocation) {
@@ -37,8 +41,18 @@ export function DisplayedCityWeatherProvider({
                 longitude
               );
               setDisplayedCityWeather(weatherData);
+
+              // Reverse Geocoding API call to get the city name
+              const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+              );
+              const data = await response.json();
+              const cityName =
+                data.address.city || data.address.town || data.address.village;
+
+              setCityToDisplay(cityName || "Unknown Location");
             } catch (error) {
-              console.error("Error fetching weather info:", error);
+              console.error("Error fetching weather or location info:", error);
             }
           },
           (error) => {
@@ -59,7 +73,13 @@ export function DisplayedCityWeatherProvider({
 
   return (
     <DisplayedCityWeatherContext.Provider
-      value={{ displayedCityWeather, setDisplayedCityWeather, updateCity }}
+      value={{
+        cityToDisplay,
+        setCityToDisplay,
+        displayedCityWeather,
+        setDisplayedCityWeather,
+        updateCity,
+      }}
     >
       {children}
     </DisplayedCityWeatherContext.Provider>

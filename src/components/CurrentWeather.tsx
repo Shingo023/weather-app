@@ -1,34 +1,82 @@
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { WeatherDay } from "@/types";
+import { WeatherIcon } from "@/types";
 import styles from "../style/components/CurrentWeather.module.scss";
+import { iconMapping } from "@/utils/weatherIconMapping";
+import React from "react";
+import { getCurrentTimeAndDate } from "@/utils/dateUtils";
+import { RotateCcw } from "lucide-react";
+import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 
 const CurrentWeather = () => {
-  const { displayedCityWeather } = useDisplayedCityWeather();
+  const { cityToDisplay, setDisplayedCityWeather, displayedCityWeather } =
+    useDisplayedCityWeather();
 
-  // To display city, province, and country (e.g., Vancouver, BC, Canada)
-  const displayedCity: string | undefined =
-    displayedCityWeather?.resolvedAddress;
-
-  // To display city as you input in the field (e.g., vancouver / Vancouver)
-  // const cityName: string | undefined = displayedCityWeather?.address;
-
-  const currentWeather: WeatherDay | undefined = displayedCityWeather?.days[0];
-
-  const currentFahrenheit: number | undefined = currentWeather?.temp;
-
-  function fahrenheitToCelsius(fahrenheit: number) {
-    return ((fahrenheit - 32) * 5) / 9;
-  }
-
-  const currentCelsius: number | undefined =
-    currentFahrenheit !== undefined
-      ? Math.round(fahrenheitToCelsius(currentFahrenheit))
+  const currentTimeAndDate =
+    displayedCityWeather?.timezone !== undefined
+      ? getCurrentTimeAndDate(displayedCityWeather?.timezone)
       : undefined;
+
+  const currentTemp = displayedCityWeather?.currentConditions.temp
+    ? Math.round(displayedCityWeather.currentConditions.temp)
+    : undefined;
+
+  const currentFeelslikeTemp = displayedCityWeather?.currentConditions.feelslike
+    ? Math.round(displayedCityWeather.currentConditions.feelslike)
+    : undefined;
+
+  const currentWeather = displayedCityWeather?.currentConditions.icon as
+    | WeatherIcon
+    | undefined;
+
+  const currentWeatherIcon =
+    currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
+
+  const updateWeatherInfo = async () => {
+    setDisplayedCityWeather(null);
+
+    const displayedCityLat = displayedCityWeather?.latitude;
+    const displayedCityLng = displayedCityWeather?.longitude;
+
+    if (displayedCityLat !== undefined && displayedCityLng !== undefined) {
+      try {
+        const updatedWeather = await getCityWeatherInfoByCoordinates(
+          displayedCityLat,
+          displayedCityLng
+        );
+        setDisplayedCityWeather(updatedWeather);
+      } catch (error) {
+        console.error("Error updating weather information:", error);
+      }
+    } else {
+      console.error("Latitude or longitude is undefined.");
+    }
+  };
+
+  // Render loading state if any key weather information is missing
+  if (
+    !cityToDisplay ||
+    currentTimeAndDate === undefined ||
+    currentTemp === undefined ||
+    currentFeelslikeTemp === undefined ||
+    currentWeatherIcon === undefined
+  ) {
+    return <div>Loading weather data...</div>;
+  }
 
   return (
     <div className={styles.CurrentWeather}>
-      <h3>{displayedCity}</h3>
-      <h2>{currentCelsius}°</h2>
+      <div>{cityToDisplay}</div>
+      <div>{currentTimeAndDate}</div>
+      <div onClick={updateWeatherInfo} style={{ cursor: "pointer" }}>
+        <RotateCcw />
+      </div>
+      <div>{currentTemp}°</div>
+      <div>Feels like {currentFeelslikeTemp}°</div>
+      <div>
+        {currentWeatherIcon
+          ? React.createElement(currentWeatherIcon, { size: 48 })
+          : undefined}
+      </div>
     </div>
   );
 };

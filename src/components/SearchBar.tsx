@@ -9,7 +9,8 @@ import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
-  const { setDisplayedCityWeather } = useDisplayedCityWeather();
+  const { setCityToDisplay, setDisplayedCityWeather } =
+    useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
 
@@ -30,15 +31,19 @@ const SearchBar = () => {
 
     // Event listener for place selection
     const handlePlaceChanged = async () => {
+      setDisplayedCityWeather(null);
+
       const place = autocomplete.getPlace();
       const city = place.name;
       const lat = place.geometry?.location?.lat();
       const lng = place.geometry?.location?.lng();
 
       if (city && lat && lng) {
+        setCityToDisplay(city);
         try {
           // Fetch weather data using coordinates
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
+          console.log(weatherData);
 
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
