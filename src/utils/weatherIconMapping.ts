@@ -8,10 +8,11 @@ import {
   Cloud,
   CloudSun,
   CloudMoon,
+  SunMedium,
 } from "lucide-react";
 
 export const iconMapping = {
-  "clear-day": Sun,
+  "clear-day": SunMedium,
   "clear-night": Moon,
   rain: CloudRain,
   snow: CloudSnow,

@@ -1,0 +1,54 @@
+@import "../style/base/variables.scss";
+
+.currentWeather {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+
+  &__cityName {
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  &__dateTimeContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__dateTimeContainer {
+    height: 15px;
+    cursor: pointer;
+  }
+
+  &__dateTime {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  &__updateIconContainer {
+    height: 15px;
+  }
+
+  &__updateIcon {
+    width: 15px;
+    height: 15px;
+  }
+
+  &__temp {
+    font-size: 48px;
+    font-weight: 700;
+    margin-top: 50px;
+  }
+
+  &__feelslikeTemp {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__weatherIconContainer {
+    height: 157px;
+    width: 157px;
+  }
+}

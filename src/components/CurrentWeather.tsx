@@ -1,11 +1,11 @@
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { WeatherIcon } from "@/types";
-import styles from "../style/components/CurrentWeather.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React from "react";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import { RotateCcw } from "lucide-react";
 import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
+import styles from "./CurrentWeather.module.scss";
 
 const CurrentWeather = () => {
   const { cityToDisplay, setDisplayedCityWeather, displayedCityWeather } =
@@ -64,17 +64,32 @@ const CurrentWeather = () => {
   }
 
   return (
-    <div className={styles.CurrentWeather}>
-      <div>{cityToDisplay}</div>
-      <div>{currentTimeAndDate}</div>
-      <div onClick={updateWeatherInfo} style={{ cursor: "pointer" }}>
-        <RotateCcw />
+    <div className={styles.currentWeather}>
+      <div className={styles.currentWeather__data}>
+        <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
+        <div className={styles.currentWeather__dateTimeContainer}>
+          <div className={styles.currentWeather__dateTime}>
+            {currentTimeAndDate}
+          </div>
+          <div
+            className={styles.currentWeather__updateIconContainer}
+            onClick={updateWeatherInfo}
+          >
+            <RotateCcw className={styles.currentWeather__updateIcon} />
+          </div>
+        </div>
+
+        <div className={styles.currentWeather__temp}>{currentTemp}°</div>
+        <div className={styles.currentWeather__feelslikeTemp}>
+          Feels like {currentFeelslikeTemp}°
+        </div>
       </div>
-      <div>{currentTemp}°</div>
-      <div>Feels like {currentFeelslikeTemp}°</div>
-      <div>
+
+      <div className={styles.currentWeather__weatherIconContainer}>
         {currentWeatherIcon
-          ? React.createElement(currentWeatherIcon, { size: 48 })
+          ? React.createElement(currentWeatherIcon, {
+              className: styles.currentWeather__weatherIconContainer,
+            })
           : undefined}
       </div>
     </div>
