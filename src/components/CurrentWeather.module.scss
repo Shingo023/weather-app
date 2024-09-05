@@ -4,7 +4,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px;
+  padding: 0 30px;
+  height: 235px;
+
+  &__loading {
+    height: 235px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   &__cityName {
     font-size: 28px;

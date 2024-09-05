@@ -60,7 +60,11 @@ const CurrentWeather = () => {
     currentFeelslikeTemp === undefined ||
     currentWeatherIcon === undefined
   ) {
-    return <div>Loading weather data...</div>;
+    return (
+      <div className={styles.currentWeather__loading}>
+        Loading weather data...
+      </div>
+    );
   }
 
   return (
@@ -68,13 +72,13 @@ const CurrentWeather = () => {
       <div className={styles.currentWeather__data}>
         <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
         <div className={styles.currentWeather__dateTimeContainer}>
-          <div className={styles.currentWeather__dateTime}>
-            {currentTimeAndDate}
-          </div>
           <div
-            className={styles.currentWeather__updateIconContainer}
+            className={styles.currentWeather__dateTime}
             onClick={updateWeatherInfo}
           >
+            {currentTimeAndDate}
+          </div>
+          <div className={styles.currentWeather__updateIconContainer}>
             <RotateCcw className={styles.currentWeather__updateIcon} />
           </div>
         </div>
