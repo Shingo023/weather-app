@@ -8,7 +8,7 @@ const Sidebar = () => {
     <div className={styles.sidebar}>
       <SidebarLink
         linkName={"Weather"}
-        path={"/"}
+        path={"/weather"}
         icon={"/weather-icon.svg"}
         iconPale={"/weather-icon-pale.svg"}
         alt={"weather-icon"}

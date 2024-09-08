@@ -20,7 +20,7 @@ export default function LoginPage() {
     });
 
     if (result?.ok) {
-      router.push("/");
+      router.push("/weather");
     } else {
       setError("Invalid credentials. Please try again.");
     }
