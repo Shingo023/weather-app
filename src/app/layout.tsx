@@ -1,10 +1,14 @@
-"use client";
-
 import { Inter } from "next/font/google";
 import Sidebar from "./components/Sidebar";
-import { SessionProvider } from "next-auth/react";
+import { Metadata } from "next";
+import SessionLayout from "./SessionLayout";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Weather App",
+  description: "Weather application",
+};
 
 export default function RootLayout({
   children,
@@ -14,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>
+        <SessionLayout>
           <Sidebar />
           {children}
-        </SessionProvider>
+        </SessionLayout>
       </body>
     </html>
   );
