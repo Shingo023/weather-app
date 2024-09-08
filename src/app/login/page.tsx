@@ -49,7 +49,7 @@ export default function LoginPage() {
             required
           />
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit">Log In</button>
       </form>
     </div>
   );

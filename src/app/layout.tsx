@@ -1,13 +1,10 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Inter } from "next/font/google";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "./components/Sidebar";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Weather App",
-  description: "Weather application",
-};
 
 export default function RootLayout({
   children,
@@ -17,8 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Sidebar />
-        {children}
+        <SessionProvider>
+          <Sidebar />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
