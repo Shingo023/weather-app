@@ -61,10 +61,8 @@ export default function RegisterForm() {
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
-        toast.error(error.message);
       } else {
         setError("An unexpected error occurred.");
-        toast.error("An unexpected error occurred.");
       }
     }
   };
@@ -72,7 +70,7 @@ export default function RegisterForm() {
   return (
     <div>
       <ToastContainer />
-
+      <h2>Create an account</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>

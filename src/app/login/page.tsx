@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -22,7 +24,7 @@ export default function LoginPage() {
     if (result?.ok) {
       router.push("/weather");
     } else {
-      setError("Invalid credentials. Please try again.");
+      setError("Invalid email address or password. Please try again.");
     }
   };
 
@@ -32,23 +34,30 @@ export default function LoginPage() {
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <label>
+            Email
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
         </div>
         <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <label>
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
         </div>
+        <p>
+          No account? <Link href="/register">Create one!</Link>
+        </p>
         <button type="submit">Log In</button>
       </form>
     </div>
