@@ -43,7 +43,6 @@ const SearchBar = () => {
         try {
           // Fetch weather data using coordinates
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
-          console.log(weatherData);
 
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
