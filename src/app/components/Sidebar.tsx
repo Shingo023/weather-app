@@ -26,7 +26,9 @@ const Sidebar = () => {
             iconPale={"/favorite-list-icon-pale.svg"}
             alt={"favorite-list-icon"}
           />
-          <button onClick={() => signOut()}>Log Out</button>
+          <div onClick={() => signOut()} style={{ cursor: "pointer" }}>
+            Log Out
+          </div>
         </>
       ) : (
         <>
@@ -44,7 +46,9 @@ const Sidebar = () => {
             iconPale={"/favorite-list-icon-pale.svg"}
             alt={"favorite-list-icon"}
           />
-          <button onClick={() => signIn()}>Log In</button>
+          <div onClick={() => signIn()} style={{ cursor: "pointer" }}>
+            Log In
+          </div>
         </>
       )}
     </div>
