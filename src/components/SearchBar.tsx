@@ -9,7 +9,7 @@ import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
-  const { setCityToDisplay, setDisplayedCityWeather } =
+  const { setCityToDisplay, setState, setCountry, setDisplayedCityWeather } =
     useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
@@ -26,7 +26,7 @@ const SearchBar = () => {
     // Initialize Google Places Autocomplete
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
       types: ["(cities)"],
-      fields: ["name", "geometry"], // Include geometry to get lat/lng
+      fields: ["name", "geometry", "address_components"], // Include address_components to get country
     });
 
     // Event listener for place selection
@@ -38,8 +38,27 @@ const SearchBar = () => {
       const lat = place.geometry?.location?.lat();
       const lng = place.geometry?.location?.lng();
 
-      if (city && lat && lng) {
+      // Extract state and country from address components
+      let stateName = "";
+      let countryName = "";
+
+      if (place.address_components) {
+        const stateComponent = place.address_components.find((component) =>
+          component.types.includes("administrative_area_level_1")
+        );
+        const countryComponent = place.address_components.find((component) =>
+          component.types.includes("country")
+        );
+
+        stateName = stateComponent?.long_name || "";
+        countryName = countryComponent?.long_name || "";
+      }
+
+      if (city && lat && lng && countryName) {
         setCityToDisplay(city);
+        setState(stateName);
+        setCountry(countryName);
+
         try {
           // Fetch weather data using coordinates
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);

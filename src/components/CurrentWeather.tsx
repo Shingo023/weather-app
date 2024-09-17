@@ -3,13 +3,18 @@ import { WeatherIcon } from "@/types";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React from "react";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Star } from "lucide-react";
 import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 import styles from "./CurrentWeather.module.scss";
 
 const CurrentWeather = () => {
-  const { cityToDisplay, setDisplayedCityWeather, displayedCityWeather } =
-    useDisplayedCityWeather();
+  const {
+    cityToDisplay,
+    state,
+    country,
+    setDisplayedCityWeather,
+    displayedCityWeather,
+  } = useDisplayedCityWeather();
 
   const currentTimeAndDate =
     displayedCityWeather?.timezone !== undefined
@@ -70,7 +75,18 @@ const CurrentWeather = () => {
   return (
     <div className={styles.currentWeather}>
       <div className={styles.currentWeather__data}>
-        <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
+        <div className={styles.currentWeather__citySection}>
+          <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
+          <div className={styles.currentWeather__starContainer}>
+            <Star className={styles.currentWeather__starIcon} />
+          </div>
+        </div>
+
+        <div className={styles.currentWeather__stateAndCountry}>
+          <div className={styles.currentWeather__stateName}>{state}, </div>
+          <div className={styles.currentWeather__countryName}>{country}</div>
+        </div>
+
         <div className={styles.currentWeather__dateTimeContainer}>
           <div
             className={styles.currentWeather__dateTime}
