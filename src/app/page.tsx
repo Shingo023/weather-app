@@ -1,7 +1,16 @@
-export default function HomePage() {
+"use client";
+import { WeeklyComponent } from "@/components/WeeklyComponent";
+import SearchBar from "@/components/SearchBar";
+import { DisplayedCityWeatherProvider } from "../contexts/DisplayedCityWeatherContext";
+import CurrentWeather from "@/components/CurrentWeather";
+import React from "react";
+
+export default function Home() {
   return (
-    <div>
-      <h1>Welcome to the Weather App</h1>
-    </div>
+    <DisplayedCityWeatherProvider>
+      <SearchBar />
+      <CurrentWeather />
+      <WeeklyComponent />
+    </DisplayedCityWeatherProvider>
   );
 }

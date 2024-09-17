@@ -1,16 +1,16 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { useJsApiLoader, LoadScriptProps } from "@react-google-maps/api";
+import { useRef, useEffect, useState } from "react";
+import { LoadScriptProps, useJsApiLoader } from "@react-google-maps/api";
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { getCityWeatherInfo } from "@/actions/weather";
+import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 
 // "places" library: necessary for autocomplete for addresses and places
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
-  const { setDisplayedCityWeather } = useDisplayedCityWeather();
-
+  const { setCityToDisplay, setDisplayedCityWeather } =
+    useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
 
@@ -21,56 +21,62 @@ const SearchBar = () => {
   });
 
   useEffect(() => {
-    if (isLoaded && inputRef.current) {
-      // Add an autocomplete feature to the input field
-      const autocomplete = new google.maps.places.Autocomplete(
-        inputRef.current,
-        {
-          types: ["(cities)"],
-          fields: ["name"], // other options: "address_components", "geometry"
-        }
-      );
+    if (!isLoaded || !inputRef.current) return;
 
-      // 'addListener' is used to add event listeners to Google Maps objects (e.g., 'autocomple').
-      autocomplete.addListener("place_changed", async () => {
-        const cityData = autocomplete.getPlace();
-        const city = cityData.name;
+    // Initialize Google Places Autocomplete
+    const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
+      types: ["(cities)"],
+      fields: ["name", "geometry"], // Include geometry to get lat/lng
+    });
 
-        if (city) {
-          try {
-            console.log("Selected place:", city);
-            // Handle the selected city's weather.
-            const selectedCityWeather = await getCityWeatherInfo(city);
-            setDisplayedCityWeather(selectedCityWeather);
-          } catch (error) {
-            console.error("Error fetching weather info", error);
+    // Event listener for place selection
+    const handlePlaceChanged = async () => {
+      setDisplayedCityWeather(null);
+
+      const place = autocomplete.getPlace();
+      const city = place.name;
+      const lat = place.geometry?.location?.lat();
+      const lng = place.geometry?.location?.lng();
+
+      if (city && lat && lng) {
+        setCityToDisplay(city);
+        try {
+          // Fetch weather data using coordinates
+          const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
+
+          if (weatherData) {
+            setDisplayedCityWeather(weatherData);
+          } else {
+            alert(
+              "Weather data for the selected city is unavailable. Please try another city."
+            );
           }
-        } else {
-          console.error("City name is undefined.");
+        } catch (error) {
+          console.error("Error fetching weather info", error);
+          alert("Failed to fetch weather data. Please try again later.");
         }
-      });
-    }
+      } else {
+        alert("Please select a city from the suggestions.");
+      }
+    };
+
+    // Attach the listener
+    autocomplete.addListener("place_changed", handlePlaceChanged);
+
+    // Cleanup function to remove the listener when the component unmounts
+    return () => {
+      google.maps.event.clearInstanceListeners(autocomplete);
+    };
   }, [isLoaded, setDisplayedCityWeather]);
 
-  const handleFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
-
   if (loadError) {
+    console.error("Error loading Google Maps:", loadError);
     return <div>Error loading Google Maps</div>;
   }
 
   return (
     <div>
-      <input
-        ref={inputRef}
-        id="searchCity"
-        type="text"
-        placeholder="Enter a city"
-        onFocus={handleFocus}
-      />
+      <input ref={inputRef} type="text" placeholder="Enter a city" />
     </div>
   );
 };
