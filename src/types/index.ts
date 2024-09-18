@@ -6,10 +6,8 @@ export type DisplayedCityWeatherContextType = {
   updateCity: (newCity: WeatherData) => void;
   cityToDisplay: string | null;
   setCityToDisplay: React.Dispatch<React.SetStateAction<string | null>>;
-  state: string | null;
-  setState: (state: string | null) => void;
-  country: string | null;
-  setCountry: (country: string | null) => void;
+  address: string | null;
+  setAddress: (state: string | null) => void;
 };
 
 export type WeatherData = {

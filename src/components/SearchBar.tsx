@@ -9,7 +9,7 @@ import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
-  const { setCityToDisplay, setState, setCountry, setDisplayedCityWeather } =
+  const { setCityToDisplay, setAddress, setDisplayedCityWeather } =
     useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
@@ -25,45 +25,42 @@ const SearchBar = () => {
 
     // Initialize Google Places Autocomplete
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
-      types: ["(cities)"],
-      fields: ["name", "geometry", "address_components"], // Include address_components to get country
+      types: ["geocode"],
+      fields: ["formatted_address", "geometry", "address_components"],
     });
 
     // Event listener for place selection
     const handlePlaceChanged = async () => {
-      setDisplayedCityWeather(null);
-
       const place = autocomplete.getPlace();
-      const city = place.name;
+      const address = place.formatted_address;
       const lat = place.geometry?.location?.lat();
       const lng = place.geometry?.location?.lng();
 
-      // Extract state and country from address components
-      let stateName = "";
-      let countryName = "";
-
+      // Extract city, town, or village name from address_components
+      let cityName: string | null = null;
       if (place.address_components) {
-        const stateComponent = place.address_components.find((component) =>
-          component.types.includes("administrative_area_level_1")
-        );
-        const countryComponent = place.address_components.find((component) =>
-          component.types.includes("country")
-        );
-
-        stateName = stateComponent?.long_name || "";
-        countryName = countryComponent?.long_name || "";
+        for (const component of place.address_components) {
+          if (
+            component.types.includes("locality") ||
+            component.types.includes("administrative_area_level_2")
+          ) {
+            cityName = component.long_name;
+            break;
+          }
+          if (component.types.includes("administrative_area_level_1")) {
+            cityName = component.long_name; // If no locality found, fallback to administrative_area_level_1
+          }
+        }
       }
 
-      if (city && lat && lng && countryName) {
-        setCityToDisplay(city);
-        setState(stateName);
-        setCountry(countryName);
+      // Only set weather data if valid coordinates and city name are available
+      if (cityName && lat !== undefined && lng !== undefined && address) {
+        setCityToDisplay(cityName);
+        setAddress(address);
 
         try {
           // Fetch weather data using coordinates
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
-          console.log(weatherData);
-
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
           } else {
@@ -76,7 +73,7 @@ const SearchBar = () => {
           alert("Failed to fetch weather data. Please try again later.");
         }
       } else {
-        alert("Please select a city from the suggestions.");
+        alert("Please select a city from the dropdown menu.");
       }
     };
 
@@ -87,7 +84,7 @@ const SearchBar = () => {
     return () => {
       google.maps.event.clearInstanceListeners(autocomplete);
     };
-  }, [isLoaded, setDisplayedCityWeather]);
+  }, [isLoaded, setDisplayedCityWeather, setCityToDisplay, setAddress]);
 
   if (loadError) {
     console.error("Error loading Google Maps:", loadError);

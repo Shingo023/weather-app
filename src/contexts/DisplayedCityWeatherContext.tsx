@@ -8,16 +8,24 @@ import {
 import { DisplayedCityWeatherContextType, WeatherData } from "@/types";
 import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 
+// Define the GeocodeResult type for Google Maps API response
+interface GeocodeResult {
+  address_components: {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }[];
+  formatted_address: string;
+}
+
 const defaultValue: DisplayedCityWeatherContextType = {
   displayedCityWeather: null,
   setDisplayedCityWeather: () => {},
   updateCity: () => {},
   cityToDisplay: null,
   setCityToDisplay: () => {},
-  state: null,
-  setState: () => {},
-  country: null,
-  setCountry: () => {},
+  address: null,
+  setAddress: () => {},
 };
 
 export const DisplayedCityWeatherContext =
@@ -33,9 +41,7 @@ export function DisplayedCityWeatherProvider({
 
   const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
 
-  const [state, setState] = useState<string | null>(null);
-
-  const [country, setCountry] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWeatherForCurrentLocation = async () => {
@@ -50,20 +56,33 @@ export function DisplayedCityWeatherProvider({
               );
               setDisplayedCityWeather(weatherData);
 
-              // Reverse Geocoding API call to get the city name
+              // Google Maps Geocoding API call to get the city name
+              const googleMapsApiKey =
+                process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
               const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleMapsApiKey}`
               );
               const data = await response.json();
-              console.log(data);
-              const cityName =
-                data.address.city || data.address.town || data.address.village;
-              const countryName = data.address.country;
-              const stateName = data.address.state;
 
-              setCityToDisplay(cityName || "Unknown Location");
-              setState(stateName || null);
-              setCountry(countryName || null);
+              if (data.status === "OK" && data.results.length > 0) {
+                const geocodeResult: GeocodeResult = data.results[0];
+                const addressComponents = geocodeResult.address_components;
+
+                // Extracting city from the geocode result
+                const cityComponent = addressComponents.find((component) =>
+                  component.types.includes("locality")
+                );
+
+                console.log(data);
+
+                const cityName = cityComponent?.long_name || "Unknown Location";
+                const address = geocodeResult?.formatted_address || null;
+
+                setCityToDisplay(cityName || "Unknown Location");
+                setAddress(address || null);
+              } else {
+                console.error("No results from Geocoding API");
+              }
             } catch (error) {
               console.error("Error fetching weather or location info:", error);
             }
@@ -92,10 +111,8 @@ export function DisplayedCityWeatherProvider({
         displayedCityWeather,
         setDisplayedCityWeather,
         updateCity,
-        state,
-        setState,
-        country,
-        setCountry,
+        address,
+        setAddress,
       }}
     >
       {children}

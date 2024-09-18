@@ -10,8 +10,7 @@ import styles from "./CurrentWeather.module.scss";
 const CurrentWeather = () => {
   const {
     cityToDisplay,
-    state,
-    country,
+    address,
     setDisplayedCityWeather,
     displayedCityWeather,
   } = useDisplayedCityWeather();
@@ -83,8 +82,7 @@ const CurrentWeather = () => {
         </div>
 
         <div className={styles.currentWeather__stateAndCountry}>
-          <div className={styles.currentWeather__stateName}>{state}, </div>
-          <div className={styles.currentWeather__countryName}>{country}</div>
+          <div className={styles.currentWeather__stateName}>{address}</div>
         </div>
 
         <div className={styles.currentWeather__dateTimeContainer}>
