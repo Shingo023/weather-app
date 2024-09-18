@@ -3,6 +3,7 @@
 # env file 
 .env.development
 .env
+.env.local
 
 # dependencies
 /node_modules
