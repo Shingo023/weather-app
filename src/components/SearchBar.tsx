@@ -63,6 +63,7 @@ const SearchBar = () => {
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
+            console.log(place);
           } else {
             alert(
               "Weather data for the selected city is unavailable. Please try another city."
