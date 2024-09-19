@@ -26,15 +26,28 @@ const SearchBar = () => {
     // Initialize Google Places Autocomplete
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
       types: ["geocode"],
-      fields: ["formatted_address", "geometry", "address_components"],
+      fields: [
+        "formatted_address",
+        "geometry",
+        "address_components",
+        "place_id",
+      ],
     });
 
     // Event listener for place selection
     const handlePlaceChanged = async () => {
       const place = autocomplete.getPlace();
+      console.log("Selected place object:", place); // Log the entire place object
+
+      const placeId = place.place_id;
+      console.log("Selected place ID:", placeId); // Log the place_id
+
       const address = place.formatted_address;
+
       const lat = place.geometry?.location?.lat();
+      console.log("lat:", lat);
       const lng = place.geometry?.location?.lng();
+      console.log("lng:", lng);
 
       // Extract city, town, or village name from address_components
       let cityName: string | null = null;
@@ -63,7 +76,6 @@ const SearchBar = () => {
           const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
-            console.log(place);
           } else {
             alert(
               "Weather data for the selected city is unavailable. Please try another city."

@@ -12,28 +12,19 @@ async function main() {
   // Hash the password
   const hashedPassword = await bcrypt.hash("password123", 10);
 
-  // Create favorite cities first
+  // Create favorite city (London) with place_id
   const london = await prisma.favoriteCity.create({
     data: {
       cityName: "London",
       address: "London, UK",
-      latitude: 51.5074,
-      longitude: -0.1278,
+      latitude: 51.5072178,
+      longitude: -0.1275862,
       timeZone: "Europe/London",
+      placeId: "ChIJdd4hrwug2EcRmSrV3Vo6llI", // Adding placeId for London
     },
   });
 
-  const tokyo = await prisma.favoriteCity.create({
-    data: {
-      cityName: "Tokyo",
-      address: "Tokyo, Japan",
-      latitude: 35.6762,
-      longitude: 139.6503,
-      timeZone: "Asia/Tokyo",
-    },
-  });
-
-  // Seed users
+  // Seed user
   const user1 = await prisma.user.create({
     data: {
       name: "Bob",
@@ -42,21 +33,15 @@ async function main() {
     },
   });
 
-  // Create relations between users and favorite cities
-  await prisma.userFavoriteCity.createMany({
-    data: [
-      {
-        userId: user1.id,
-        favoriteCityId: london.id,
-      },
-      {
-        userId: user1.id,
-        favoriteCityId: tokyo.id,
-      },
-    ],
+  // Create relation between user and favorite city (London)
+  await prisma.userFavoriteCity.create({
+    data: {
+      userId: user1.id,
+      favoriteCityId: london.id,
+    },
   });
 
-  console.log("Seeded user and favorite cities.");
+  console.log("Seeded user and favorite city (London).");
 }
 
 main()
