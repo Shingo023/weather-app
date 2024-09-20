@@ -9,7 +9,7 @@ import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 const libraries: LoadScriptProps["libraries"] = ["places"];
 
 const SearchBar = () => {
-  const { setCityToDisplay, setAddress, setDisplayedCityWeather } =
+  const { setCityToDisplay, setAddress, setPlaceId, setDisplayedCityWeather } =
     useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
@@ -37,17 +37,15 @@ const SearchBar = () => {
     // Event listener for place selection
     const handlePlaceChanged = async () => {
       const place = autocomplete.getPlace();
-      console.log("Selected place object:", place); // Log the entire place object
+      console.log("Selected place object:", place);
 
       const placeId = place.place_id;
-      console.log("Selected place ID:", placeId); // Log the place_id
+      console.log("Selected place ID:", placeId);
 
       const address = place.formatted_address;
 
       const lat = place.geometry?.location?.lat();
-      console.log("lat:", lat);
       const lng = place.geometry?.location?.lng();
-      console.log("lng:", lng);
 
       // Extract city, town, or village name from address_components
       let cityName: string | null = null;
@@ -66,10 +64,16 @@ const SearchBar = () => {
         }
       }
 
-      // Only set weather data if valid coordinates and city name are available
-      if (cityName && lat !== undefined && lng !== undefined && address) {
+      if (
+        cityName &&
+        lat !== undefined &&
+        lng !== undefined &&
+        address &&
+        placeId
+      ) {
         setCityToDisplay(cityName);
         setAddress(address);
+        setPlaceId(placeId);
 
         try {
           // Fetch weather data using coordinates

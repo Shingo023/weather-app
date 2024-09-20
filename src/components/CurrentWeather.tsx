@@ -1,19 +1,56 @@
+"use client";
+
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { WeatherIcon } from "@/types";
 import { iconMapping } from "@/utils/weatherIconMapping";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import { RotateCcw, Star } from "lucide-react";
 import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 import styles from "./CurrentWeather.module.scss";
+import { useSession } from "next-auth/react";
 
 const CurrentWeather = () => {
   const {
     cityToDisplay,
     address,
+    placeId,
     setDisplayedCityWeather,
     displayedCityWeather,
   } = useDisplayedCityWeather();
+  const { data: session } = useSession();
+
+  const [favoriteCityPlaceIds, setFavoriteCityPlaceIds] = useState<string[]>(
+    []
+  );
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const fetchFavoriteCities = async () => {
+      if (session?.user?.id) {
+        try {
+          const response = await fetch(
+            `/api/favorite-cities?userId=${session.user.id}`
+          );
+          const favoriteCities = await response.json();
+          setFavoriteCityPlaceIds(favoriteCities);
+          console.log(favoriteCities);
+        } catch (error) {
+          console.error("Error fetching favorite cities:", error);
+        }
+      }
+    };
+
+    fetchFavoriteCities();
+  }, [session]);
+
+  useEffect(() => {
+    if (placeId && favoriteCityPlaceIds.length > 0) {
+      const isCityFavorite = favoriteCityPlaceIds.includes(placeId);
+      console.log(placeId);
+      setIsFavorite(isCityFavorite);
+    }
+  }, [placeId, favoriteCityPlaceIds]);
 
   const currentTimeAndDate =
     displayedCityWeather?.timezone !== undefined
@@ -77,7 +114,22 @@ const CurrentWeather = () => {
         <div className={styles.currentWeather__citySection}>
           <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
           <div className={styles.currentWeather__starContainer}>
-            <Star className={styles.currentWeather__starIcon} />
+            {isFavorite ? (
+              <Star
+                className={styles.currentWeather__starIcon}
+                style={{
+                  height: "24px",
+                  width: "24px",
+                  fill: "yellow",
+                  color: "yellowgreen",
+                }}
+              />
+            ) : (
+              <Star
+                className={styles.currentWeather__starIcon}
+                style={{ height: "24px", width: "24px" }}
+              />
+            )}
           </div>
         </div>
 

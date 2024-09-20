@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 
 export type DisplayedCityWeatherContextType = {
   displayedCityWeather: WeatherData | null;
@@ -8,6 +9,8 @@ export type DisplayedCityWeatherContextType = {
   setCityToDisplay: React.Dispatch<React.SetStateAction<string | null>>;
   address: string | null;
   setAddress: (state: string | null) => void;
+  placeId: string | null;
+  setPlaceId: (state: string | null) => void;
 };
 
 export type WeatherData = {
@@ -101,3 +104,16 @@ export type WeatherIcon =
   | "cloudy"
   | "partly-cloudy-day"
   | "partly-cloudy-night";
+
+// Extend the User object returned by NextAuth to include an ID
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string; // Add the id field to the session's user object
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    id: string; // Add the id field to the User object
+  }
+}

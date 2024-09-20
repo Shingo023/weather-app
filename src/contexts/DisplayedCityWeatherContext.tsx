@@ -16,6 +16,7 @@ interface GeocodeResult {
     types: string[];
   }[];
   formatted_address: string;
+  place_id: string;
 }
 
 const defaultValue: DisplayedCityWeatherContextType = {
@@ -26,6 +27,8 @@ const defaultValue: DisplayedCityWeatherContextType = {
   setCityToDisplay: () => {},
   address: null,
   setAddress: () => {},
+  placeId: null,
+  setPlaceId: () => {},
 };
 
 export const DisplayedCityWeatherContext =
@@ -38,10 +41,9 @@ export function DisplayedCityWeatherProvider({
 }) {
   const [displayedCityWeather, setDisplayedCityWeather] =
     useState<WeatherData | null>(null);
-
   const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
-
   const [address, setAddress] = useState<string | null>(null);
+  const [placeId, setPlaceId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWeatherForCurrentLocation = async () => {
@@ -77,9 +79,11 @@ export function DisplayedCityWeatherProvider({
 
                 const cityName = cityComponent?.long_name || "Unknown Location";
                 const address = geocodeResult?.formatted_address || null;
+                const placeId = geocodeResult?.place_id || null;
 
                 setCityToDisplay(cityName || "Unknown Location");
                 setAddress(address || null);
+                setPlaceId(placeId || null);
               } else {
                 console.error("No results from Geocoding API");
               }
@@ -113,6 +117,8 @@ export function DisplayedCityWeatherProvider({
         updateCity,
         address,
         setAddress,
+        placeId,
+        setPlaceId,
       }}
     >
       {children}
