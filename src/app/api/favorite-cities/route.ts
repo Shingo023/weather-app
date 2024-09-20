@@ -1,39 +1,41 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"; // Import NextResponse for consistent response handling
 
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const placeId = searchParams.get("placeId");
+
+  if (!placeId) {
+    return NextResponse.json({ error: "placeId is required" }, { status: 400 });
+  }
+
+  const city = await prisma.favoriteCity.findUnique({
+    where: { placeId: String(placeId) },
+  });
+
+  return NextResponse.json(city, { status: 200 });
+}
+
+export async function POST(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const { cityName, latitude, longitude, placeId, address, timeZone } =
+      await request.json();
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      );
-    }
-
-    const favoriteCities = await prisma.userFavoriteCity.findMany({
-      where: { userId: userId },
-      select: {
-        favoriteCity: {
-          select: {
-            placeId: true, // Accessing placeId from the related FavoriteCity
-          },
-        },
+    const newFavoriteCity = await prisma.favoriteCity.create({
+      data: {
+        cityName,
+        latitude,
+        longitude,
+        placeId,
+        address,
+        timeZone,
       },
     });
 
-    return NextResponse.json(
-      favoriteCities.map((fc) => fc.favoriteCity.placeId) // Mapping to get placeId
-    );
+    return NextResponse.json(newFavoriteCity, { status: 201 });
   } catch (error) {
-    console.error("Error fetching favorite cities:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch favorite cities" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Error creating city" }, { status: 500 });
   }
 }

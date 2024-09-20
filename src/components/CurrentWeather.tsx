@@ -30,7 +30,7 @@ const CurrentWeather = () => {
       if (session?.user?.id) {
         try {
           const response = await fetch(
-            `/api/favorite-cities?userId=${session.user.id}`
+            `/api/user-favorite-cities?userId=${session.user.id}`
           );
           const favoriteCities = await response.json();
           setFavoriteCityPlaceIds(favoriteCities);
@@ -93,6 +93,81 @@ const CurrentWeather = () => {
     }
   };
 
+  const handleStarClick = async () => {
+    if (!isFavorite) {
+      const confirmBookmark = window.confirm(
+        `Do you want to add ${cityToDisplay} to your favorite cities?`
+      );
+      if (confirmBookmark) {
+        try {
+          await bookmarkCity();
+          setIsFavorite(true);
+        } catch (error) {
+          console.error("Error bookmarking city:", error);
+        }
+      }
+    }
+  };
+
+  const bookmarkCity = async () => {
+    const newCity = {
+      cityName: cityToDisplay,
+      latitude: displayedCityWeather?.latitude,
+      longitude: displayedCityWeather?.longitude,
+      placeId,
+      address,
+      timeZone: displayedCityWeather?.timezone,
+    };
+
+    try {
+      // First, check if the city already exists in the FavoriteCity table
+      const cityResponse = await fetch(
+        `/api/favorite-cities?placeId=${placeId}`
+      );
+      const city = await cityResponse.json();
+
+      let cityId;
+      if (!city) {
+        // City does not exist, so create a new city in the FavoriteCity table
+        const createCityResponse = await fetch(`/api/favorite-cities`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newCity),
+        });
+
+        const createdCity = await createCityResponse.json();
+        cityId = createdCity.id;
+      } else {
+        // City exists, use the existing city ID
+        cityId = city.id;
+      }
+
+      // Now, add the city to the UserFavoriteCity table for the current user
+      const addUserFavoriteCityResponse = await fetch(
+        `/api/user-favorite-cities`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: session?.user?.id,
+            favoriteCityId: cityId,
+          }),
+        }
+      );
+
+      if (!addUserFavoriteCityResponse.ok) {
+        throw new Error("Failed to add city to favorites");
+      }
+    } catch (error) {
+      console.error("Error bookmarking the city:", error);
+      throw error;
+    }
+  };
+
   // Render loading state if any key weather information is missing
   if (
     !cityToDisplay ||
@@ -128,6 +203,7 @@ const CurrentWeather = () => {
               <Star
                 className={styles.currentWeather__starIcon}
                 style={{ height: "24px", width: "24px" }}
+                onClick={handleStarClick}
               />
             )}
           </div>
