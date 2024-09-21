@@ -270,11 +270,15 @@ const CurrentWeather = () => {
       </div>
 
       <div className={styles.currentWeather__weatherIconContainer}>
-        {currentWeatherIcon
-          ? React.createElement(currentWeatherIcon, {
-              className: styles.currentWeather__weatherIconContainer,
-            })
-          : undefined}
+        {currentWeatherIcon ? (
+          <img
+            src={currentWeatherIcon}
+            alt="Weather icon"
+            width={150}
+            height={150}
+            className={styles.currentWeather__weatherIcon}
+          />
+        ) : null}
       </div>
     </div>
   );

@@ -62,9 +62,14 @@ export const WeeklyComponent = () => {
                   {getWeekday(dailyWeather.datetime)}
                 </p>
                 <p>
-                  {dailyWeatherIcon
-                    ? React.createElement(dailyWeatherIcon)
-                    : undefined}
+                  {dailyWeatherIcon ? (
+                    <img
+                      src={dailyWeatherIcon}
+                      alt="Weather Icon"
+                      width={50}
+                      height={50}
+                    />
+                  ) : null}
                 </p>
                 <p>
                   {Math.round(dailyWeather.tempmax)}°/
