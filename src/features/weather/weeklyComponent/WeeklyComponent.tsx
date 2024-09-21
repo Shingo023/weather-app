@@ -1,6 +1,6 @@
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { WeatherDay, WeatherIcon } from "@/types";
-import styles from "../style/components/WeeklyComponent.module.scss";
+import styles from "@/style/components/WeeklyComponent.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React from "react";
 
