@@ -37,13 +37,8 @@ const SearchBar = () => {
     // Event listener for place selection
     const handlePlaceChanged = async () => {
       const place = autocomplete.getPlace();
-      console.log("Selected place object:", place);
-
       const placeId = place.place_id;
-      console.log("Selected place ID:", placeId);
-
       const address = place.formatted_address;
-
       const lat = place.geometry?.location?.lat();
       const lng = place.geometry?.location?.lng();
 

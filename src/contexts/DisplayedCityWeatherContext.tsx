@@ -75,8 +75,6 @@ export function DisplayedCityWeatherProvider({
                   component.types.includes("locality")
                 );
 
-                console.log(data);
-
                 const cityName = cityComponent?.long_name || "Unknown Location";
                 const address = geocodeResult?.formatted_address || null;
                 const placeId = geocodeResult?.place_id || null;

@@ -34,7 +34,6 @@ const CurrentWeather = () => {
           );
           const favoriteCities = await response.json();
           setFavoriteCityPlaceIds(favoriteCities);
-          console.log(favoriteCities);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
         }
@@ -47,7 +46,6 @@ const CurrentWeather = () => {
   useEffect(() => {
     if (placeId && favoriteCityPlaceIds.length > 0) {
       const isCityFavorite = favoriteCityPlaceIds.includes(placeId);
-      console.log(placeId);
       setIsFavorite(isCityFavorite);
     }
   }, [placeId, favoriteCityPlaceIds]);
@@ -94,14 +92,26 @@ const CurrentWeather = () => {
   };
 
   const handleStarClick = async () => {
-    if (!isFavorite) {
+    if (isFavorite) {
+      const confirmUnbookmark = window.confirm(
+        `Do you want to remove ${cityToDisplay} from your favorite cities?`
+      );
+      if (confirmUnbookmark) {
+        try {
+          setIsFavorite(false);
+          await unbookmarkCity();
+        } catch (error) {
+          console.error("Error unbookmarking city:", error);
+        }
+      }
+    } else {
       const confirmBookmark = window.confirm(
         `Do you want to add ${cityToDisplay} to your favorite cities?`
       );
       if (confirmBookmark) {
         try {
-          await bookmarkCity();
           setIsFavorite(true);
+          await bookmarkCity();
         } catch (error) {
           console.error("Error bookmarking city:", error);
         }
@@ -168,6 +178,41 @@ const CurrentWeather = () => {
     }
   };
 
+  const unbookmarkCity = async () => {
+    try {
+      // First, get the favoriteCityId for the current city (using placeId)
+      const cityResponse = await fetch(
+        `/api/favorite-cities?placeId=${placeId}`
+      );
+      const city = await cityResponse.json();
+
+      if (!city || !city.id) {
+        throw new Error("City not found in favorites");
+      }
+
+      const favoriteCityId = city.id;
+
+      // Delete the city from the UserFavoriteCity table using favoriteCityId
+      const response = await fetch(`/api/user-favorite-cities`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session?.user?.id,
+          favoriteCityId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to remove city from favorites");
+      }
+    } catch (error) {
+      console.error("Error unbookmarking the city:", error);
+      throw error;
+    }
+  };
+
   // Render loading state if any key weather information is missing
   if (
     !cityToDisplay ||
@@ -189,23 +234,16 @@ const CurrentWeather = () => {
         <div className={styles.currentWeather__citySection}>
           <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
           <div className={styles.currentWeather__starContainer}>
-            {isFavorite ? (
-              <Star
-                className={styles.currentWeather__starIcon}
-                style={{
-                  height: "24px",
-                  width: "24px",
-                  fill: "yellow",
-                  color: "yellowgreen",
-                }}
-              />
-            ) : (
-              <Star
-                className={styles.currentWeather__starIcon}
-                style={{ height: "24px", width: "24px" }}
-                onClick={handleStarClick}
-              />
-            )}
+            <Star
+              className={styles.currentWeather__starIcon}
+              style={{
+                height: "24px",
+                width: "24px",
+                fill: isFavorite ? "yellow" : "none",
+                color: isFavorite ? "yellowgreen" : "black",
+              }}
+              onClick={handleStarClick}
+            />
           </div>
         </div>
 
