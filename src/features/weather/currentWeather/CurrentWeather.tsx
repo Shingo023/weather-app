@@ -3,11 +3,9 @@
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { WeatherIcon } from "@/types";
 import { iconMapping } from "@/utils/weatherIconMapping";
-import { getCurrentTimeAndDate } from "@/utils/dateUtils";
-import { RotateCcw } from "lucide-react";
-import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
 import styles from "./CurrentWeather.module.scss";
 import StarIcon from "./StarIcon";
+import CurrentDateTime from "./CurrentDateTime";
 
 const CurrentWeather = () => {
   const {
@@ -16,11 +14,6 @@ const CurrentWeather = () => {
     setDisplayedCityWeather,
     displayedCityWeather,
   } = useDisplayedCityWeather();
-
-  const currentTimeAndDate =
-    displayedCityWeather?.timezone !== undefined
-      ? getCurrentTimeAndDate(displayedCityWeather?.timezone)
-      : undefined;
 
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
@@ -37,31 +30,9 @@ const CurrentWeather = () => {
   const currentWeatherIcon =
     currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
 
-  const updateWeatherInfo = async () => {
-    setDisplayedCityWeather(null);
-
-    const displayedCityLat = displayedCityWeather?.latitude;
-    const displayedCityLng = displayedCityWeather?.longitude;
-
-    if (displayedCityLat !== undefined && displayedCityLng !== undefined) {
-      try {
-        const updatedWeather = await getCityWeatherInfoByCoordinates(
-          displayedCityLat,
-          displayedCityLng
-        );
-        setDisplayedCityWeather(updatedWeather);
-      } catch (error) {
-        console.error("Error updating weather information:", error);
-      }
-    } else {
-      console.error("Latitude or longitude is undefined.");
-    }
-  };
-
   // Render loading state if any key weather information is missing
   if (
     !cityToDisplay ||
-    currentTimeAndDate === undefined ||
     currentTemp === undefined ||
     currentFeelslikeTemp === undefined ||
     currentWeatherIcon === undefined
@@ -85,17 +56,7 @@ const CurrentWeather = () => {
           <div className={styles.currentWeather__stateName}>{address}</div>
         </div>
 
-        <div className={styles.currentWeather__dateTimeContainer}>
-          <div
-            className={styles.currentWeather__dateTime}
-            onClick={updateWeatherInfo}
-          >
-            {currentTimeAndDate}
-          </div>
-          <div className={styles.currentWeather__updateIconContainer}>
-            <RotateCcw className={styles.currentWeather__updateIcon} />
-          </div>
-        </div>
+        <CurrentDateTime />
 
         <div className={styles.currentWeather__temp}>{currentTemp}°</div>
         <div className={styles.currentWeather__feelslikeTemp}>
