@@ -1,4 +1,3 @@
-import CurrentDateTime from "@/features/weather/currentWeather/CurrentDateTime";
 import styles from "./FavoriteCityCard.module.scss";
 
 type FavoriteCityCardPropsType = {
@@ -6,6 +5,7 @@ type FavoriteCityCardPropsType = {
   cityAddress: string;
   currentTemp: number;
   currentWeather: string;
+  currentDateTime: string;
 };
 
 const FavoriteCityCard = ({
@@ -13,6 +13,7 @@ const FavoriteCityCard = ({
   cityAddress,
   currentTemp,
   currentWeather,
+  currentDateTime,
 }: FavoriteCityCardPropsType) => {
   return (
     <div className={styles.cityCard}>

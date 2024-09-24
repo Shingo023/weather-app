@@ -18,16 +18,11 @@ export async function GET(request: Request) {
     const favoriteCities = await prisma.userFavoriteCity.findMany({
       where: { userId: userId },
       select: {
-        favoriteCity: {
-          select: {
-            placeId: true,
-          },
-        },
+        customName: true,
+        favoriteCity: true,
       },
     });
-    return NextResponse.json(
-      favoriteCities.map((fc) => fc.favoriteCity.placeId)
-    );
+    return NextResponse.json(favoriteCities.map((fc) => fc.favoriteCity));
   } catch (error) {
     console.error("Error fetching favorite cities:", error);
     return NextResponse.json(

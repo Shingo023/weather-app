@@ -117,3 +117,30 @@ declare module "next-auth" {
     id: string; // Add the id field to the User object
   }
 }
+
+export type FavoriteCity = {
+  id: number;
+  cityName: string;
+  placeId: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  timeZone: string;
+  createdAt: Date;
+  customName?: string;
+};
+
+export type FavoriteCityWithWeather = FavoriteCity & {
+  weather: WeatherData;
+};
+
+// Define the GeocodeResult type for Google Maps API response
+export type GeocodeResult = {
+  address_components: {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }[];
+  formatted_address: string;
+  place_id: string;
+};

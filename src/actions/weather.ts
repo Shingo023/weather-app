@@ -16,21 +16,3 @@ export const getCityWeatherInfo = async (cityName: string) => {
 export const getDisplayedCityWeather = () => {
   return displayedCityWeather;
 };
-
-export const getCityWeatherInfoByCoordinates = async (
-  lat: number,
-  lng: number
-) => {
-  const apiKey = process.env.WEATHER_API_KEY;
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lng}?unitGroup=metric&key=${apiKey}&contentType=json`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch weather data.");
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching weather info:", error);
-    throw error;
-  }
-};

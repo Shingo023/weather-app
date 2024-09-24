@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FavoriteCity } from "@/types";
 
 const StarIcon = () => {
   const {
@@ -28,9 +29,13 @@ const StarIcon = () => {
           );
           const favoriteCities = await response.json();
 
-          if (placeId && favoriteCities.length > 0) {
-            const isCityFavorite = favoriteCities.includes(placeId);
+          if (favoriteCities.length > 0) {
+            const isCityFavorite = favoriteCities.some(
+              (city: FavoriteCity) => city.placeId === placeId
+            );
             setIsFavorite(isCityFavorite);
+          } else {
+            setIsFavorite(false);
           }
         } catch (error) {
           console.error("Error fetching favorite cities:", error);

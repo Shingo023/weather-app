@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { LoadScriptProps, useJsApiLoader } from "@react-google-maps/api";
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
+import { WeatherData } from "@/types";
 
 // "places" library: necessary for autocomplete for addresses and places
 const libraries: LoadScriptProps["libraries"] = ["places"];
@@ -72,7 +72,10 @@ const SearchBar = () => {
 
         try {
           // Fetch weather data using coordinates
-          const weatherData = await getCityWeatherInfoByCoordinates(lat, lng);
+          const weatherResponse = await fetch(
+            `/api/weather?lat=${lat}&lng=${lng}`
+          );
+          const weatherData: WeatherData = await weatherResponse.json();
           if (weatherData) {
             setDisplayedCityWeather(weatherData);
           } else {

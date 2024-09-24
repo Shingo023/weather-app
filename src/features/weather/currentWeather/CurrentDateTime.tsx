@@ -1,8 +1,10 @@
-import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
+"use client";
+
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import styles from "./CurrentWeather.module.scss";
 import { RotateCcw } from "lucide-react";
+import { WeatherData } from "@/types";
 
 const CurrentDateTime = () => {
   const { displayedCityWeather, setDisplayedCityWeather } =
@@ -21,10 +23,12 @@ const CurrentDateTime = () => {
 
     if (displayedCityLat !== undefined && displayedCityLng !== undefined) {
       try {
-        const updatedWeather = await getCityWeatherInfoByCoordinates(
-          displayedCityLat,
-          displayedCityLng
+        // cons
+        const weatherResponse = await fetch(
+          `/api/weather?lat=${displayedCityLat}&lng=${displayedCityLng}`
         );
+        const updatedWeather: WeatherData = await weatherResponse.json();
+
         setDisplayedCityWeather(updatedWeather);
       } catch (error) {
         console.error("Error updating weather information:", error);

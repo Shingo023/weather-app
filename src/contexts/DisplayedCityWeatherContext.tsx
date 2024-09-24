@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createContext,
   ReactNode,
@@ -5,19 +7,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import { DisplayedCityWeatherContextType, WeatherData } from "@/types";
-import { getCityWeatherInfoByCoordinates } from "@/actions/weather";
-
-// Define the GeocodeResult type for Google Maps API response
-interface GeocodeResult {
-  address_components: {
-    long_name: string;
-    short_name: string;
-    types: string[];
-  }[];
-  formatted_address: string;
-  place_id: string;
-}
+import {
+  DisplayedCityWeatherContextType,
+  GeocodeResult,
+  WeatherData,
+} from "@/types";
 
 const defaultValue: DisplayedCityWeatherContextType = {
   displayedCityWeather: null,
@@ -52,10 +46,10 @@ export function DisplayedCityWeatherProvider({
           async (position) => {
             const { latitude, longitude } = position.coords;
             try {
-              const weatherData = await getCityWeatherInfoByCoordinates(
-                latitude,
-                longitude
+              const weatherResponse = await fetch(
+                `/api/weather?lat=${latitude}&lng=${longitude}`
               );
+              const weatherData: WeatherData = await weatherResponse.json();
               setDisplayedCityWeather(weatherData);
 
               // Google Maps Geocoding API call to get the city name
