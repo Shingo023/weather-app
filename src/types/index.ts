@@ -134,8 +134,7 @@ export type FavoriteCityWithWeather = FavoriteCity & {
   weather: WeatherData;
 };
 
-// Define the GeocodeResult type for Google Maps API response
-export type GeocodeResult = {
+export type LocationDetails = {
   address_components: {
     long_name: string;
     short_name: string;
@@ -143,4 +142,12 @@ export type GeocodeResult = {
   }[];
   formatted_address: string;
   place_id: string;
+};
+
+export type autocompleteSuggestion = {
+  place_id: string;
+  description: string;
+  structured_formatting: {
+    main_text: string;
+  };
 };

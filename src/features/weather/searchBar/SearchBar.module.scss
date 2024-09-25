@@ -1,0 +1,29 @@
+@import "@/style/base/variables.scss";
+
+.searchBar {
+  position: relative;
+
+  &__suggestionsList {
+    position: absolute; 
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    list-style-type: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    width: 100%;
+  }
+
+  &__suggestion {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    &:hover {
+      background-color: #D9D9D9;
+    }
+  }
+}
+

@@ -1,114 +1,136 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { LoadScriptProps, useJsApiLoader } from "@react-google-maps/api";
+import { useRef, useState } from "react";
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { WeatherData } from "@/types";
+import { autocompleteSuggestion, WeatherData } from "@/types";
+import { debounce } from "@/utils/debounce";
+import styles from "./SearchBar.module.scss";
 
 // "places" library: necessary for autocomplete for addresses and places
-const libraries: LoadScriptProps["libraries"] = ["places"];
-
 const SearchBar = () => {
   const { setCityToDisplay, setAddress, setPlaceId, setDisplayedCityWeather } =
     useDisplayedCityWeather();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [librariesArray] = useState<LoadScriptProps["libraries"]>(libraries);
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
+    autocompleteSuggestion[]
+  >([]);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load Google Maps API
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: librariesArray,
-  });
+  const handleInputChange = debounce(async () => {
+    const input = inputRef.current?.value;
 
-  useEffect(() => {
-    if (!isLoaded || !inputRef.current) return;
+    if (!input) {
+      setAutocompleteSuggestions([]);
+      setError(null);
+      return;
+    }
 
-    // Initialize Google Places Autocomplete
-    const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
-      types: ["geocode"],
-      fields: [
-        "formatted_address",
-        "geometry",
-        "address_components",
-        "place_id",
-      ],
-    });
+    setError(null);
 
-    // Event listener for place selection
-    const handlePlaceChanged = async () => {
-      const place = autocomplete.getPlace();
-      const placeId = place.place_id;
-      const address = place.formatted_address;
-      const lat = place.geometry?.location?.lat();
-      const lng = place.geometry?.location?.lng();
+    try {
+      const response = await fetch(
+        `/api/autocomplete?input=${encodeURIComponent(input)}`
+      );
+      const data = await response.json();
 
-      // Extract city, town, or village name from address_components
-      let cityName: string | null = null;
-      if (place.address_components) {
-        for (const component of place.address_components) {
-          if (
-            component.types.includes("locality") ||
-            component.types.includes("administrative_area_level_2")
-          ) {
-            cityName = component.long_name;
-            break;
-          }
-          if (component.types.includes("administrative_area_level_1")) {
-            cityName = component.long_name; // If no locality found, fallback to administrative_area_level_1
-          }
-        }
+      if (data.predictions) {
+        setAutocompleteSuggestions(data.predictions);
+      } else {
+        setAutocompleteSuggestions([]);
       }
+    } catch (error) {
+      console.error("Error fetching autocomplete data:", error);
+      setError("Failed to fetch suggestions. Please try again.");
+    }
+  }, 500);
 
-      if (
-        cityName &&
-        lat !== undefined &&
-        lng !== undefined &&
-        address &&
-        placeId
-      ) {
-        setCityToDisplay(cityName);
-        setAddress(address);
+  // Handle place selection and fetch weather data
+  const handlePlaceSelect = async (
+    placeName: string,
+    placeId: string,
+    description: string
+  ) => {
+    setAutocompleteSuggestions([]);
+    setError(null);
+
+    if (inputRef.current) {
+      inputRef.current.value = description;
+    }
+
+    try {
+      const coordinateResponse = await fetch(
+        `/api/place-coordinate?placeId=${placeId}`
+      );
+      const coordinateData = await coordinateResponse.json();
+      const { latitude, longitude } = coordinateData;
+
+      if (latitude && longitude && placeName && description) {
+        setCityToDisplay(placeName);
+        setAddress(description);
         setPlaceId(placeId);
 
+        // Fetch weather data only if coordinates are valid
         try {
-          // Fetch weather data using coordinates
           const weatherResponse = await fetch(
-            `/api/weather?lat=${lat}&lng=${lng}`
+            `/api/weather?lat=${latitude}&lng=${longitude}`
           );
           const weatherData: WeatherData = await weatherResponse.json();
-          if (weatherData) {
-            setDisplayedCityWeather(weatherData);
-          } else {
-            alert(
-              "Weather data for the selected city is unavailable. Please try another city."
-            );
-          }
+          setDisplayedCityWeather(weatherData);
         } catch (error) {
           console.error("Error fetching weather info", error);
-          alert("Failed to fetch weather data. Please try again later.");
+          setError("Failed to fetch weather data. Please try again.");
         }
       } else {
-        alert("Please select a city from the dropdown menu.");
+        setError("Invalid place data. Please try again.");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching place details:", error);
+      setError("Failed to fetch place details. Please try again.");
+    }
+  };
 
-    // Attach the listener
-    autocomplete.addListener("place_changed", handlePlaceChanged);
-
-    // Cleanup function to remove the listener when the component unmounts
-    return () => {
-      google.maps.event.clearInstanceListeners(autocomplete);
-    };
-  }, [isLoaded, setDisplayedCityWeather, setCityToDisplay, setAddress]);
-
-  if (loadError) {
-    console.error("Error loading Google Maps:", loadError);
-    return <div>Error loading Google Maps</div>;
-  }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      if (autocompleteSuggestions.length > 0) {
+        setError("Please select a suggested place from the dropdown.");
+      } else {
+        setError(null);
+      }
+    }
+  };
 
   return (
-    <div>
-      <input ref={inputRef} type="text" placeholder="Enter a city" />
+    <div className={styles.searchBar}>
+      <input
+        ref={inputRef}
+        type="text"
+        placeholder="Enter a city"
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {autocompleteSuggestions.length > 0 && (
+        <ul className={styles.searchBar__suggestionsList} role="listbox">
+          {autocompleteSuggestions.map((suggestion) => (
+            <li
+              className={styles.searchBar__suggestion}
+              role="option"
+              key={suggestion.place_id}
+              onClick={() =>
+                handlePlaceSelect(
+                  suggestion.structured_formatting.main_text,
+                  suggestion.place_id,
+                  suggestion.description
+                )
+              }
+            >
+              {suggestion.description}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -9,7 +9,7 @@ import {
 } from "react";
 import {
   DisplayedCityWeatherContextType,
-  GeocodeResult,
+  LocationDetails,
   WeatherData,
 } from "@/types";
 
@@ -52,26 +52,26 @@ export function DisplayedCityWeatherProvider({
               const weatherData: WeatherData = await weatherResponse.json();
               setDisplayedCityWeather(weatherData);
 
-              const geocodeResponse = await fetch(
-                `/api/geocode?lat=${latitude}&lng=${longitude}`
+              const locationDetailsResponse = await fetch(
+                `/api/location-details?lat=${latitude}&lng=${longitude}`
               );
-              const geocodeData = await geocodeResponse.json();
+              const locationDetailsData = await locationDetailsResponse.json();
 
               if (
-                geocodeData.status === "OK" &&
-                geocodeData.results.length > 0
+                locationDetailsData.status === "OK" &&
+                locationDetailsData.results.length > 0
               ) {
-                const geocodeResult: GeocodeResult = geocodeData.results[0];
-                const addressComponents = geocodeResult.address_components;
+                const locationDetails: LocationDetails =
+                  locationDetailsData.results[0];
+                const addressComponents = locationDetails.address_components;
 
-                // Extracting city from the geocode result
                 const cityComponent = addressComponents.find((component) =>
                   component.types.includes("locality")
                 );
 
                 const cityName = cityComponent?.long_name || "Unknown Location";
-                const address = geocodeResult?.formatted_address || null;
-                const placeId = geocodeResult?.place_id || null;
+                const address = locationDetails?.formatted_address || null;
+                const placeId = locationDetails?.place_id || null;
 
                 setCityToDisplay(cityName || "Unknown Location");
                 setAddress(address || null);
