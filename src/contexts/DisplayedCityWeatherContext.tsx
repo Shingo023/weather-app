@@ -52,16 +52,16 @@ export function DisplayedCityWeatherProvider({
               const weatherData: WeatherData = await weatherResponse.json();
               setDisplayedCityWeather(weatherData);
 
-              // Google Maps Geocoding API call to get the city name
-              const googleMapsApiKey =
-                process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-              const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleMapsApiKey}`
+              const geocodeResponse = await fetch(
+                `/api/geocode?lat=${latitude}&lng=${longitude}`
               );
-              const data = await response.json();
+              const geocodeData = await geocodeResponse.json();
 
-              if (data.status === "OK" && data.results.length > 0) {
-                const geocodeResult: GeocodeResult = data.results[0];
+              if (
+                geocodeData.status === "OK" &&
+                geocodeData.results.length > 0
+              ) {
+                const geocodeResult: GeocodeResult = geocodeData.results[0];
                 const addressComponents = geocodeResult.address_components;
 
                 // Extracting city from the geocode result
