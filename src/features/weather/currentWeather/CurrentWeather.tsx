@@ -8,12 +8,8 @@ import StarIcon from "./StarIcon";
 import CurrentDateTime from "./CurrentDateTime";
 
 const CurrentWeather = () => {
-  const {
-    cityToDisplay,
-    address,
-    setDisplayedCityWeather,
-    displayedCityWeather,
-  } = useDisplayedCityWeather();
+  const { cityToDisplay, address, displayedCityWeather } =
+    useDisplayedCityWeather();
 
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)

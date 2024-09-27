@@ -2,20 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { FavoriteCity, FavoriteCityWithWeather, WeatherData } from "@/types";
+import {
+  FavoriteCity,
+  FavoriteCityWithWeather,
+  WeatherData,
+  WeatherIcon,
+} from "@/types";
 import FavoriteCityCard from "@/features/favoritesList/favoriteCityCard/FavoriteCityCard";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
+import { useRouter } from "next/navigation";
+import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
     FavoriteCityWithWeather[]
   >([]);
+  const { setDisplayedCityWeather, setCityToDisplay, setAddress, setPlaceId } =
+    useDisplayedCityWeather();
 
   const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchFavoriteCitiesWithWeather = async () => {
-      if (session?.user?.id && favoriteCitiesWithWeather.length === 0) {
+      if (session?.user?.id) {
         try {
           const response = await fetch(
             `/api/user-favorite-cities?userId=${session.user.id}`
@@ -36,7 +46,7 @@ const FavoriteList = () => {
               };
             })
           );
-
+          console.log(favoriteCitiesWeatherData);
           setFavoriteCitiesWithWeather(favoriteCitiesWeatherData);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
@@ -45,7 +55,20 @@ const FavoriteList = () => {
     };
 
     fetchFavoriteCitiesWithWeather();
-  }, [session, favoriteCitiesWithWeather.length]);
+  }, [session]);
+
+  const handleCardClick = (
+    weather: WeatherData,
+    cityName: string,
+    cityAddress: string,
+    placeId: string
+  ) => {
+    setDisplayedCityWeather(weather);
+    setCityToDisplay(cityName);
+    setAddress(cityAddress);
+    setPlaceId(placeId);
+    router.push("/weather");
+  };
 
   return (
     <>
@@ -55,7 +78,8 @@ const FavoriteList = () => {
         const currentTemp = Math.round(
           favoriteCity.weather.currentConditions.temp
         );
-        const currentWeather = favoriteCity.weather.currentConditions.icon;
+        const currentWeather = favoriteCity.weather.currentConditions
+          .icon as WeatherIcon;
         const currentDateTime = getCurrentTimeAndDate(favoriteCity.timeZone);
 
         return (
@@ -66,6 +90,14 @@ const FavoriteList = () => {
             currentTemp={currentTemp}
             currentWeather={currentWeather}
             currentDateTime={currentDateTime}
+            onClick={() =>
+              handleCardClick(
+                favoriteCity.weather,
+                cityName,
+                cityAddress,
+                favoriteCity.placeId
+              )
+            }
           />
         );
       })}

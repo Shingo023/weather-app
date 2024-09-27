@@ -151,3 +151,12 @@ export type autocompleteSuggestion = {
     main_text: string;
   };
 };
+
+export type FavoriteCityCardPropsType = {
+  cityName: string;
+  cityAddress: string;
+  currentTemp: number;
+  currentWeather: WeatherIcon;
+  currentDateTime: string;
+  onClick: () => void;
+};

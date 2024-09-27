@@ -23,7 +23,6 @@ const CurrentDateTime = () => {
 
     if (displayedCityLat !== undefined && displayedCityLng !== undefined) {
       try {
-        // cons
         const weatherResponse = await fetch(
           `/api/weather?lat=${displayedCityLat}&lng=${displayedCityLng}`
         );

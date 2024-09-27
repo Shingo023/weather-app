@@ -13,7 +13,7 @@ export async function GET(request: Request) {
   }
 
   const apiKey = process.env.WEATHER_API_KEY;
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lng}?unitGroup=metric&key=${apiKey}&contentType=json`;
+  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${lat},${lng}?unitGroup=metric&key=${apiKey}&contentType=json&include=current,hours`;
 
   try {
     const response = await fetch(url);

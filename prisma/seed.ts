@@ -20,7 +20,7 @@ async function main() {
       latitude: 51.5072178,
       longitude: -0.1275862,
       timeZone: "Europe/London",
-      placeId: "ChIJdd4hrwug2EcRmSrV3Vo6llI", // Adding placeId for London
+      placeId: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
     },
   });
 
