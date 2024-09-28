@@ -20,7 +20,7 @@ const FavoriteList = () => {
   const { setDisplayedCityWeather, setCityToDisplay, setAddress, setPlaceId } =
     useDisplayedCityWeather();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -54,8 +54,11 @@ const FavoriteList = () => {
       }
     };
 
-    fetchFavoriteCitiesWithWeather();
-  }, [session]);
+    // Only run the effect once the session is loaded and available
+    if (status === "authenticated") {
+      fetchFavoriteCitiesWithWeather();
+    }
+  }, [status, session?.user?.id]);
 
   const handleCardClick = (
     weather: WeatherData,

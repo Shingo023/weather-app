@@ -1,3 +1,5 @@
+"use client";
+
 import { FavoriteCityCardPropsType } from "@/types";
 import styles from "./FavoriteCityCard.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
