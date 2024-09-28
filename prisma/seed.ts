@@ -38,6 +38,7 @@ async function main() {
     data: {
       userId: user1.id,
       favoriteCityId: london.id,
+      isDefault: true,
     },
   });
 
