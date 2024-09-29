@@ -46,7 +46,6 @@ const FavoriteList = () => {
               };
             })
           );
-          console.log(favoriteCitiesWeatherData);
           setFavoriteCitiesWithWeather(favoriteCitiesWeatherData);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
@@ -60,17 +59,8 @@ const FavoriteList = () => {
     }
   }, [status, session?.user?.id]);
 
-  const handleCardClick = (
-    weather: WeatherData,
-    cityName: string,
-    cityAddress: string,
-    placeId: string
-  ) => {
-    setDisplayedCityWeather(weather);
-    setCityToDisplay(cityName);
-    setAddress(cityAddress);
-    setPlaceId(placeId);
-    router.push("/weather");
+  const handleCardClick = (lat: number, lng: number, placeId: string) => {
+    router.push(`/weather/${lat}/${lng}?placeId=${placeId}`);
   };
 
   return (
@@ -95,9 +85,8 @@ const FavoriteList = () => {
             currentDateTime={currentDateTime}
             onClick={() =>
               handleCardClick(
-                favoriteCity.weather,
-                cityName,
-                cityAddress,
+                favoriteCity.latitude,
+                favoriteCity.longitude,
                 favoriteCity.placeId
               )
             }

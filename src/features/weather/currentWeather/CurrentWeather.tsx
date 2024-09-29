@@ -1,15 +1,29 @@
 "use client";
 
-import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { WeatherIcon } from "@/types";
+import { WeatherData, WeatherIconType } from "@/types";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import styles from "./CurrentWeather.module.scss";
 import StarIcon from "./StarIcon";
 import CurrentDateTime from "./CurrentDateTime";
+import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
 
-const CurrentWeather = () => {
-  const { cityToDisplay, address, displayedCityWeather } =
-    useDisplayedCityWeather();
+interface CurrentWeatherProps {
+  displayedCityWeather: WeatherData | null;
+  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
+}
+
+const CurrentWeather = ({
+  displayedCityWeather,
+  setDisplayedCityWeather,
+  cityToDisplay,
+  address,
+  placeId,
+}: CurrentWeatherProps) => {
+  // const { cityToDisplay, address, displayedCityWeather } =
+  //   useDisplayedCityWeather();
 
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
@@ -20,7 +34,7 @@ const CurrentWeather = () => {
     : undefined;
 
   const currentWeather = displayedCityWeather?.currentConditions.icon as
-    | WeatherIcon
+    | WeatherIconType
     | undefined;
 
   const currentWeatherIcon =
@@ -45,14 +59,24 @@ const CurrentWeather = () => {
       <div className={styles.currentWeather__data}>
         <div className={styles.currentWeather__citySection}>
           <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
-          <StarIcon />
+          <StarIcon
+            displayedCityWeather={displayedCityWeather}
+            cityToDisplay={cityToDisplay}
+            address={address}
+            placeId={placeId}
+          />
         </div>
 
         <div className={styles.currentWeather__stateAndCountry}>
           <div className={styles.currentWeather__stateName}>{address}</div>
         </div>
 
-        <CurrentDateTime />
+        {displayedCityWeather && (
+          <CurrentDateTime
+            displayedCityWeather={displayedCityWeather}
+            setDisplayedCityWeather={setDisplayedCityWeather}
+          />
+        )}
 
         <div className={styles.currentWeather__temp}>{currentTemp}°</div>
         <div className={styles.currentWeather__feelslikeTemp}>
@@ -61,18 +85,14 @@ const CurrentWeather = () => {
       </div>
 
       <div className={styles.currentWeather__weatherIconContainer}>
-        {currentWeatherIcon ? (
-          <img
-            src={currentWeatherIcon}
-            alt="Weather icon"
-            width={150}
-            height={150}
-            className={styles.currentWeather__weatherIcon}
-          />
-        ) : null}
+        <WeatherIcon
+          weatherIcon={currentWeatherIcon}
+          width={150}
+          height={150}
+          priority={true}
+        />
       </div>
     </div>
   );
 };
-
 export default CurrentWeather;

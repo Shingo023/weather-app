@@ -5,11 +5,15 @@ import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import styles from "./CurrentWeather.module.scss";
 import { RotateCcw } from "lucide-react";
 import { WeatherData } from "@/types";
+import { useState } from "react";
 
-const CurrentDateTime = () => {
-  const { displayedCityWeather, setDisplayedCityWeather } =
-    useDisplayedCityWeather();
-
+const CurrentDateTime = ({
+  displayedCityWeather,
+  setDisplayedCityWeather,
+}: {
+  displayedCityWeather: WeatherData;
+  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
+}) => {
   const currentTimeAndDate =
     displayedCityWeather?.timezone !== undefined
       ? getCurrentTimeAndDate(displayedCityWeather?.timezone)

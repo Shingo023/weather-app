@@ -38,6 +38,7 @@ const SidebarLink = ({
         alt={alt}
         width={50}
         height={50}
+        priority
       />
       <span className={pathname === path ? styles.name : styles.namePale}>
         {linkName}

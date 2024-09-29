@@ -3,6 +3,7 @@
 import { FavoriteCityCardPropsType } from "@/types";
 import styles from "./FavoriteCityCard.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
+import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
 
 const FavoriteCityCard = ({
   cityName,
@@ -13,7 +14,7 @@ const FavoriteCityCard = ({
   onClick,
 }: FavoriteCityCardPropsType) => {
   const currentWeatherIcon =
-    currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
+    currentWeather !== undefined ? iconMapping[currentWeather] : null;
 
   return (
     <div className={styles.cityCard} onClick={onClick}>
@@ -30,15 +31,12 @@ const FavoriteCityCard = ({
           </div>
           <div className={styles.cityCard__currentWeather}>
             <div className={styles.cityCard__currentWeatherIconContainer}>
-              {currentWeatherIcon ? (
-                <img
-                  src={currentWeatherIcon}
-                  alt="Weather icon"
-                  width={70}
-                  height={70}
-                  className={styles.cityCard__currentWeatherIcon}
-                />
-              ) : null}
+              <WeatherIcon
+                weatherIcon={currentWeatherIcon}
+                width={70}
+                height={70}
+                priority={true}
+              />
             </div>
             <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>
           </div>

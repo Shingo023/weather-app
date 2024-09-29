@@ -7,6 +7,10 @@ import SidebarLink from "./SidebarLink";
 const Sidebar = () => {
   const { data: session, status } = useSession();
 
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/weather" });
+  };
+
   return (
     <div className={styles.sidebar}>
       {status === "authenticated" ? (
@@ -26,7 +30,7 @@ const Sidebar = () => {
             iconPale={"/favorite-list-icon-pale.svg"}
             alt={"favorite-list-icon"}
           />
-          <div onClick={() => signOut()} style={{ cursor: "pointer" }}>
+          <div onClick={handleSignOut} style={{ cursor: "pointer" }}>
             Log Out
           </div>
         </>

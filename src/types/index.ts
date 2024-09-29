@@ -4,7 +4,6 @@ import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 export type DisplayedCityWeatherContextType = {
   displayedCityWeather: WeatherData | null;
   setDisplayedCityWeather: Dispatch<SetStateAction<WeatherData | null>>;
-  updateCity: (newCity: WeatherData) => void;
   cityToDisplay: string | null;
   setCityToDisplay: React.Dispatch<React.SetStateAction<string | null>>;
   address: string | null;
@@ -94,7 +93,7 @@ type WeatherHour = {
   source: string;
 };
 
-export type WeatherIcon =
+export type WeatherIconType =
   | "clear-day"
   | "clear-night"
   | "rain"
@@ -156,7 +155,7 @@ export type FavoriteCityCardPropsType = {
   cityName: string;
   cityAddress: string;
   currentTemp: number;
-  currentWeather: WeatherIcon;
+  currentWeather: WeatherIconType;
   currentDateTime: string;
   onClick: () => void;
 };

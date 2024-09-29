@@ -7,16 +7,21 @@ import { useSession } from "next-auth/react";
 import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FavoriteCity } from "@/types";
+import { FavoriteCity, WeatherData } from "@/types";
 
-const StarIcon = () => {
-  const {
-    cityToDisplay,
-    address,
-    placeId,
-    setDisplayedCityWeather,
-    displayedCityWeather,
-  } = useDisplayedCityWeather();
+interface CurrentWeatherProps {
+  displayedCityWeather: WeatherData | null;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
+}
+
+const StarIcon = ({
+  displayedCityWeather,
+  cityToDisplay,
+  address,
+  placeId,
+}: CurrentWeatherProps) => {
   const { data: session } = useSession();
   const [isFavorite, setIsFavorite] = useState(false);
 
