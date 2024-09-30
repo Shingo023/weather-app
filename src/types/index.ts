@@ -159,3 +159,18 @@ export type FavoriteCityCardPropsType = {
   currentDateTime: string;
   onClick: () => void;
 };
+
+export type CurrentWeatherPropsType = {
+  displayedCityWeather: WeatherData | null;
+  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
+};
+
+export type StarIconPropsType = {
+  displayedCityWeather: WeatherData | null;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
+};

@@ -4,24 +4,16 @@ import { useEffect, useState } from "react";
 import styles from "./CurrentWeather.module.scss";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FavoriteCity, WeatherData } from "@/types";
-
-interface CurrentWeatherProps {
-  displayedCityWeather: WeatherData | null;
-  cityToDisplay: string | null;
-  address: string | null;
-  placeId: string | null;
-}
+import { FavoriteCity, StarIconPropsType } from "@/types";
 
 const StarIcon = ({
   displayedCityWeather,
   cityToDisplay,
   address,
   placeId,
-}: CurrentWeatherProps) => {
+}: StarIconPropsType) => {
   const { data: session } = useSession();
   const [isFavorite, setIsFavorite] = useState(false);
 

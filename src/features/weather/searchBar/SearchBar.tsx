@@ -5,21 +5,10 @@ import { autocompleteSuggestion, WeatherData } from "@/types";
 import { debounce } from "@/utils/debounce";
 import styles from "./SearchBar.module.scss";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 // "places" library: necessary for autocomplete for addresses and places
-const SearchBar = ({
-  setCityToDisplay,
-  setAddress,
-  setPlaceId,
-}: // setDisplayedCityWeather,
-{
-  setCityToDisplay: (city: string | null) => void;
-  setAddress: (address: string | null) => void;
-  setPlaceId: (placeId: string | null) => void;
-  // setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
-}) => {
-  // const { setCityToDisplay, setAddress, setPlaceId, setDisplayedCityWeather } =
-  //   useDisplayedCityWeather();
+const SearchBar = React.memo(() => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<
     autocompleteSuggestion[]
@@ -75,21 +64,10 @@ const SearchBar = ({
       const coordinateData = await coordinateResponse.json();
       const { latitude, longitude } = coordinateData;
 
-      if (latitude && longitude && placeName && description) {
-        // setCityToDisplay(placeName);
-        // setAddress(description);
-        // setPlaceId(placeId);
-        router.push(`/weather/${latitude}/${longitude}`);
-        // Fetch weather data only if coordinates are valid
-        // try {
-        //   const weatherResponse = await fetch(
-        //     `/api/weather?lat=${latitude}&lng=${longitude}`
-        //   );
-        //   const weatherData: WeatherData = await weatherResponse.json();
-        // } catch (error) {
-        //   console.error("Error fetching weather info", error);
-        //   setError("Failed to fetch weather data. Please try again.");
-        // }
+      if (latitude && longitude && placeName && description && placeId) {
+        router.push(
+          `/weather/${latitude}/${longitude}?place=${placeName}&address=${description}&id=${placeId}`
+        );
       } else {
         setError("Invalid place data. Please try again.");
       }
@@ -143,6 +121,6 @@ const SearchBar = ({
       )}
     </div>
   );
-};
+});
 
 export default SearchBar;

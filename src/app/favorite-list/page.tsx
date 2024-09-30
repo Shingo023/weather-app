@@ -6,19 +6,16 @@ import {
   FavoriteCity,
   FavoriteCityWithWeather,
   WeatherData,
-  WeatherIcon,
+  WeatherIconType,
 } from "@/types";
 import FavoriteCityCard from "@/features/favoritesList/favoriteCityCard/FavoriteCityCard";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import { useRouter } from "next/navigation";
-import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
     FavoriteCityWithWeather[]
   >([]);
-  const { setDisplayedCityWeather, setCityToDisplay, setAddress, setPlaceId } =
-    useDisplayedCityWeather();
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -59,8 +56,16 @@ const FavoriteList = () => {
     }
   }, [status, session?.user?.id]);
 
-  const handleCardClick = (lat: number, lng: number, placeId: string) => {
-    router.push(`/weather/${lat}/${lng}?placeId=${placeId}`);
+  const handleCardClick = (
+    lat: number,
+    lng: number,
+    placeName: string,
+    address: string,
+    placeId: string
+  ) => {
+    router.push(
+      `/weather/${lat}/${lng}?place=${placeName}&address=${address}&id=${placeId}`
+    );
   };
 
   return (
@@ -72,7 +77,7 @@ const FavoriteList = () => {
           favoriteCity.weather.currentConditions.temp
         );
         const currentWeather = favoriteCity.weather.currentConditions
-          .icon as WeatherIcon;
+          .icon as WeatherIconType;
         const currentDateTime = getCurrentTimeAndDate(favoriteCity.timeZone);
 
         return (
@@ -87,6 +92,8 @@ const FavoriteList = () => {
               handleCardClick(
                 favoriteCity.latitude,
                 favoriteCity.longitude,
+                cityName,
+                cityAddress,
                 favoriteCity.placeId
               )
             }

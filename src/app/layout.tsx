@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import Sidebar from "./components/layouts/sideBar/Sidebar";
-import SessionAndContextLayout from "./SessionAndContextLayout";
+import SessionLayout from "./SessionLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionAndContextLayout>
+        <SessionLayout>
           <Sidebar />
           {children}
-        </SessionAndContextLayout>
+        </SessionLayout>
       </body>
     </html>
   );

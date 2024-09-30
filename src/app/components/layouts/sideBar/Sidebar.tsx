@@ -3,9 +3,15 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "./Sidebar.module.scss";
 import SidebarLink from "./SidebarLink";
+import { memo } from "react";
 
 const Sidebar = () => {
   const { data: session, status } = useSession();
+
+  // Render nothing while the session status is "loading"
+  if (status === "loading") {
+    return null;
+  }
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/weather" });
@@ -59,4 +65,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default memo(Sidebar);

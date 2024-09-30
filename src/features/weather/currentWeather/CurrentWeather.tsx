@@ -1,19 +1,12 @@
 "use client";
 
-import { WeatherData, WeatherIconType } from "@/types";
+import { CurrentWeatherPropsType, WeatherIconType } from "@/types";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import styles from "./CurrentWeather.module.scss";
 import StarIcon from "./StarIcon";
 import CurrentDateTime from "./CurrentDateTime";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
-
-interface CurrentWeatherProps {
-  displayedCityWeather: WeatherData | null;
-  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
-  cityToDisplay: string | null;
-  address: string | null;
-  placeId: string | null;
-}
+import { useState } from "react";
 
 const CurrentWeather = ({
   displayedCityWeather,
@@ -21,10 +14,7 @@ const CurrentWeather = ({
   cityToDisplay,
   address,
   placeId,
-}: CurrentWeatherProps) => {
-  // const { cityToDisplay, address, displayedCityWeather } =
-  //   useDisplayedCityWeather();
-
+}: CurrentWeatherPropsType) => {
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
     : undefined;
@@ -41,12 +31,13 @@ const CurrentWeather = ({
     currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
 
   // Render loading state if any key weather information is missing
-  if (
+  const isLoading =
     !cityToDisplay ||
     currentTemp === undefined ||
     currentFeelslikeTemp === undefined ||
-    currentWeatherIcon === undefined
-  ) {
+    currentWeatherIcon === undefined;
+
+  if (isLoading) {
     return (
       <div className={styles.currentWeather__loading}>
         Loading weather data...
@@ -89,7 +80,6 @@ const CurrentWeather = ({
           weatherIcon={currentWeatherIcon}
           width={150}
           height={150}
-          priority={true}
         />
       </div>
     </div>

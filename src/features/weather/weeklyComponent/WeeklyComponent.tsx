@@ -68,7 +68,6 @@ export const WeeklyComponent = ({
                     weatherIcon={dailyWeatherIcon}
                     width={50}
                     height={50}
-                    priority={true}
                   />
                 </p>
                 <p>

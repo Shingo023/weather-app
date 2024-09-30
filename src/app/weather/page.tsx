@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { FavoriteCity } from "@/types";
 
 export default function Home() {
   const router = useRouter();
@@ -15,36 +16,34 @@ export default function Home() {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            // Redirect to the URL with the latitude and longitude
             router.push(`/weather/${latitude}/${longitude}`);
           },
           (error) => {
             console.error("Error getting geolocation:", error);
-            setLoading(false); // Stop loading in case of error
+            setLoading(false);
           }
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
-        setLoading(false); // Stop loading if geolocation is not supported
+        setLoading(false);
       }
     };
 
     const fetchDefaultCityAndRedirect = async (userId: string) => {
       try {
-        const response = await fetch(`/api/user/${userId}/default-city`);
-        const data = await response.json();
+        const response = await fetch(`/api/users/${userId}/default-city`);
+        const data: FavoriteCity = await response.json();
 
-        if (data && data.latitude && data.longitude) {
-          const { latitude, longitude, placeId } = data;
-          // If the user has a default city, redirect to it with cityId as a query
-          router.push(`/weather/${latitude}/${longitude}?placeId=${placeId}`);
+        if (data) {
+          const { latitude, longitude, cityName, address, placeId } = data;
+          router.push(
+            `/weather/${latitude}/${longitude}?place=${cityName}&address=${address}&id=${placeId}`
+          );
         } else {
-          // If no default city is found, fallback to user's current location
           fetchLocationAndRedirect();
         }
       } catch (error) {
         console.error("Error fetching default city:", error);
-        // Fallback to user's current location in case of error
         fetchLocationAndRedirect();
       }
     };
@@ -60,8 +59,8 @@ export default function Home() {
   }, [router, session, status]);
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading message while fetching data
+    return <div>Loading...</div>;
   }
 
-  return null; // Optionally, render nothing once the redirect happens
+  return null;
 }

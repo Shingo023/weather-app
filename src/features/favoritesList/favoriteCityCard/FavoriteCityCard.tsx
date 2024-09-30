@@ -35,7 +35,6 @@ const FavoriteCityCard = ({
                 weatherIcon={currentWeatherIcon}
                 width={70}
                 height={70}
-                priority={true}
               />
             </div>
             <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>

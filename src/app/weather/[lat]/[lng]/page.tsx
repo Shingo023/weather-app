@@ -11,7 +11,10 @@ import { useSession } from "next-auth/react";
 export default function WeatherPage() {
   const { lat, lng } = useParams();
   const searchParams = useSearchParams();
-  const placeIdQuery = searchParams.get("placeId");
+  const cityQuery = searchParams.get("place");
+  const addressQuery = searchParams.get("address");
+  const placeIdQuery = searchParams.get("id");
+
   const [displayedCityWeather, setDisplayedCityWeather] =
     useState<WeatherData | null>(null);
   const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
@@ -19,7 +22,6 @@ export default function WeatherPage() {
   const [placeId, setPlaceId] = useState<string | null>(null);
 
   const router = useRouter();
-  const { data: session } = useSession();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,7 +64,7 @@ export default function WeatherPage() {
 
         setCityToDisplay(cityName || "Unknown Location");
         setAddress(address || null);
-        // setPlaceId(placeId || null);
+        setPlaceId(placeId || null);
       } else {
         console.error("No results from Geocoding API");
       }
@@ -71,43 +73,22 @@ export default function WeatherPage() {
     }
   };
 
-  const fetchPlaceDataByPlaceId = async (placeIdQuery: string) => {
-    try {
-      const response = await fetch(
-        `/api/favorite-cities?placeId=${placeIdQuery}`
-      );
-      const placeData = await response.json();
-
-      if (placeData && placeData.latitude && placeData.longitude) {
-        await fetchWeatherData(placeData.latitude, placeData.longitude);
-
-        setCityToDisplay(placeData.cityName || "Unknown Location");
-        setAddress(placeData.address || null);
-        setPlaceId(placeIdQuery || null);
-      } else {
-        console.error("No valid place data found for placeId.");
-      }
-    } catch (error) {
-      console.error("Error fetching place data by placeId:", error);
-    }
-  };
-
   useEffect(() => {
-    if (placeIdQuery) {
-      fetchPlaceDataByPlaceId(placeIdQuery);
-    } else if (lat && lng) {
+    if (lat && lng) {
+      if (cityQuery && addressQuery && placeIdQuery) {
+        setCityToDisplay(cityQuery);
+        setAddress(addressQuery);
+        setPlaceId(placeIdQuery);
+      } else {
+        fetchLocationDetails(Number(lat), Number(lng));
+      }
       fetchWeatherData(Number(lat), Number(lng));
-      fetchLocationDetails(Number(lat), Number(lng));
     }
-  }, [lat, lng, placeId]);
+  }, [lat, lng, cityQuery, addressQuery, placeIdQuery]);
 
   return (
     <div>
-      <SearchBar
-        setCityToDisplay={setCityToDisplay}
-        setAddress={setAddress}
-        setPlaceId={setPlaceId}
-      />
+      <SearchBar />
       <CurrentWeather
         displayedCityWeather={displayedCityWeather}
         setDisplayedCityWeather={setDisplayedCityWeather}
