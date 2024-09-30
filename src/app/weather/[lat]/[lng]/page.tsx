@@ -35,7 +35,6 @@ export default function WeatherPage() {
       const weatherData: WeatherData = await weatherResponse.json();
 
       setDisplayedCityWeather(weatherData);
-      console.log("Weather Data Fetched:", weatherData);
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
