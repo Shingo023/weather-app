@@ -7,5 +7,9 @@ export default function SessionLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return (
+    <div>
+      <SessionProvider>{children}</SessionProvider>
+    </div>
+  );
 }

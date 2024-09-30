@@ -3,9 +3,19 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "./Sidebar.module.scss";
 import SidebarLink from "./SidebarLink";
+import { memo } from "react";
 
 const Sidebar = () => {
   const { data: session, status } = useSession();
+
+  // Render nothing while the session status is "loading"
+  if (status === "loading") {
+    return null;
+  }
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/weather" });
+  };
 
   return (
     <div className={styles.sidebar}>
@@ -26,7 +36,7 @@ const Sidebar = () => {
             iconPale={"/favorite-list-icon-pale.svg"}
             alt={"favorite-list-icon"}
           />
-          <div onClick={() => signOut()} style={{ cursor: "pointer" }}>
+          <div onClick={handleSignOut} style={{ cursor: "pointer" }}>
             Log Out
           </div>
         </>
@@ -55,4 +65,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default memo(Sidebar);

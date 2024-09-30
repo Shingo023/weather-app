@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
-import Sidebar from "./components/Sidebar";
 import { Metadata } from "next";
+import Sidebar from "./components/layouts/sideBar/Sidebar";
 import SessionLayout from "./SessionLayout";
 
 const inter = Inter({ subsets: ["latin"] });

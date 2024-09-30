@@ -1,12 +1,14 @@
-import { useDisplayedCityWeather } from "@/contexts/DisplayedCityWeatherContext";
-import { WeatherDay, WeatherIcon } from "@/types";
-import styles from "../style/components/WeeklyComponent.module.scss";
+import { WeatherData, WeatherDay, WeatherIconType } from "@/types";
+import styles from "@/style/components/WeeklyComponent.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React from "react";
+import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
 
-export const WeeklyComponent = () => {
-  const { displayedCityWeather } = useDisplayedCityWeather();
-
+export const WeeklyComponent = ({
+  displayedCityWeather,
+}: {
+  displayedCityWeather: WeatherData | null;
+}) => {
   const weeklyWeather: WeatherDay[] | undefined =
     displayedCityWeather?.days.slice(0, 7);
 
@@ -54,7 +56,7 @@ export const WeeklyComponent = () => {
         {weeklyWeather ? (
           weeklyWeather.map((dailyWeather, index) => {
             const dailyWeatherIcon =
-              iconMapping[dailyWeather.icon as WeatherIcon];
+              iconMapping[dailyWeather.icon as WeatherIconType];
 
             return (
               <li className={styles.WeeklyComponentItem} key={index}>
@@ -62,9 +64,11 @@ export const WeeklyComponent = () => {
                   {getWeekday(dailyWeather.datetime)}
                 </p>
                 <p>
-                  {dailyWeatherIcon
-                    ? React.createElement(dailyWeatherIcon)
-                    : undefined}
+                  <WeatherIcon
+                    weatherIcon={dailyWeatherIcon}
+                    width={50}
+                    height={50}
+                  />
                 </p>
                 <p>
                   {Math.round(dailyWeather.tempmax)}°/
