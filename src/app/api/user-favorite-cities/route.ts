@@ -15,14 +15,16 @@ export async function GET(request: Request) {
       );
     }
 
-    const favoriteCities = await prisma.userFavoriteCity.findMany({
+    const userFavoriteCities = await prisma.userFavoriteCity.findMany({
       where: { userId: userId },
       select: {
+        id: true,
         customName: true,
+        isDefault: true,
         favoriteCity: true,
       },
     });
-    return NextResponse.json(favoriteCities.map((fc) => fc.favoriteCity));
+    return NextResponse.json(userFavoriteCities);
   } catch (error) {
     console.error("Error fetching favorite cities:", error);
     return NextResponse.json(

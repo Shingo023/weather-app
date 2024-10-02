@@ -3,7 +3,6 @@
 import React, { useState, FormEvent } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
@@ -68,8 +67,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div>
-      <ToastContainer />
+    <>
       <h2>Create an account</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -134,6 +132,6 @@ export default function RegisterForm() {
 
         <div>{error && <p>{error}</p>}</div>
       </form>
-    </div>
+    </>
   );
 }

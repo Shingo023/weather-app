@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
+import { DefaultSession } from "next-auth";
 
 export type DisplayedCityWeatherContextType = {
   displayedCityWeather: WeatherData | null;
@@ -129,7 +129,11 @@ export type FavoriteCity = {
   customName?: string;
 };
 
-export type FavoriteCityWithWeather = FavoriteCity & {
+export type FavoriteCityWithWeather = {
+  id: number;
+  customName: string | null;
+  isDefault: boolean;
+  favoriteCity: FavoriteCity;
   weather: WeatherData;
 };
 
@@ -152,11 +156,15 @@ export type autocompleteSuggestion = {
 };
 
 export type FavoriteCityCardPropsType = {
+  favoriteCityId: number;
+  userId: string | undefined;
   cityName: string;
   cityAddress: string;
   currentTemp: number;
   currentWeather: WeatherIconType;
   currentDateTime: string;
+  homeLocationId: number | null;
+  setHomeLocationId: (homeLocationId: number | null) => void;
   onClick: () => void;
 };
 
@@ -173,4 +181,16 @@ export type StarIconPropsType = {
   cityToDisplay: string | null;
   address: string | null;
   placeId: string | null;
+};
+
+export type HomeLocationContextType = {
+  homeLocationId: string | null;
+  setHomeLocationId: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+export type UserFavoriteCity = {
+  id: number;
+  customName: string | null;
+  isDefault: boolean;
+  favoriteCity: FavoriteCity;
 };

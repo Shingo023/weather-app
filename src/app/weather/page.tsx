@@ -32,6 +32,11 @@ export default function Home() {
     const fetchDefaultCityAndRedirect = async (userId: string) => {
       try {
         const response = await fetch(`/api/users/${userId}/default-city`);
+
+        if (!response.ok) {
+          throw new Error("Default city not found");
+        }
+
         const data: FavoriteCity = await response.json();
 
         if (data) {

@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import styles from "./CurrentWeather.module.scss";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FavoriteCity, StarIconPropsType } from "@/types";
+import React from "react";
 
 const StarIcon = ({
   displayedCityWeather,
@@ -168,8 +169,6 @@ const StarIcon = ({
 
   return (
     <>
-      <ToastContainer />
-
       <div className={styles.currentWeather__starContainer}>
         <Star
           className={styles.currentWeather__starIcon}

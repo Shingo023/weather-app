@@ -3,19 +3,21 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
-  FavoriteCity,
   FavoriteCityWithWeather,
+  UserFavoriteCity,
   WeatherData,
   WeatherIconType,
 } from "@/types";
 import FavoriteCityCard from "@/features/favoritesList/favoriteCityCard/FavoriteCityCard";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
     FavoriteCityWithWeather[]
   >([]);
+  const [homeLocationId, setHomeLocationId] = useState<number | null>(null);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -27,23 +29,30 @@ const FavoriteList = () => {
           const response = await fetch(
             `/api/user-favorite-cities?userId=${session.user.id}`
           );
-          const favoriteCitiesData = await response.json();
+          const userFavoriteCitiesData = await response.json();
 
           // Fetch weather for each favorite city
-          const favoriteCitiesWeatherData = await Promise.all(
-            favoriteCitiesData.map(async (favoriteCity: FavoriteCity) => {
-              const weatherResponse = await fetch(
-                `/api/weather?lat=${favoriteCity.latitude}&lng=${favoriteCity.longitude}`
-              );
-              const weatherData: WeatherData = await weatherResponse.json();
+          const favoriteCitiesWithWeatherData = await Promise.all(
+            userFavoriteCitiesData.map(
+              async (userFavoriteCity: UserFavoriteCity) => {
+                if (userFavoriteCity.isDefault) {
+                  setHomeLocationId(userFavoriteCity.id);
+                }
 
-              return {
-                ...favoriteCity,
-                weather: weatherData,
-              };
-            })
+                const weatherResponse = await fetch(
+                  `/api/weather?lat=${userFavoriteCity.favoriteCity.latitude}&lng=${userFavoriteCity.favoriteCity.longitude}`
+                );
+                const weatherData: WeatherData = await weatherResponse.json();
+
+                return {
+                  ...userFavoriteCity,
+                  weather: weatherData,
+                };
+              }
+            )
           );
-          setFavoriteCitiesWithWeather(favoriteCitiesWeatherData);
+          favoriteCitiesWithWeatherData.sort((a, b) => a.id - b.id);
+          setFavoriteCitiesWithWeather(favoriteCitiesWithWeatherData);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
         }
@@ -70,31 +79,43 @@ const FavoriteList = () => {
 
   return (
     <>
-      {favoriteCitiesWithWeather.map((favoriteCity) => {
-        const cityName = favoriteCity.cityName;
-        const cityAddress = favoriteCity.address;
+      {favoriteCitiesWithWeather.map((favoriteCityWithWeather) => {
+        const userId = session?.user.id;
+        const userFavoriteCityId = favoriteCityWithWeather.id;
+        const favoriteCityPlaceId =
+          favoriteCityWithWeather.favoriteCity.placeId;
+        const cityName = favoriteCityWithWeather.favoriteCity.cityName;
+        const cityAddress = favoriteCityWithWeather.favoriteCity.address;
         const currentTemp = Math.round(
-          favoriteCity.weather.currentConditions.temp
+          favoriteCityWithWeather.weather.currentConditions.temp
         );
-        const currentWeather = favoriteCity.weather.currentConditions
+        const currentWeather = favoriteCityWithWeather.weather.currentConditions
           .icon as WeatherIconType;
-        const currentDateTime = getCurrentTimeAndDate(favoriteCity.timeZone);
+        const currentDateTime = getCurrentTimeAndDate(
+          favoriteCityWithWeather.favoriteCity.timeZone
+        );
+        const cityLat = favoriteCityWithWeather.favoriteCity.latitude;
+        const cityLng = favoriteCityWithWeather.favoriteCity.longitude;
 
         return (
           <FavoriteCityCard
-            key={favoriteCity.id}
+            key={userFavoriteCityId}
+            userId={userId}
+            favoriteCityId={userFavoriteCityId}
             cityName={cityName}
             cityAddress={cityAddress}
             currentTemp={currentTemp}
             currentWeather={currentWeather}
             currentDateTime={currentDateTime}
+            homeLocationId={homeLocationId}
+            setHomeLocationId={setHomeLocationId}
             onClick={() =>
               handleCardClick(
-                favoriteCity.latitude,
-                favoriteCity.longitude,
+                cityLat,
+                cityLng,
                 cityName,
                 cityAddress,
-                favoriteCity.placeId
+                favoriteCityPlaceId
               )
             }
           />
