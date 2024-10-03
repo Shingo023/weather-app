@@ -6,7 +6,6 @@ import styles from "./CurrentWeather.module.scss";
 import StarIcon from "./StarIcon";
 import CurrentDateTime from "./CurrentDateTime";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
-import { useState } from "react";
 
 const CurrentWeather = ({
   displayedCityWeather,

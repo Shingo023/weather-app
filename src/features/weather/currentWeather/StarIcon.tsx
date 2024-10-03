@@ -79,6 +79,7 @@ const StarIcon = ({
           },
           body: JSON.stringify({
             userId: session?.user?.id,
+            customName: cityToDisplay,
             favoriteCityId: cityId,
           }),
         }

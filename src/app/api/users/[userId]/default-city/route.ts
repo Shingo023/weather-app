@@ -37,10 +37,10 @@ export async function GET(
       );
     }
 
-    const { favoriteCity } = defaultCity;
-    const { cityName, latitude, longitude, address, placeId } = favoriteCity;
+    const { customName, favoriteCity } = defaultCity;
+    const { latitude, longitude, address, placeId } = favoriteCity;
     return NextResponse.json({
-      cityName,
+      customName,
       latitude,
       longitude,
       address,

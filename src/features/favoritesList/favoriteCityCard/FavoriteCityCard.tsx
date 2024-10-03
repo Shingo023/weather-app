@@ -65,7 +65,8 @@ const FavoriteCityCard = ({
     }
   };
 
-  const handleIconClick = () => {
+  const handleIconClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.stopPropagation();
     if (favoriteCityId === homeLocationId) {
       unsetHomeLocation();
     } else {
@@ -74,7 +75,7 @@ const FavoriteCityCard = ({
   };
 
   return (
-    <div className={styles.cityCard}>
+    <div className={styles.cityCard} onClick={onClick}>
       <div className={styles.cityCard__cityInfo}>
         <div className={styles.cityCard__cityName}>{cityName}</div>
         <div className={styles.cityCard__homeIconContainer}>
@@ -113,7 +114,6 @@ const FavoriteCityCard = ({
       </div>
 
       <div className={styles.cityCard__buttons}>
-        <button onClick={onClick}>Weather Details</button>
         <button>Edit Place Name</button>
       </div>
     </div>

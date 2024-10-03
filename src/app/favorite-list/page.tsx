@@ -84,7 +84,7 @@ const FavoriteList = () => {
         const userFavoriteCityId = favoriteCityWithWeather.id;
         const favoriteCityPlaceId =
           favoriteCityWithWeather.favoriteCity.placeId;
-        const cityName = favoriteCityWithWeather.favoriteCity.cityName;
+        const cityName = favoriteCityWithWeather.customName;
         const cityAddress = favoriteCityWithWeather.favoriteCity.address;
         const currentTemp = Math.round(
           favoriteCityWithWeather.weather.currentConditions.temp

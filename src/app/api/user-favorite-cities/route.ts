@@ -36,10 +36,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId, favoriteCityId } = await request.json();
+    const { userId, customName, favoriteCityId } = await request.json();
     const userFavoriteCity = await prisma.userFavoriteCity.create({
       data: {
         userId,
+        customName,
         favoriteCityId,
       },
     });

@@ -126,12 +126,12 @@ export type FavoriteCity = {
   longitude: number;
   timeZone: string;
   createdAt: Date;
-  customName?: string;
+  customName: string;
 };
 
 export type FavoriteCityWithWeather = {
   id: number;
-  customName: string | null;
+  customName: string;
   isDefault: boolean;
   favoriteCity: FavoriteCity;
   weather: WeatherData;
@@ -175,7 +175,7 @@ export type CurrentWeatherPropsType = {
   address: string | null;
   placeId: string | null;
   favoriteCitiesPlaceIds: string[];
-  setFavoriteCitiesPlaceIds: (placeIds: string[]) => void;
+  setFavoriteCitiesPlaceIds: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export type StarIconPropsType = {
