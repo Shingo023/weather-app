@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styles from "./CurrentWeather.module.scss";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FavoriteCity, StarIconPropsType } from "@/types";
+import { StarIconPropsType } from "@/types";
 import React from "react";
 
 const StarIcon = ({
@@ -14,60 +13,35 @@ const StarIcon = ({
   cityToDisplay,
   address,
   placeId,
+  favoriteCitiesPlaceIds,
+  setFavoriteCitiesPlaceIds,
 }: StarIconPropsType) => {
   const { data: session } = useSession();
-  const [isFavorite, setIsFavorite] = useState(false);
 
-  useEffect(() => {
-    const fetchFavoriteCities = async () => {
-      if (session?.user?.id) {
-        try {
-          const response = await fetch(
-            `/api/user-favorite-cities?userId=${session.user.id}`
-          );
-          const favoriteCities = await response.json();
+  const fetchCityData = async () => {
+    const response = await fetch(`/api/favorite-cities?placeId=${placeId}`);
+    if (!response.ok) {
+      throw new Error("City not found");
+    }
+    return response.json();
+  };
 
-          if (favoriteCities.length > 0) {
-            const isCityFavorite = favoriteCities.some(
-              (city: FavoriteCity) => city.placeId === placeId
-            );
-            setIsFavorite(isCityFavorite);
-          } else {
-            setIsFavorite(false);
-          }
-        } catch (error) {
-          console.error("Error fetching favorite cities:", error);
-        }
-      }
-    };
+  const updateFavoriteCities = (placeId: string, add: boolean) => {
+    setFavoriteCitiesPlaceIds((prev) =>
+      add ? [...prev, placeId] : prev.filter((id) => id !== placeId)
+    );
+  };
 
-    fetchFavoriteCities();
-  }, [session, placeId]);
-
-  const handleStarClick = async () => {
+  const bookmarkCity = async () => {
     if (!session) {
       alert("You need to log in to use the favorites feature.");
       return;
     }
 
-    if (isFavorite) {
-      try {
-        setIsFavorite(false);
-        await unbookmarkCity();
-      } catch (error) {
-        console.error("Error unbookmarking city:", error);
-      }
-    } else {
-      try {
-        setIsFavorite(true);
-        await bookmarkCity();
-      } catch (error) {
-        console.error("Error bookmarking city:", error);
-      }
-    }
-  };
+    if (!placeId) return;
 
-  const bookmarkCity = async () => {
+    updateFavoriteCities(placeId, true);
+
     const newCity = {
       cityName: cityToDisplay,
       latitude: displayedCityWeather?.latitude,
@@ -79,14 +53,11 @@ const StarIcon = ({
 
     try {
       // First, check if the city already exists in the FavoriteCity table
-      const cityResponse = await fetch(
-        `/api/favorite-cities?placeId=${placeId}`
-      );
-      const city = await cityResponse.json();
+      const city = await fetchCityData();
+      let cityId = city?.id;
 
-      let cityId;
       if (!city) {
-        // City does not exist, so create a new city in the FavoriteCity table
+        // If the city does not exist, create a new city in the FavoriteCity table
         const createCityResponse = await fetch(`/api/favorite-cities`, {
           method: "POST",
           headers: {
@@ -94,12 +65,8 @@ const StarIcon = ({
           },
           body: JSON.stringify(newCity),
         });
-
         const createdCity = await createCityResponse.json();
         cityId = createdCity.id;
-      } else {
-        // City exists, use the existing city ID
-        cityId = city.id;
       }
 
       // Now, add the city to the UserFavoriteCity table for the current user
@@ -118,29 +85,31 @@ const StarIcon = ({
       );
 
       if (!addUserFavoriteCityResponse.ok) {
+        updateFavoriteCities(placeId, false);
         throw new Error("Failed to add city to favorites");
       }
 
       toast.success(`${cityToDisplay} has been added to your favorite cities!`);
     } catch (error) {
       console.error("Error bookmarking the city:", error);
+      updateFavoriteCities(placeId, false);
       toast.error(`Failed to add ${cityToDisplay} to favorites.`);
-      throw error;
     }
   };
 
   const unbookmarkCity = async () => {
+    if (!session) {
+      alert("You need to log in to use the favorites feature.");
+      return;
+    }
+
+    if (!placeId) return;
+
+    updateFavoriteCities(placeId, false);
+
     try {
       // First, get the favoriteCityId for the current city (using placeId)
-      const cityResponse = await fetch(
-        `/api/favorite-cities?placeId=${placeId}`
-      );
-      const city = await cityResponse.json();
-
-      if (!city || !city.id) {
-        throw new Error("City not found in favorites");
-      }
-
+      const city = await fetchCityData();
       const favoriteCityId = city.id;
 
       // Delete the city from the UserFavoriteCity table using favoriteCityId
@@ -156,14 +125,23 @@ const StarIcon = ({
       });
 
       if (!response.ok) {
+        updateFavoriteCities(placeId, true);
         throw new Error("Failed to remove city from favorites");
       }
 
       toast.success(`${cityToDisplay} has been removed from your favorites.`);
     } catch (error) {
       console.error("Error unbookmarking the city:", error);
+      updateFavoriteCities(placeId, true);
       toast.error(`Failed to remove ${cityToDisplay} from favorites.`);
-      throw error;
+    }
+  };
+
+  const handleStarClick = () => {
+    if (placeId && favoriteCitiesPlaceIds.includes(placeId)) {
+      unbookmarkCity();
+    } else {
+      bookmarkCity();
     }
   };
 
@@ -171,14 +149,15 @@ const StarIcon = ({
     <>
       <div className={styles.currentWeather__starContainer}>
         <Star
-          className={styles.currentWeather__starIcon}
-          style={{
-            height: "24px",
-            width: "24px",
-            fill: isFavorite ? "yellow" : "none",
-            color: isFavorite ? "yellowgreen" : "black",
-          }}
+          className={`${styles.currentWeather__starIcon} ${
+            placeId && favoriteCitiesPlaceIds.includes(placeId)
+              ? styles.isFavorite
+              : ""
+          }`}
           onClick={handleStarClick}
+          style={{
+            cursor: placeId ? "pointer" : "not-allowed",
+          }}
         />
       </div>
     </>

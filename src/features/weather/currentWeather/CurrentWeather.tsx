@@ -14,6 +14,8 @@ const CurrentWeather = ({
   cityToDisplay,
   address,
   placeId,
+  favoriteCitiesPlaceIds,
+  setFavoriteCitiesPlaceIds,
 }: CurrentWeatherPropsType) => {
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
@@ -55,6 +57,8 @@ const CurrentWeather = ({
             cityToDisplay={cityToDisplay}
             address={address}
             placeId={placeId}
+            favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
+            setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
           />
         </div>
 

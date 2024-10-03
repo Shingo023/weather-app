@@ -174,6 +174,8 @@ export type CurrentWeatherPropsType = {
   cityToDisplay: string | null;
   address: string | null;
   placeId: string | null;
+  favoriteCitiesPlaceIds: string[];
+  setFavoriteCitiesPlaceIds: (placeIds: string[]) => void;
 };
 
 export type StarIconPropsType = {
@@ -181,6 +183,8 @@ export type StarIconPropsType = {
   cityToDisplay: string | null;
   address: string | null;
   placeId: string | null;
+  favoriteCitiesPlaceIds: string[];
+  setFavoriteCitiesPlaceIds: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export type HomeLocationContextType = {

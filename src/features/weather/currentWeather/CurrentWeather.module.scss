@@ -21,6 +21,13 @@
 
   &__starIcon {
     cursor: pointer;
+    height: 24px;
+    width: 24px;
+    color: lightgray;
+  }
+  .isFavorite {
+    fill:yellow;
+    color: rgb(228, 228, 28);
   }
 
   &__cityName {

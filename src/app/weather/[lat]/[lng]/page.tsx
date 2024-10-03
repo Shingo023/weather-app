@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { LocationDetails, WeatherData } from "@/types";
 import { useSession } from "next-auth/react";
+import React from "react";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -20,8 +21,12 @@ export default function WeatherPage() {
   const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [placeId, setPlaceId] = useState<string | null>(null);
+  const [favoriteCitiesPlaceIds, setFavoriteCitiesPlaceIds] = useState<
+    string[]
+  >([]);
 
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -85,8 +90,29 @@ export default function WeatherPage() {
     }
   }, [lat, lng, cityQuery, addressQuery, placeIdQuery]);
 
+  useEffect(() => {
+    const fetchFavoriteCitiesPlaceIds = async () => {
+      if (session?.user?.id) {
+        try {
+          const response = await fetch(
+            `/api/users/${session.user.id}/favorite-cities/placeIds`
+          );
+          const favoriteCitiesPlaceIdsData = await response.json();
+
+          setFavoriteCitiesPlaceIds(favoriteCitiesPlaceIdsData);
+        } catch (error) {
+          console.error("Error fetching favorite cities place IDs:", error);
+        }
+      }
+    };
+
+    if (status === "authenticated") {
+      fetchFavoriteCitiesPlaceIds();
+    }
+  }, [status, session?.user?.id]);
+
   return (
-    <div>
+    <>
       <SearchBar />
       <CurrentWeather
         displayedCityWeather={displayedCityWeather}
@@ -94,8 +120,10 @@ export default function WeatherPage() {
         cityToDisplay={cityToDisplay}
         address={address}
         placeId={placeId}
+        favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
+        setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
       />
       <WeeklyComponent displayedCityWeather={displayedCityWeather} />
-    </div>
+    </>
   );
 }
