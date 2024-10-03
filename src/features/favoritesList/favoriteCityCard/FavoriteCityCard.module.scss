@@ -22,18 +22,44 @@
     font-weight: 600;
   }
   
+  &__homeIconContainer {
+    position: relative; 
+  }
   &__homeIcon {
     height: 30px;
     width: 30px;
     transition: all 0.3s ease; 
     color: white;
     &:hover {
-      cursor: pointer;
+      cursor: pointer; 
       color: rgba(0, 0, 255, 0.3); 
+      /* Make the tooltip visible when the icon is hovered */
+      + .cityCard__homeIconTooltip {
+        visibility: visible;
+        opacity: 1; 
+      }
     }
   }
   .active {
     color: rgba(0, 0, 255, 1);
+  }
+  &__homeIconTooltip {
+    visibility: hidden; /* Hidden by default */
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+  
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; 
+    left: 50%;
+    margin-left: -60px; 
+  
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease-in-out;
   }
 
   &__cityAddress {

@@ -23,26 +23,27 @@ const FavoriteCityCard = ({
   const currentWeatherIcon =
     currentWeather !== undefined ? iconMapping[currentWeather] : null;
 
-  const updateHomeLocation = async (
-    currentHomeLocationId: number | null,
-    newHomeLocationId: number | null
-  ) => {
+  const updateHomeLocationApi = async (body: any) => {
+    const response = await fetch(`/api/users/${userId}/default-city`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update default city");
+    }
+    return response;
+  };
+
+  const updateHomeLocation = async (newHomeLocationId: number | null) => {
     try {
-      const response = await fetch(`/api/users/${userId}/default-city`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          currentHomeLocationId,
-          newHomeLocationId,
-        }),
+      await updateHomeLocationApi({
+        currentHomeLocationId: homeLocationId,
+        newHomeLocationId,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update default city");
-      }
-
       setHomeLocationId(newHomeLocationId);
       toast.success(
         `${cityName} has been successfully set as the home location.`
@@ -52,26 +53,23 @@ const FavoriteCityCard = ({
     }
   };
 
-  const unsetHomeLocation = async (currentHomeLocationId: number | null) => {
+  const unsetHomeLocation = async () => {
     try {
-      const response = await fetch(`/api/users/${userId}/default-city`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          currentHomeLocationId,
-        }),
+      await updateHomeLocationApi({
+        currentHomeLocationId: homeLocationId,
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update default city");
-      }
-
       setHomeLocationId(null);
       toast.success(`${cityName} has been unset as the home location.`);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleIconClick = () => {
+    if (favoriteCityId === homeLocationId) {
+      unsetHomeLocation();
+    } else {
+      updateHomeLocation(favoriteCityId);
     }
   };
 
@@ -84,14 +82,13 @@ const FavoriteCityCard = ({
             className={`${styles.cityCard__homeIcon} ${
               favoriteCityId === homeLocationId ? styles.active : ""
             }`}
-            onClick={() => {
-              if (favoriteCityId === homeLocationId) {
-                unsetHomeLocation(homeLocationId);
-              } else {
-                updateHomeLocation(homeLocationId, favoriteCityId);
-              }
-            }}
+            onClick={handleIconClick}
           />
+          <span className={styles.cityCard__homeIconTooltip}>
+            {favoriteCityId === homeLocationId
+              ? "Unset home location"
+              : "Set as home location"}
+          </span>
         </div>
         <div className={styles.cityCard__cityAddress}>{cityAddress}</div>
       </div>
