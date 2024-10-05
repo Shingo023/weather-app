@@ -2,10 +2,10 @@
 
 .sidebar {
   margin: 24px;
-  padding: 24px;
-  max-width: 40px;
+  padding: 24px 15px;
+  width: 105px;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: $background-color;
 
   display: flex;
