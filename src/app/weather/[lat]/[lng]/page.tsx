@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { WeatherData } from "@/types";
 import { useSession } from "next-auth/react";
-import React from "react";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -69,7 +68,7 @@ export default function WeatherPage() {
   }, [router]);
 
   return (
-    <>
+    <div>
       <SearchBar />
       <CurrentWeather
         displayedCityWeather={displayedCityWeather}
@@ -81,6 +80,6 @@ export default function WeatherPage() {
         setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
       />
       <WeeklyComponent displayedCityWeather={displayedCityWeather} />
-    </>
+    </div>
   );
 }

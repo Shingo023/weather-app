@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
@@ -67,7 +67,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <>
+    <div>
       <h2>Create an account</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -132,6 +132,6 @@ export default function RegisterForm() {
 
         <div>{error && <p>{error}</p>}</div>
       </form>
-    </>
+    </div>
   );
 }

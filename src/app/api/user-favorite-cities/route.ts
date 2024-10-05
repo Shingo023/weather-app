@@ -99,3 +99,36 @@ export async function DELETE(request: Request) {
     );
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    const { customName } = await req.json();
+
+    if (!id || !customName) {
+      return NextResponse.json(
+        { message: "Missing required parameters" },
+        { status: 400 }
+      );
+    }
+
+    const updatedCity = await prisma.userFavoriteCity.update({
+      where: { id: Number(id) },
+      data: {
+        customName,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "City name updated", updatedCity },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Failed to update city name" },
+      { status: 500 }
+    );
+  }
+}

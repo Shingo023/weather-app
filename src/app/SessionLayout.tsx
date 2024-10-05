@@ -1,7 +1,6 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
@@ -11,11 +10,11 @@ export default function SessionLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div>
       <SessionProvider>
         <ToastContainer />
         {children}
       </SessionProvider>
-    </>
+    </div>
   );
 }

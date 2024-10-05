@@ -155,17 +155,45 @@ export type autocompleteSuggestion = {
   };
 };
 
-export type FavoriteCityCardPropsType = {
+export type FavoriteCityContainerPropsType = {
   favoriteCityId: number;
   userId: string | undefined;
   cityName: string;
   cityAddress: string;
+  cityPlaceId: string;
   currentTemp: number;
   currentWeather: WeatherIconType;
   currentDateTime: string;
   homeLocationId: number | null;
   setHomeLocationId: (homeLocationId: number | null) => void;
-  onClick: () => void;
+  cityLat: number;
+  cityLng: number;
+};
+
+export type FavoriteCityCardPropsType = {
+  favoriteCityId: number;
+  userId: string | undefined;
+  cityName: string;
+  cityAddress: string;
+  cityPlaceId: string;
+  currentTemp: number;
+  currentWeather: WeatherIconType;
+  currentDateTime: string;
+  homeLocationId: number | null;
+  setHomeLocationId: (homeLocationId: number | null) => void;
+  cityLat: number;
+  cityLng: number;
+  placeNameToDisplay: string;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export type EditPlaceNameModalPropsType = {
+  cityName: string;
+  isModalOpen: boolean;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setPlaceNameToDisplay: (name: string) => void;
+  favoriteCityId: number;
+  cityAddress: string;
 };
 
 export type CurrentWeatherPropsType = {

@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { StarIconPropsType } from "@/types";
-import React from "react";
 
 const StarIcon = ({
   displayedCityWeather,
@@ -147,7 +146,7 @@ const StarIcon = ({
   };
 
   return (
-    <>
+    <div>
       <div className={styles.currentWeather__starContainer}>
         <Star
           className={`${styles.currentWeather__starIcon} ${
@@ -161,7 +160,7 @@ const StarIcon = ({
           }}
         />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -8,10 +8,8 @@ import {
   WeatherData,
   WeatherIconType,
 } from "@/types";
-import FavoriteCityCard from "@/features/favoritesList/favoriteCityCard/FavoriteCityCard";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
-import { useRouter } from "next/navigation";
-import React from "react";
+import FavoriteCityContainer from "@/features/favoritesList/favoriteCityContainer/FavoriteCityContainer";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
@@ -20,7 +18,6 @@ const FavoriteList = () => {
   const [homeLocationId, setHomeLocationId] = useState<number | null>(null);
 
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     const fetchFavoriteCitiesWithWeather = async () => {
@@ -65,20 +62,8 @@ const FavoriteList = () => {
     }
   }, [status, session?.user?.id]);
 
-  const handleCardClick = (
-    lat: number,
-    lng: number,
-    placeName: string,
-    address: string,
-    placeId: string
-  ) => {
-    router.push(
-      `/weather/${lat}/${lng}?place=${placeName}&address=${address}&id=${placeId}`
-    );
-  };
-
   return (
-    <>
+    <div>
       {favoriteCitiesWithWeather.map((favoriteCityWithWeather) => {
         const userId = session?.user.id;
         const userFavoriteCityId = favoriteCityWithWeather.id;
@@ -98,30 +83,24 @@ const FavoriteList = () => {
         const cityLng = favoriteCityWithWeather.favoriteCity.longitude;
 
         return (
-          <FavoriteCityCard
+          <FavoriteCityContainer
             key={userFavoriteCityId}
             userId={userId}
             favoriteCityId={userFavoriteCityId}
             cityName={cityName}
             cityAddress={cityAddress}
+            cityPlaceId={favoriteCityPlaceId}
             currentTemp={currentTemp}
             currentWeather={currentWeather}
             currentDateTime={currentDateTime}
             homeLocationId={homeLocationId}
             setHomeLocationId={setHomeLocationId}
-            onClick={() =>
-              handleCardClick(
-                cityLat,
-                cityLng,
-                cityName,
-                cityAddress,
-                favoriteCityPlaceId
-              )
-            }
+            cityLat={cityLat}
+            cityLng={cityLng}
           />
         );
       })}
-    </>
+    </div>
   );
 };
 
