@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "./Sidebar.module.scss";
 import SidebarLink from "./SidebarLink";
 import { memo } from "react";
+import React from "react";
 
 const Sidebar = () => {
   const { data: session, status } = useSession();

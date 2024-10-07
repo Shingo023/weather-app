@@ -15,14 +15,16 @@ export async function GET(request: Request) {
       );
     }
 
-    const favoriteCities = await prisma.userFavoriteCity.findMany({
+    const userFavoriteCities = await prisma.userFavoriteCity.findMany({
       where: { userId: userId },
       select: {
+        id: true,
         customName: true,
+        isDefault: true,
         favoriteCity: true,
       },
     });
-    return NextResponse.json(favoriteCities.map((fc) => fc.favoriteCity));
+    return NextResponse.json(userFavoriteCities);
   } catch (error) {
     console.error("Error fetching favorite cities:", error);
     return NextResponse.json(
@@ -34,10 +36,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { userId, favoriteCityId } = await request.json();
+    const { userId, customName, favoriteCityId } = await request.json();
     const userFavoriteCity = await prisma.userFavoriteCity.create({
       data: {
         userId,
+        customName,
         favoriteCityId,
       },
     });
@@ -58,37 +61,73 @@ export async function DELETE(request: Request) {
   try {
     const { userId, favoriteCityId } = await request.json();
 
-    // Remove the city from user's favorites
-    await prisma.userFavoriteCity.deleteMany({
-      where: {
-        userId,
-        favoriteCityId,
-      },
-    });
-
-    // Check if the city is still favorited by any user
-    const remainingFavorites = await prisma.userFavoriteCity.findFirst({
-      where: {
-        favoriteCityId,
-      },
-    });
-
-    // If no users have this city as a favorite, remove it from the FavoriteCity table
-    if (!remainingFavorites) {
-      await prisma.favoriteCity.delete({
+    await prisma.$transaction(async (prisma) => {
+      // Step 1: Remove the city from user's favorites
+      await prisma.userFavoriteCity.deleteMany({
         where: {
-          id: favoriteCityId,
+          userId,
+          favoriteCityId,
         },
       });
-    }
 
-    return NextResponse.json({
-      message: "City has been removed from your favorites.",
+      // Step 2: Check if any users still have this city as a favorite
+      const remainingFavorites = await prisma.userFavoriteCity.findFirst({
+        where: {
+          favoriteCityId,
+        },
+      });
+
+      // Step 3: If no users have the city as a favorite, remove it from the FavoriteCity table
+      if (!remainingFavorites) {
+        await prisma.favoriteCity.delete({
+          where: {
+            id: favoriteCityId,
+          },
+        });
+      }
     });
+
+    return NextResponse.json(
+      { message: "City has been removed from your favorites." },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error unbookmarking city:", error);
     return NextResponse.json(
       { error: "Failed to remove city from favorites" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    const { customName } = await req.json();
+
+    if (!id || !customName) {
+      return NextResponse.json(
+        { message: "Missing required parameters" },
+        { status: 400 }
+      );
+    }
+
+    const updatedCity = await prisma.userFavoriteCity.update({
+      where: { id: Number(id) },
+      data: {
+        customName,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "City name updated", updatedCity },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Failed to update city name" },
       { status: 500 }
     );
   }
