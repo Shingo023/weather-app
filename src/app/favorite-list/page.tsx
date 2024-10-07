@@ -37,10 +37,9 @@ const FavoriteList = () => {
                 }
 
                 const weatherResponse = await fetch(
-                  `/api/weather?lat=${userFavoriteCity.favoriteCity.latitude}&lng=${userFavoriteCity.favoriteCity.longitude}`
+                  `/api/weather/favorite-cities?lat=${userFavoriteCity.favoriteCity.latitude}&lng=${userFavoriteCity.favoriteCity.longitude}`
                 );
                 const weatherData: WeatherData = await weatherResponse.json();
-
                 return {
                   ...userFavoriteCity,
                   weather: weatherData,
