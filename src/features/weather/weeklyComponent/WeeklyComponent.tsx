@@ -31,15 +31,7 @@ export const WeeklyComponent = ({
     const date = new Date(dateString);
 
     // Array of weekday names
-    const weekdays = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
+    const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     const dayIndex = date.getDay();
 
@@ -62,23 +54,28 @@ export const WeeklyComponent = ({
 
               return (
                 <li className={styles.WeeklyComponentItem} key={index}>
-                  <p className={styles.WeeklyComponentDay}>
-                    {getWeekday(dailyWeather.datetime)}
-                  </p>
-                  <div>
-                    <WeatherIcon
-                      weatherIcon={dailyWeatherIcon}
-                      width={60}
-                      height={60}
-                    />
+                  <div className={styles.WeeklyComponentItem__left}>
+                    <p className={styles.WeeklyComponentDay}>
+                      {getWeekday(dailyWeather.datetime)}
+                    </p>
+                    <div>
+                      <WeatherIcon
+                        weatherIcon={dailyWeatherIcon}
+                        width={60}
+                        height={60}
+                      />
+                    </div>
                   </div>
-                  <p>
-                    {Math.round(dailyWeather.tempmax)}°/
-                    {Math.round(dailyWeather.tempmin)}°
-                  </p>
-                  <div className={styles.humidity}>
-                    <Droplet className={styles.humidity__icon} />
-                    <p>{Math.round(dailyWeather.humidity)}%</p>
+
+                  <div className={styles.WeeklyComponentItem__right}>
+                    <p>
+                      {Math.round(dailyWeather.tempmax)}°/
+                      {Math.round(dailyWeather.tempmin)}°
+                    </p>
+                    <div className={styles.humidity}>
+                      <Droplet className={styles.humidity__icon} />
+                      <p>{Math.round(dailyWeather.humidity)}%</p>
+                    </div>
                   </div>
                 </li>
               );

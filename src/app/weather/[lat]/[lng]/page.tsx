@@ -80,6 +80,8 @@ export default function WeatherPage() {
           placeId={placeIdQuery}
           favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
           setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
+          latitude={lat as string}
+          longitude={lng as string}
         />
       </div>
       <div className={styles.weatherPage__rightContent}>

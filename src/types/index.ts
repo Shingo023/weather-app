@@ -291,6 +291,15 @@ export type CurrentWeatherPropsType = {
   placeId: string | null;
   favoriteCitiesPlaceIds: string[];
   setFavoriteCitiesPlaceIds: React.Dispatch<React.SetStateAction<string[]>>;
+  latitude: string;
+  longitude: string;
+};
+
+export type CurrentDateAndTimePropsType = {
+  placeTimeZone: string | undefined;
+  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
+  latitude: string;
+  longitude: string;
 };
 
 export type StarIconPropsType = {

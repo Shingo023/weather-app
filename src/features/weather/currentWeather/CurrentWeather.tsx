@@ -15,6 +15,8 @@ const CurrentWeather = ({
   placeId,
   favoriteCitiesPlaceIds,
   setFavoriteCitiesPlaceIds,
+  latitude,
+  longitude,
 }: CurrentWeatherPropsType) => {
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
@@ -27,6 +29,8 @@ const CurrentWeather = ({
   const currentWeather = displayedCityWeather?.currentConditions.icon as
     | WeatherIconType
     | undefined;
+
+  const placeTimeZone = displayedCityWeather?.timezone;
 
   const currentWeatherIcon =
     currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
@@ -67,8 +71,10 @@ const CurrentWeather = ({
 
         {displayedCityWeather && (
           <CurrentDateTime
-            displayedCityWeather={displayedCityWeather}
+            placeTimeZone={placeTimeZone}
             setDisplayedCityWeather={setDisplayedCityWeather}
+            latitude={latitude}
+            longitude={longitude}
           />
         )}
 

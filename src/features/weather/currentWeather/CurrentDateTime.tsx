@@ -2,31 +2,28 @@
 
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import styles from "./CurrentWeather.module.scss";
-import { RotateCcw } from "lucide-react";
-import { WeatherData } from "@/types";
+import { RotateCw } from "lucide-react";
+import { CurrentDateAndTimePropsType, WeatherData } from "@/types";
+import React from "react";
 
 const CurrentDateTime = ({
-  displayedCityWeather,
+  placeTimeZone,
   setDisplayedCityWeather,
-}: {
-  displayedCityWeather: WeatherData;
-  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
-}) => {
+  latitude,
+  longitude,
+}: CurrentDateAndTimePropsType) => {
   const currentTimeAndDate =
-    displayedCityWeather?.timezone !== undefined
-      ? getCurrentTimeAndDate(displayedCityWeather?.timezone)
+    placeTimeZone !== undefined
+      ? getCurrentTimeAndDate(placeTimeZone)
       : undefined;
 
   const updateWeatherInfo = async () => {
     setDisplayedCityWeather(null);
 
-    const displayedCityLat = displayedCityWeather?.latitude;
-    const displayedCityLng = displayedCityWeather?.longitude;
-
-    if (displayedCityLat !== undefined && displayedCityLng !== undefined) {
+    if (latitude !== undefined && longitude !== undefined) {
       try {
         const weatherResponse = await fetch(
-          `/api/weather?lat=${displayedCityLat}&lng=${displayedCityLng}`
+          `/api/weather?lat=${latitude}&lng=${longitude}`
         );
         const updatedWeather: WeatherData = await weatherResponse.json();
 
@@ -48,10 +45,10 @@ const CurrentDateTime = ({
         {currentTimeAndDate}
       </div>
       <div className={styles.currentWeather__updateIconContainer}>
-        <RotateCcw className={styles.currentWeather__updateIcon} />
+        <RotateCw className={styles.currentWeather__updateIcon} />
       </div>
     </div>
   );
 };
 
-export default CurrentDateTime;
+export default React.memo(CurrentDateTime);
