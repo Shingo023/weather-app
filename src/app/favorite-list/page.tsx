@@ -10,6 +10,7 @@ import {
 } from "@/types";
 import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import FavoriteCityContainer from "@/features/favoritesList/favoriteCityContainer/FavoriteCityContainer";
+import styles from "./page.module.scss";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
@@ -62,7 +63,7 @@ const FavoriteList = () => {
   }, [status, session?.user?.id]);
 
   return (
-    <div>
+    <div className={styles.favoritesList}>
       {favoriteCitiesWithWeather.map((favoriteCityWithWeather) => {
         const userId = session?.user.id;
         const userFavoriteCityId = favoriteCityWithWeather.id;
@@ -75,9 +76,7 @@ const FavoriteList = () => {
         );
         const currentWeather = favoriteCityWithWeather.weather.currentConditions
           .icon as WeatherIconType;
-        const currentDateTime = getCurrentTimeAndDate(
-          favoriteCityWithWeather.favoriteCity.timeZone
-        );
+        const timeZone = favoriteCityWithWeather.favoriteCity.timeZone;
         const cityLat = favoriteCityWithWeather.favoriteCity.latitude;
         const cityLng = favoriteCityWithWeather.favoriteCity.longitude;
 
@@ -91,7 +90,7 @@ const FavoriteList = () => {
             cityPlaceId={favoriteCityPlaceId}
             currentTemp={currentTemp}
             currentWeather={currentWeather}
-            currentDateTime={currentDateTime}
+            timeZone={timeZone}
             homeLocationId={homeLocationId}
             setHomeLocationId={setHomeLocationId}
             cityLat={cityLat}

@@ -11,7 +11,7 @@ const FavoriteCityContainer = ({
   cityPlaceId,
   currentTemp,
   currentWeather,
-  currentDateTime,
+  timeZone,
   homeLocationId,
   setHomeLocationId,
   cityLat,
@@ -30,7 +30,7 @@ const FavoriteCityContainer = ({
         cityPlaceId={cityPlaceId}
         currentTemp={currentTemp}
         currentWeather={currentWeather}
-        currentDateTime={currentDateTime}
+        timeZone={timeZone}
         homeLocationId={homeLocationId}
         setHomeLocationId={setHomeLocationId}
         cityLat={cityLat}

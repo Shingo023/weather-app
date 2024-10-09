@@ -250,7 +250,7 @@ export type FavoriteCityContainerPropsType = {
   cityPlaceId: string;
   currentTemp: number;
   currentWeather: WeatherIconType;
-  currentDateTime: string;
+  timeZone: string;
   homeLocationId: number | null;
   setHomeLocationId: (homeLocationId: number | null) => void;
   cityLat: number;
@@ -265,7 +265,7 @@ export type FavoriteCityCardPropsType = {
   cityPlaceId: string;
   currentTemp: number;
   currentWeather: WeatherIconType;
-  currentDateTime: string;
+  timeZone: string;
   homeLocationId: number | null;
   setHomeLocationId: (homeLocationId: number | null) => void;
   cityLat: number;

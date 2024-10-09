@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import React from "react";
+import DateAndTime from "./DateAndTime";
 
 const FavoriteCityCard = React.memo(
   ({
@@ -19,7 +20,7 @@ const FavoriteCityCard = React.memo(
     cityPlaceId,
     currentTemp,
     currentWeather,
-    currentDateTime,
+    timeZone,
     homeLocationId,
     setHomeLocationId,
     cityLat,
@@ -122,9 +123,10 @@ const FavoriteCityCard = React.memo(
 
           <div className={styles.cityCard__weather}>
             <div className={styles.cityCard__currentInfo}>
-              <div className={styles.cityCard__currentDateTime}>
-                {currentDateTime}
-              </div>
+              <DateAndTime
+                timeZone={timeZone}
+                className={styles.cityCard__currentDateTime}
+              />
               <div className={styles.cityCard__currentWeather}>
                 <div className={styles.cityCard__currentWeatherIconContainer}>
                   <WeatherIcon
