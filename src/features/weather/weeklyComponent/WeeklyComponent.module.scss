@@ -1,0 +1,52 @@
+@import "@/style/base/variables.scss";
+
+.WeeklyComponent {
+  background-color: #D9D9D9;
+  width: 100%;
+  height: 100%;
+  padding: 28px 34px;
+  border-radius: 10px;
+
+  &__content {
+    height: 100%;
+  }
+  h2 {
+    font-weight: 400;
+    margin-bottom: 40px;
+    font-size: 20px;
+  }
+  p {
+    font-size: 14px;
+  }
+}
+
+.WeeklyComponentList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  // gap: 10px;
+  height: calc(100% - 64px);
+  justify-content: space-between;
+}
+
+.WeeklyComponentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(188, 188, 188);
+}
+
+.WeeklyComponentDay {
+  width: 90px;
+}
+
+.humidity {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  &__icon {
+    width: 18px;
+    height: 18px;
+  }
+}

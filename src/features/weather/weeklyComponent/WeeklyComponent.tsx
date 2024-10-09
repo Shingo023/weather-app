@@ -1,8 +1,9 @@
 import { WeatherData, WeatherDay, WeatherIconType } from "@/types";
-import styles from "@/style/components/WeeklyComponent.module.scss";
+import styles from "./WeeklyComponent.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React from "react";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
+import { Droplet } from "lucide-react";
 
 export const WeeklyComponent = ({
   displayedCityWeather,
@@ -51,37 +52,42 @@ export const WeeklyComponent = ({
 
   return (
     <div className={styles.WeeklyComponent}>
-      <h2>Weekly Forecast</h2>
-      <ul className={styles.WeeklyComponentList}>
-        {weeklyWeather ? (
-          weeklyWeather.map((dailyWeather, index) => {
-            const dailyWeatherIcon =
-              iconMapping[dailyWeather.icon as WeatherIconType];
+      <div className={styles.WeeklyComponent__content}>
+        <h2>Weekly Forecast</h2>
+        <ul className={styles.WeeklyComponentList}>
+          {weeklyWeather ? (
+            weeklyWeather.map((dailyWeather, index) => {
+              const dailyWeatherIcon =
+                iconMapping[dailyWeather.icon as WeatherIconType];
 
-            return (
-              <li className={styles.WeeklyComponentItem} key={index}>
-                <p className={styles.WeeklyComponentDay}>
-                  {getWeekday(dailyWeather.datetime)}
-                </p>
-                <p>
-                  <WeatherIcon
-                    weatherIcon={dailyWeatherIcon}
-                    width={50}
-                    height={50}
-                  />
-                </p>
-                <p>
-                  {Math.round(dailyWeather.tempmax)}°/
-                  {Math.round(dailyWeather.tempmin)}°
-                </p>
-                <p>{Math.ceil(dailyWeather.humidity)}%</p>
-              </li>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </ul>
+              return (
+                <li className={styles.WeeklyComponentItem} key={index}>
+                  <p className={styles.WeeklyComponentDay}>
+                    {getWeekday(dailyWeather.datetime)}
+                  </p>
+                  <div>
+                    <WeatherIcon
+                      weatherIcon={dailyWeatherIcon}
+                      width={60}
+                      height={60}
+                    />
+                  </div>
+                  <p>
+                    {Math.round(dailyWeather.tempmax)}°/
+                    {Math.round(dailyWeather.tempmin)}°
+                  </p>
+                  <div className={styles.humidity}>
+                    <Droplet className={styles.humidity__icon} />
+                    <p>{Math.round(dailyWeather.humidity)}%</p>
+                  </div>
+                </li>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

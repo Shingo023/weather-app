@@ -4,7 +4,7 @@ import { FavoriteCityCardPropsType } from "@/types";
 import styles from "./FavoriteCityCard.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
-import { MapPinIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
@@ -82,7 +82,7 @@ const FavoriteCityCard = React.memo(
       }
     };
 
-    const handleCardClick = () => {
+    const handleDetailsClick = () => {
       router.push(
         `/weather/${cityLat}/${cityLng}?place=${placeNameToDisplay}&address=${cityAddress}&id=${cityPlaceId}`
       );
@@ -144,7 +144,7 @@ const FavoriteCityCard = React.memo(
           <div className={styles.cityCard__buttons}>
             <button
               className={styles.cityCard__weatherDetailBtn}
-              onClick={handleCardClick}
+              onClick={handleDetailsClick}
             >
               Weather Details
             </button>

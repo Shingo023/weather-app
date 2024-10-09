@@ -1,9 +1,8 @@
 @import "src/app/variables.module.scss";
 
 .sidebar {
-  margin: 24px;
-  padding: 24px 15px;
-  width: 105px;
+  padding: 24px 10px;
+  width: 115px;
   height: 100%;
   border-radius: 10px;
   background-color: $background-color;
@@ -13,4 +12,14 @@
   align-items: center;
   text-align: center;
   gap: 24px;
+
+  &__user {
+    p {
+      font-size: 16px;
+    }
+  }
+  &__userIcon {
+    height: 40px;
+    width: 40px;
+  }
 }

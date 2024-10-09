@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { WeatherData } from "@/types";
 import { useSession } from "next-auth/react";
+import styles from "./page.module.scss";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -68,18 +69,22 @@ export default function WeatherPage() {
   }, [router]);
 
   return (
-    <div>
-      <SearchBar />
-      <CurrentWeather
-        displayedCityWeather={displayedCityWeather}
-        setDisplayedCityWeather={setDisplayedCityWeather}
-        cityToDisplay={cityQuery}
-        address={addressQuery}
-        placeId={placeIdQuery}
-        favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
-        setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
-      />
-      <WeeklyComponent displayedCityWeather={displayedCityWeather} />
+    <div className={styles.weatherPage}>
+      <div className={styles.weatherPage__leftContent}>
+        <SearchBar />
+        <CurrentWeather
+          displayedCityWeather={displayedCityWeather}
+          setDisplayedCityWeather={setDisplayedCityWeather}
+          cityToDisplay={cityQuery}
+          address={addressQuery}
+          placeId={placeIdQuery}
+          favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
+          setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
+        />
+      </div>
+      <div className={styles.weatherPage__rightContent}>
+        <WeeklyComponent displayedCityWeather={displayedCityWeather} />
+      </div>
     </div>
   );
 }
