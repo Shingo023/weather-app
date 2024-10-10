@@ -4,14 +4,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 30px 30px;
   height: 235px;
 
-  &__loading {
-    height: 235px;
+  &__info {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
   }
 
   &__citySection {
@@ -70,7 +70,7 @@
   &__temp {
     font-size: 48px;
     font-weight: 700;
-    margin-top: 50px;
+    // margin-top: 50px;
   }
 
   &__feelslikeTemp {
@@ -81,5 +81,92 @@
   &__weatherIconContainer {
     height: 157px;
     width: 157px;
+  }
+
+  
+
+}
+
+
+// Skeletons
+.currentWeather {
+
+  &__skeletonCityName {
+    height: 28px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    width: 120px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__skeletonAddress {
+    height: 14px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    width: 150px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__skeletonDateTime {
+    height: 12px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    width: 100px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__skeletonTemp {
+    height: 48px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    width: 55px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+    margin-top: 50px;
+  }
+
+  &__skeletonFeelslikeTemp {
+    height: 14px;
+    width: 80px;
+    border-radius: 8px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__skeletonWeatherIcon {
+    height: 100px;
+    width: 100px;
+    border-radius: 8px;
+    background-color: #ddd;
+    background-image: linear-gradient(90deg, #ddd 25%, #eee 50%, #ddd 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
   }
 }

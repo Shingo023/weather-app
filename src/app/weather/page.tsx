@@ -8,7 +8,7 @@ import { FavoriteCity } from "@/types";
 export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLocationAndRedirect = () => {
@@ -31,24 +31,24 @@ export default function Home() {
                     cityName
                   )}&address=${encodeURIComponent(address)}&id=${placeId}`
                 );
-                setLoading(false);
+                // setLoading(false);
               } else {
                 console.error("Failed to retrieve necessary location details.");
-                setLoading(false);
+                // setLoading(false);
               }
             } catch (error) {
               console.error("Error fetching location details:", error);
-              setLoading(false);
+              // setLoading(false);
             }
           },
           (error) => {
             console.error("Error getting geolocation:", error);
-            setLoading(false);
+            // setLoading(false);
           }
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -69,7 +69,7 @@ export default function Home() {
               customName
             )}&address=${encodeURIComponent(address)}&id=${placeId}`
           );
-          setLoading(false);
+          // setLoading(false);
         } else {
           fetchLocationAndRedirect();
         }
@@ -89,9 +89,9 @@ export default function Home() {
     }
   }, [router, session, status]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return null;
 }

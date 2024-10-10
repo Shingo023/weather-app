@@ -6,6 +6,7 @@ import styles from "./CurrentWeather.module.scss";
 import StarIcon from "./StarIcon";
 import CurrentDateTime from "./CurrentDateTime";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
+import { useEffect, useState } from "react";
 
 const CurrentWeather = ({
   displayedCityWeather,
@@ -18,6 +19,8 @@ const CurrentWeather = ({
   latitude,
   longitude,
 }: CurrentWeatherPropsType) => {
+  const [loading, setLoading] = useState(true);
+
   const currentTemp = displayedCityWeather?.currentConditions.temp
     ? Math.round(displayedCityWeather.currentConditions.temp)
     : undefined;
@@ -33,54 +36,70 @@ const CurrentWeather = ({
   const placeTimeZone = displayedCityWeather?.timezone;
 
   const currentWeatherIcon =
-    currentWeather !== undefined ? iconMapping[currentWeather] : undefined;
+    currentWeather !== undefined ? iconMapping[currentWeather] : null;
 
-  // Render loading state if any key weather information is missing
-  const isLoading =
-    !cityToDisplay ||
-    currentTemp === undefined ||
-    currentFeelslikeTemp === undefined ||
-    currentWeatherIcon === undefined;
+  useEffect(() => {
+    if (displayedCityWeather && favoriteCitiesPlaceIds) {
+      setLoading(false);
+    }
+  }, [displayedCityWeather]);
 
-  if (isLoading) {
+  // Render skeletons while loading
+  if (loading) {
     return (
-      <div className={styles.currentWeather__loading}>
-        Loading weather data...
+      <div className={styles.currentWeather}>
+        <div className={styles.currentWeather__info}>
+          <div className={styles.currentWeather__infoTop}>
+            <div className={styles.currentWeather__skeletonCityName} />
+            <div className={styles.currentWeather__skeletonAddress} />
+            <div className={styles.currentWeather__skeletonDateTime} />
+          </div>
+          <div className={styles.currentWeather__infoTop}>
+            <div className={styles.currentWeather__skeletonTemp} />
+            <div className={styles.currentWeather__skeletonFeelslikeTemp} />
+          </div>
+        </div>
+
+        <div className={styles.currentWeather__skeletonWeatherIcon} />
       </div>
     );
   }
 
   return (
     <div className={styles.currentWeather}>
-      <div className={styles.currentWeather__data}>
-        <div className={styles.currentWeather__citySection}>
-          <div className={styles.currentWeather__cityName}>{cityToDisplay}</div>
-          <StarIcon
-            displayedCityWeather={displayedCityWeather}
-            cityToDisplay={cityToDisplay}
-            address={address}
-            placeId={placeId}
-            favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
-            setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
-          />
+      <div className={styles.currentWeather__info}>
+        <div className={styles.currentWeather__infoTop}>
+          <div className={styles.currentWeather__citySection}>
+            <div className={styles.currentWeather__cityName}>
+              {cityToDisplay}
+            </div>
+            <StarIcon
+              displayedCityWeather={displayedCityWeather}
+              cityToDisplay={cityToDisplay}
+              address={address}
+              placeId={placeId}
+              favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
+              setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
+            />
+          </div>
+          <div className={styles.currentWeather__stateAndCountry}>
+            <div className={styles.currentWeather__stateName}>{address}</div>
+          </div>
+          {displayedCityWeather && (
+            <CurrentDateTime
+              placeTimeZone={placeTimeZone}
+              setDisplayedCityWeather={setDisplayedCityWeather}
+              latitude={latitude}
+              longitude={longitude}
+            />
+          )}
         </div>
 
-        <div className={styles.currentWeather__stateAndCountry}>
-          <div className={styles.currentWeather__stateName}>{address}</div>
-        </div>
-
-        {displayedCityWeather && (
-          <CurrentDateTime
-            placeTimeZone={placeTimeZone}
-            setDisplayedCityWeather={setDisplayedCityWeather}
-            latitude={latitude}
-            longitude={longitude}
-          />
-        )}
-
-        <div className={styles.currentWeather__temp}>{currentTemp}°</div>
-        <div className={styles.currentWeather__feelslikeTemp}>
-          Feels like {currentFeelslikeTemp}°
+        <div className={styles.currentWeather__infoBottom}>
+          <div className={styles.currentWeather__temp}>{currentTemp}°</div>
+          <div className={styles.currentWeather__feelslikeTemp}>
+            Feels like {currentFeelslikeTemp}°
+          </div>
         </div>
       </div>
 
