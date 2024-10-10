@@ -6,22 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.19.1",
     "@react-google-maps/api": "^2.19.3",
+    "@vercel/postgres": "^0.10.0",
+    "bcrypt": "^5.1.1",
+    "lucide-react": "^0.438.0",
     "next": "14.2.3",
+    "next-auth": "^4.24.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/google.maps": "^3.55.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "prisma": "^5.19.1",
     "sass": "^1.77.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

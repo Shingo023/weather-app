@@ -1,9 +1,15 @@
 import { Dispatch, SetStateAction } from "react";
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 
 export type DisplayedCityWeatherContextType = {
   displayedCityWeather: WeatherData | null;
   setDisplayedCityWeather: Dispatch<SetStateAction<WeatherData | null>>;
-  updateCity: (newCity: WeatherData) => void;
+  cityToDisplay: string | null;
+  setCityToDisplay: React.Dispatch<React.SetStateAction<string | null>>;
+  address: string | null;
+  setAddress: (state: string | null) => void;
+  placeId: string | null;
+  setPlaceId: (state: string | null) => void;
 };
 
 export type currentCityContextType = {
@@ -21,6 +27,7 @@ export type WeatherData = {
   tzoffset: number;
   description: string;
   days: WeatherDay[];
+  currentConditions: { feelslike: number; icon: string; temp: number };
 };
 
 export type WeatherDay = {
@@ -89,4 +96,86 @@ type WeatherHour = {
   icon: string;
   stations: string[] | null;
   source: string;
+};
+
+export type WeatherIconType =
+  | "clear-day"
+  | "clear-night"
+  | "rain"
+  | "snow"
+  | "wind"
+  | "fog"
+  | "cloudy"
+  | "partly-cloudy-day"
+  | "partly-cloudy-night";
+
+// Extend the User object returned by NextAuth to include an ID
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string; // Add the id field to the session's user object
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    id: string; // Add the id field to the User object
+  }
+}
+
+export type FavoriteCity = {
+  id: number;
+  cityName: string;
+  placeId: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  timeZone: string;
+  createdAt: Date;
+  customName?: string;
+};
+
+export type FavoriteCityWithWeather = FavoriteCity & {
+  weather: WeatherData;
+};
+
+export type LocationDetails = {
+  address_components: {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }[];
+  formatted_address: string;
+  place_id: string;
+};
+
+export type autocompleteSuggestion = {
+  place_id: string;
+  description: string;
+  structured_formatting: {
+    main_text: string;
+  };
+};
+
+export type FavoriteCityCardPropsType = {
+  cityName: string;
+  cityAddress: string;
+  currentTemp: number;
+  currentWeather: WeatherIconType;
+  currentDateTime: string;
+  onClick: () => void;
+};
+
+export type CurrentWeatherPropsType = {
+  displayedCityWeather: WeatherData | null;
+  setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
+};
+
+export type StarIconPropsType = {
+  displayedCityWeather: WeatherData | null;
+  cityToDisplay: string | null;
+  address: string | null;
+  placeId: string | null;
 };

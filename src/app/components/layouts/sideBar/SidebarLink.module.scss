@@ -1,6 +1,12 @@
 .link {
   text-decoration: none;
   color: black;
+  cursor: pointer;
+}
+
+.link.disabled {
+  cursor: default; 
+  pointer-events: none; 
 }
 
 .name {

@@ -1,0 +1,55 @@
+@import "@/style/base/variables.scss";
+
+.cityCard {
+  background-color: #D9D9D9;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  padding: 25px 35px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    background-color: #BFBFBF; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  &__cityInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  &__cityName {
+    font-size: 28px;
+    font-weight: 600;
+  }
+  &__nameEdit {
+    font-size: 14px;
+    color: blue;
+    &:hover {
+      cursor: pointer;
+      color: rgb(97, 97, 220);
+    }
+  }
+  &__cityAddress {
+    font-size: 14px;
+  }
+
+  &__currentDateTime {
+    font-weight: 500;
+    margin-top: 10px;
+  }
+
+  &__currentWeather {
+    display: flex;
+    align-items: center;
+  }
+  &__currentWeatherIconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__currentTemp {
+    font-size: 58px;
+    font-weight: 500;
+
+  }
+}
