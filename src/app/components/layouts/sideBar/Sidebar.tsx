@@ -16,7 +16,20 @@ const Sidebar = () => {
 
   // Render nothing while the session status is "loading"
   if (status === "loading") {
-    return null;
+    return (
+      <div className={styles.skeleton}>
+        <>
+          <div className={styles.sidebar__links}>
+            <div className={styles.skeleton__link} />
+            <div className={styles.skeleton__link} />
+          </div>
+
+          <div className={styles.sidebar__bottom}>
+            <div className={styles.skeleton__log} />
+          </div>
+        </>
+      </div>
+    );
   }
 
   const handleSignOut = () => {
