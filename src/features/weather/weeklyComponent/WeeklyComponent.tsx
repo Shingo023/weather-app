@@ -1,7 +1,7 @@
 import { WeatherData, WeatherDay, WeatherIconType } from "@/types";
 import styles from "./WeeklyComponent.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
 import { Droplet } from "lucide-react";
 
@@ -10,6 +10,8 @@ export const WeeklyComponent = ({
 }: {
   displayedCityWeather: WeatherData | null;
 }) => {
+  const [loading, setLoading] = useState(true);
+
   const weeklyWeather: WeatherDay[] | undefined =
     displayedCityWeather?.days.slice(0, 7);
 
@@ -41,6 +43,41 @@ export const WeeklyComponent = ({
 
     return weekdays[dayIndex];
   };
+
+  useEffect(() => {
+    if (displayedCityWeather) {
+      setLoading(false);
+    }
+  }, [displayedCityWeather]);
+
+  // Render skeletons while loading
+  if (loading) {
+    const items = Array(7).fill(null); // Create an array with 7 undefined elements
+
+    return (
+      <div className={styles.skeleton}>
+        <div className={styles.WeeklyComponent__content}>
+          <h2 />
+          <ul className={styles.WeeklyComponentList}>
+            {items.map((_, index) => (
+              <li key={index} className={styles.WeeklyComponentItem}>
+                <div className={styles.WeeklyComponentItem__left}>
+                  <p className={styles.skeleton__WeeklyComponentDay} />
+                  <div
+                    className={styles.skeleton__WeeklyComponentWeatherIcon}
+                  />
+                </div>
+                <div className={styles.WeeklyComponentItem__right}>
+                  <p className={styles.skeleton__temps} />
+                  <div className={styles.skeleton__humidity} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.WeeklyComponent}>
