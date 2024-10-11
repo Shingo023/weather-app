@@ -5,9 +5,11 @@ import SearchBar from "@/features/weather/searchBar/SearchBar";
 import CurrentWeather from "@/features/weather/currentWeather/CurrentWeather";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { WeatherData } from "@/types";
+import { WeatherData, WeatherDay } from "@/types";
 import { useSession } from "next-auth/react";
 import styles from "./page.module.scss";
+import TodaysHighlights from "@/features/weather/todaysHighlights/TodaysHighlights";
+import TodaysForecast from "@/features/weather/todaysForecast/TodaysForecast";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -21,6 +23,7 @@ export default function WeatherPage() {
   const [favoriteCitiesPlaceIds, setFavoriteCitiesPlaceIds] = useState<
     string[]
   >([]);
+  const [todaysWeather, setTodaysWeather] = useState<WeatherDay | null>(null);
 
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -33,6 +36,9 @@ export default function WeatherPage() {
       const weatherData: WeatherData = await weatherResponse.json();
 
       setDisplayedCityWeather(weatherData);
+      console.log(weatherData);
+      const todaysWeatherData = weatherData.days[0];
+      setTodaysWeather(todaysWeatherData);
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
@@ -83,6 +89,8 @@ export default function WeatherPage() {
           latitude={lat as string}
           longitude={lng as string}
         />
+        <TodaysForecast />
+        <TodaysHighlights todaysWeather={todaysWeather} />
       </div>
       <div className={styles.weatherPage__rightContent}>
         <WeeklyComponent displayedCityWeather={displayedCityWeather} />
