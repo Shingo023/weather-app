@@ -45,10 +45,10 @@ export const WeeklyComponent = ({
   };
 
   useEffect(() => {
-    if (displayedCityWeather) {
+    if (weeklyWeather && weeklyWeather.length > 0) {
       setLoading(false);
     }
-  }, [displayedCityWeather]);
+  }, [weeklyWeather]);
 
   // Render skeletons while loading
   if (loading) {

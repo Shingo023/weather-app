@@ -8,7 +8,7 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import DateAndTime from "./DateAndTime";
 
 const FavoriteCityCard = React.memo(
@@ -90,67 +90,61 @@ const FavoriteCityCard = React.memo(
     };
 
     return (
-      <div>
-        <div className={styles.cityCard}>
-          <div className={styles.cityCard__cityInfo}>
-            <div className={styles.cityCard__homeIconContainer}>
-              <MapPinIcon
-                className={`${styles.cityCard__homeIcon} ${
-                  favoriteCityId === homeLocationId ? styles.active : ""
-                }`}
-                onClick={handleIconClick}
-              />
-              <span className={styles.cityCard__homeIconTooltip}>
-                {favoriteCityId === homeLocationId
-                  ? "Unset home location"
-                  : "Set as home location"}
-              </span>
-            </div>
-            <div className={styles.cityCard__cityName}>
-              {placeNameToDisplay}
-            </div>
-            <div
-              className={styles.cityCard__placeEdit}
-              onClick={(event) => {
-                event.stopPropagation();
-                setIsModalOpen(true);
-              }}
-            >
-              Edit
-            </div>
-            <div className={styles.cityCard__cityAddress}>{cityAddress}</div>
+      <div className={styles.cityCard}>
+        <div className={styles.cityCard__cityInfo}>
+          <div className={styles.cityCard__homeIconContainer}>
+            <MapPinIcon
+              className={`${styles.cityCard__homeIcon} ${
+                favoriteCityId === homeLocationId ? styles.active : ""
+              }`}
+              onClick={handleIconClick}
+            />
+            <span className={styles.cityCard__homeIconTooltip}>
+              {favoriteCityId === homeLocationId
+                ? "Unset home location"
+                : "Set as home location"}
+            </span>
           </div>
+          <div className={styles.cityCard__cityName}>{placeNameToDisplay}</div>
+          <div
+            className={styles.cityCard__placeEdit}
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsModalOpen(true);
+            }}
+          >
+            Edit
+          </div>
+          <div className={styles.cityCard__cityAddress}>{cityAddress}</div>
+        </div>
 
-          <div className={styles.cityCard__weather}>
-            <div className={styles.cityCard__currentInfo}>
-              <DateAndTime
-                timeZone={timeZone}
-                className={styles.cityCard__currentDateTime}
-              />
-              <div className={styles.cityCard__currentWeather}>
-                <div className={styles.cityCard__currentWeatherIconContainer}>
-                  <WeatherIcon
-                    weatherIcon={currentWeatherIcon}
-                    width={70}
-                    height={70}
-                  />
-                </div>
-                <div className={styles.cityCard__currentTemp}>
-                  {currentTemp}°
-                </div>
+        <div className={styles.cityCard__weather}>
+          <div className={styles.cityCard__currentInfo}>
+            <DateAndTime
+              timeZone={timeZone}
+              className={styles.cityCard__currentDateTime}
+            />
+            <div className={styles.cityCard__currentWeather}>
+              <div className={styles.cityCard__currentWeatherIconContainer}>
+                <WeatherIcon
+                  weatherIcon={currentWeatherIcon}
+                  width={70}
+                  height={70}
+                />
               </div>
+              <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>
             </div>
-            <div className={styles.cityCard__hourlyWeather}></div>
           </div>
+          <div className={styles.cityCard__hourlyWeather}></div>
+        </div>
 
-          <div className={styles.cityCard__buttons}>
-            <button
-              className={styles.cityCard__weatherDetailBtn}
-              onClick={handleDetailsClick}
-            >
-              Weather Details
-            </button>
-          </div>
+        <div className={styles.cityCard__buttons}>
+          <button
+            className={styles.cityCard__weatherDetailBtn}
+            onClick={handleDetailsClick}
+          >
+            Weather Details
+          </button>
         </div>
       </div>
     );

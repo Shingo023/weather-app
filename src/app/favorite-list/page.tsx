@@ -8,7 +8,6 @@ import {
   WeatherData,
   WeatherIconType,
 } from "@/types";
-import { getCurrentTimeAndDate } from "@/utils/dateUtils";
 import FavoriteCityContainer from "@/features/favoritesList/favoriteCityContainer/FavoriteCityContainer";
 import styles from "./page.module.scss";
 
@@ -17,6 +16,7 @@ const FavoriteList = () => {
     FavoriteCityWithWeather[]
   >([]);
   const [homeLocationId, setHomeLocationId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const { data: session, status } = useSession();
 
@@ -52,6 +52,9 @@ const FavoriteList = () => {
           setFavoriteCitiesWithWeather(favoriteCitiesWithWeatherData);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
+        } finally {
+          // Set loading to false after all data is fetched and processed
+          setLoading(false);
         }
       }
     };
@@ -61,6 +64,44 @@ const FavoriteList = () => {
       fetchFavoriteCitiesWithWeather();
     }
   }, [status, session?.user?.id]);
+
+  // Render skeletons while loading
+  if (loading) {
+    const skeletons = Array(4).fill(null);
+
+    return (
+      <div className={styles.favoritesList}>
+        {skeletons.map((_, index) => (
+          <div key={index} className={styles.skeleton}>
+            <div className={styles.cityCard__cityInfo}>
+              <div className={styles.cityCard__homeIconContainer}>
+                <div className={styles.skeleton__homeIcon} />
+              </div>
+              <div className={styles.skeleton__cityName} />
+              <div className={styles.skeleton__cityAddress} />
+            </div>
+
+            <div className={styles.cityCard__weather}>
+              <div className={styles.cityCard__currentInfo}>
+                <div className={styles.skeleton__dateAndTime} />
+                <div className={styles.cityCard__currentWeather}>
+                  <div className={styles.cityCard__currentWeatherIconContainer}>
+                    <div className={styles.skeleton__weatherIcon} />
+                  </div>
+                  <div className={styles.skeleton__currentTemp} />
+                </div>
+              </div>
+              <div className={styles.cityCard__hourlyWeather}></div>
+            </div>
+
+            <div className={styles.cityCard__buttons}>
+              <div className={styles.skeleton__weatherDetailBtn} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.favoritesList}>
