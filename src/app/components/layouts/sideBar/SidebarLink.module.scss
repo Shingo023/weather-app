@@ -2,6 +2,18 @@
   text-decoration: none;
   color: black;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 20px;
+  border-radius: 10px;
+  transition: all 0.3s ease; 
+  padding: 8px;
+
+  &:hover {
+    background-color: rgba(180, 180, 180, 0.5);
+  }
 }
 
 .link.disabled {

@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { autocompleteSuggestion, WeatherData } from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { autocompleteSuggestion } from "@/types";
 import { debounce } from "@/utils/debounce";
 import styles from "./SearchBar.module.scss";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+import { Search, TriangleAlert } from "lucide-react";
 
 // "places" library: necessary for autocomplete for addresses and places
 const SearchBar = React.memo(() => {
@@ -15,6 +16,17 @@ const SearchBar = React.memo(() => {
   >([]);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const address = searchParams.get("address");
+    const source = searchParams.get("source");
+
+    // Only set the address in the input if the source is 'search'
+    if (address && inputRef.current && source === "search") {
+      inputRef.current.value = address;
+    }
+  }, [searchParams]);
 
   const handleInputChange = debounce(async () => {
     const input = inputRef.current?.value;
@@ -40,7 +52,7 @@ const SearchBar = React.memo(() => {
       }
     } catch (error) {
       console.error("Error fetching autocomplete data:", error);
-      setError("Failed to fetch suggestions. Please try again.");
+      alert("Failed to fetch suggestions. Please try again.");
     }
   }, 500);
 
@@ -66,21 +78,21 @@ const SearchBar = React.memo(() => {
 
       if (latitude && longitude && placeName && description && placeId) {
         router.push(
-          `/weather/${latitude}/${longitude}?place=${placeName}&address=${description}&id=${placeId}`
+          `/weather/${latitude}/${longitude}?place=${placeName}&address=${description}&id=${placeId}&source=search`
         );
       } else {
-        setError("Invalid place data. Please try again.");
+        alert("Invalid place data. Please try again.");
       }
     } catch (error) {
       console.error("Error fetching place details:", error);
-      setError("Failed to fetch place details. Please try again.");
+      alert("Failed to fetch place details. Please try again.");
     }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       if (autocompleteSuggestions.length > 0) {
-        setError("Please select a suggested place from the dropdown.");
+        setError("Please select a suggested place from the list.");
       } else {
         setError(null);
       }
@@ -89,18 +101,23 @@ const SearchBar = React.memo(() => {
 
   return (
     <div className={styles.searchBar}>
+      <Search className={styles.searchBar__searchIcon} />
       <input
         ref={inputRef}
         type="text"
-        placeholder="Enter a city"
+        placeholder="Search places ..."
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
       {autocompleteSuggestions.length > 0 && (
         <ul className={styles.searchBar__suggestionsList} role="listbox">
+          {error && (
+            <div className={styles.searchBar__error}>
+              <TriangleAlert className={styles.searchBar__errorIcon} />
+              <p>{error}</p>
+            </div>
+          )}
           {autocompleteSuggestions.map((suggestion) => (
             <li
               className={styles.searchBar__suggestion}
@@ -114,7 +131,8 @@ const SearchBar = React.memo(() => {
                 )
               }
             >
-              {suggestion.description}
+              <Search className={styles.searchBar__suggestionIcon} />
+              <p>{suggestion.description}</p>
             </li>
           ))}
         </ul>

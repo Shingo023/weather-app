@@ -5,8 +5,11 @@ import SearchBar from "@/features/weather/searchBar/SearchBar";
 import CurrentWeather from "@/features/weather/currentWeather/CurrentWeather";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { LocationDetails, WeatherData } from "@/types";
+import { WeatherData, WeatherDay } from "@/types";
 import { useSession } from "next-auth/react";
+import styles from "./page.module.scss";
+import TodaysHighlights from "@/features/weather/todaysHighlights/TodaysHighlights";
+import TodaysForecast from "@/features/weather/todaysForecast/TodaysForecast";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -17,15 +20,13 @@ export default function WeatherPage() {
 
   const [displayedCityWeather, setDisplayedCityWeather] =
     useState<WeatherData | null>(null);
-  const [cityToDisplay, setCityToDisplay] = useState<string | null>(null);
-  const [address, setAddress] = useState<string | null>(null);
-  const [placeId, setPlaceId] = useState<string | null>(null);
+  const [favoriteCitiesPlaceIds, setFavoriteCitiesPlaceIds] = useState<
+    string[]
+  >([]);
+  const [todaysWeather, setTodaysWeather] = useState<WeatherDay | null>(null);
 
   const router = useRouter();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [router]);
+  const { data: session, status } = useSession();
 
   const fetchWeatherData = async (latitude: number, longitude: number) => {
     try {
@@ -35,67 +36,65 @@ export default function WeatherPage() {
       const weatherData: WeatherData = await weatherResponse.json();
 
       setDisplayedCityWeather(weatherData);
+      console.log(weatherData);
+      const todaysWeatherData = weatherData.days[0];
+      setTodaysWeather(todaysWeatherData);
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
   };
 
-  const fetchLocationDetails = async (latitude: number, longitude: number) => {
-    try {
-      const locationDetailsResponse = await fetch(
-        `/api/location-details?lat=${latitude}&lng=${longitude}`
-      );
-      const locationDetailsData = await locationDetailsResponse.json();
-
-      if (
-        locationDetailsData.status === "OK" &&
-        locationDetailsData.results.length > 0
-      ) {
-        const locationDetails: LocationDetails = locationDetailsData.results[0];
-        const addressComponents = locationDetails.address_components;
-
-        const cityComponent = addressComponents.find((component) =>
-          component.types.includes("locality")
+  const fetchFavoriteCitiesPlaceIds = async () => {
+    if (session?.user?.id) {
+      try {
+        const response = await fetch(
+          `/api/users/${session.user.id}/favorite-cities/placeIds`
         );
-        const cityName = cityComponent?.long_name || "Unknown Location";
-        const address = locationDetails?.formatted_address || null;
-        const placeId = locationDetails?.place_id || null;
-
-        setCityToDisplay(cityName || "Unknown Location");
-        setAddress(address || null);
-        setPlaceId(placeId || null);
-      } else {
-        console.error("No results from Geocoding API");
+        const favoriteCitiesPlaceIdsData = await response.json();
+        setFavoriteCitiesPlaceIds(favoriteCitiesPlaceIdsData);
+      } catch (error) {
+        console.error("Error fetching favorite cities place IDs:", error);
       }
-    } catch (error) {
-      console.error("Error fetching location details:", error);
     }
   };
 
   useEffect(() => {
     if (lat && lng) {
-      if (cityQuery && addressQuery && placeIdQuery) {
-        setCityToDisplay(cityQuery);
-        setAddress(addressQuery);
-        setPlaceId(placeIdQuery);
-      } else {
-        fetchLocationDetails(Number(lat), Number(lng));
-      }
       fetchWeatherData(Number(lat), Number(lng));
     }
-  }, [lat, lng, cityQuery, addressQuery, placeIdQuery]);
+  }, [lat, lng]);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchFavoriteCitiesPlaceIds();
+    }
+  }, [status, session?.user?.id]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [router]);
 
   return (
-    <div>
-      <SearchBar />
-      <CurrentWeather
-        displayedCityWeather={displayedCityWeather}
-        setDisplayedCityWeather={setDisplayedCityWeather}
-        cityToDisplay={cityToDisplay}
-        address={address}
-        placeId={placeId}
-      />
-      <WeeklyComponent displayedCityWeather={displayedCityWeather} />
+    <div className={styles.weatherPage}>
+      <div className={styles.weatherPage__leftContent}>
+        <SearchBar />
+        <CurrentWeather
+          displayedCityWeather={displayedCityWeather}
+          setDisplayedCityWeather={setDisplayedCityWeather}
+          cityToDisplay={cityQuery}
+          address={addressQuery}
+          placeId={placeIdQuery}
+          favoriteCitiesPlaceIds={favoriteCitiesPlaceIds}
+          setFavoriteCitiesPlaceIds={setFavoriteCitiesPlaceIds}
+          latitude={lat as string}
+          longitude={lng as string}
+        />
+        <TodaysForecast />
+        <TodaysHighlights todaysWeather={todaysWeather} />
+      </div>
+      <div className={styles.weatherPage__rightContent}>
+        <WeeklyComponent displayedCityWeather={displayedCityWeather} />
+      </div>
     </div>
   );
 }
