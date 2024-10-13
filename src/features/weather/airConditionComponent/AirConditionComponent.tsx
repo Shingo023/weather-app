@@ -1,13 +1,18 @@
-import { useCurrentCity } from "@/contexts/currentCity";
-import styles from "../style/components/AirConditionComponent.module.scss";
+import styles from "./AirConditionComponent.module.scss";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import sunriseSVG from "../public/bi_sunrise.svg";
-import sunsetSVG from "../public/Vector.svg";
-import sun from "../public/heroicons_sun-solid.svg";
+import sunriseSVG from "../../../public/bi_sunrise.svg";
+import sunsetSVG from "../../../public/Vector.svg";
+import sun from "../../../public/heroicons_sun-solid.svg";
+import { WeatherData } from "@/types";
 
-export const AirConditionComponent = () => {
-  const { currentCity } = useCurrentCity();
+type AirConditionComponentProps = {
+  displayedCityWeather: WeatherData | null;
+};
+
+export const AirConditionComponent = ({
+  displayedCityWeather,
+}: AirConditionComponentProps) => {
   const [totalUV, setTotalUV] = useState<number>(0);
   const [sunPath, setSunPath] = useState<[string, string, number]>([
     "00:00",
@@ -21,31 +26,57 @@ export const AirConditionComponent = () => {
   }
 
   useEffect(() => {
-    if (currentCity) {
-      setTotalUV((180 * currentCity.days[0].uvindex * 10) / 100);
+    if (displayedCityWeather) {
+      setTotalUV((180 * displayedCityWeather.days[0].uvindex * 10) / 100);
 
       const sunrise: number = getHourFromTimeString(
-        currentCity.days[0].sunrise
+        displayedCityWeather.days[0].sunrise
       );
-      const sunset: number = getHourFromTimeString(currentCity.days[0].sunset);
+      const sunset: number = getHourFromTimeString(
+        displayedCityWeather.days[0].sunset
+      );
 
       const now: Date = new Date();
       const totalHours: number = sunset - sunrise;
       const currentHour: number = now.getHours() - sunrise;
       const currentSunLocation: number = (currentHour * 100) / totalHours;
 
-      const currentSunLocationPercentage: number =
-        (180 * currentSunLocation) / 10 / 100;
+      const currentSunLocationPercentage: number = currentSunLocation
+        
       setSunPath([
-        currentCity.days[0].sunrise.slice(0, 5),
-        currentCity.days[0].sunset.slice(0, 5),
+        displayedCityWeather.days[0].sunrise.slice(0, 5),
+        displayedCityWeather.days[0].sunset.slice(0, 5),
         currentSunLocationPercentage,
       ]);
     }
-  }, [currentCity]);
+  }, [displayedCityWeather]);
+
+  const getUvMessage = (uvPercentage: number): string => {
+    let message = "";
+
+    switch (true) {
+      case uvPercentage <= 25:
+        message = "Low: Minimal risk of harm";
+        break;
+      case uvPercentage <= 50:
+        message = "";
+        break;
+      case uvPercentage <= 75:
+        message = "";
+        break;
+      case uvPercentage <= 100:
+        message = "";
+        break;
+      default:
+        message = "Error, please try again later";
+        break;
+    }
+
+    return message;
+  };
 
   const UVpercentage = {
-    transform: `rotate(${totalUV}deg`,
+    transform: `rotate(${(totalUV * 100) / 10 / 180}deg`,
   };
 
   const sunPathPercentage = {
@@ -69,10 +100,11 @@ export const AirConditionComponent = () => {
                 <div className={styles.gaugeBody}>
                   <div className={styles.gaugeFill} style={UVpercentage}></div>
                   <div className={styles.gaugeCover}>
-                    <p>{((totalUV * 100) / 10 / 180).toFixed(2)} UV</p>
+                    <p>{((totalUV * 100) / 10 / 180).toFixed(1)} %</p>
                   </div>
                 </div>
               </div>
+              <p className={styles.uvMessage}>{getUvMessage((totalUV * 100) / 10 / 180)}</p>
             </div>
           </div>
           <div className={styles.AirConditionContainerChildren}>

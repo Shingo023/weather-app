@@ -1,4 +1,4 @@
-@import "../base/variables.scss";
+@import "@/style/base/variables.scss";
 
 .AirConditionComponent {
   background-color: $componentsBackGround;
@@ -144,4 +144,15 @@
 .sunIcon {
   position: absolute;
   left: -14px;
+}
+
+.uvMessage {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.currentTime {
+  top: 0;
+  position: absolute;
+  background-color: red;
 }

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { LocationDetails, WeatherData } from "@/types";
 import { useSession } from "next-auth/react";
+import { AirConditionComponent } from "@/features/weather/airConditionComponent/AirConditionComponent";
 
 export default function WeatherPage() {
   const { lat, lng } = useParams();
@@ -95,6 +96,7 @@ export default function WeatherPage() {
         address={address}
         placeId={placeId}
       />
+      <AirConditionComponent displayedCityWeather={displayedCityWeather}/>
       <WeeklyComponent displayedCityWeather={displayedCityWeather} />
     </div>
   );
