@@ -3,7 +3,7 @@ import styles from "./WeeklyComponent.module.scss";
 import { iconMapping } from "@/utils/weatherIconMapping";
 import React, { useEffect, useState } from "react";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
-import { Droplet } from "lucide-react";
+import { Droplet, Umbrella } from "lucide-react";
 
 export const WeeklyComponent = ({
   displayedCityWeather,
@@ -69,7 +69,7 @@ export const WeeklyComponent = ({
                 </div>
                 <div className={styles.WeeklyComponentItem__right}>
                   <p className={styles.skeleton__temps} />
-                  <div className={styles.skeleton__humidity} />
+                  <div className={styles.skeleton__chanceOfRain} />
                 </div>
               </li>
             ))}
@@ -109,9 +109,9 @@ export const WeeklyComponent = ({
                       {Math.round(dailyWeather.tempmax)}°/
                       {Math.round(dailyWeather.tempmin)}°
                     </p>
-                    <div className={styles.humidity}>
-                      <Droplet className={styles.humidity__icon} />
-                      <p>{Math.round(dailyWeather.humidity)}%</p>
+                    <div className={styles.chanceOfRain}>
+                      <Umbrella className={styles.chanceOfRain__icon} />
+                      <p>{Math.round(dailyWeather.precipprob / 5) * 5}%</p>
                     </div>
                   </div>
                 </li>

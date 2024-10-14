@@ -1,8 +1,8 @@
 import SunsetAndSunrise from "./sunsetAndSunrise/SunsetAndSunrise";
 import UVIndex from "./uvIndex/UVIndex";
-import WindStatus from "./windStatus/windStatus";
 import styles from "./TodaysHighlights.module.scss";
 import { WeatherDay } from "@/types";
+import Overview from "./overview/Overview";
 
 const TodaysHighlights = ({
   todaysWeather,
@@ -10,6 +10,14 @@ const TodaysHighlights = ({
   todaysWeather: WeatherDay | null;
 }) => {
   if (!todaysWeather) return;
+
+  const humidity = Math.round(todaysWeather.humidity);
+  const windSpeed = todaysWeather.windspeed;
+  const rainfall = Math.round(
+    (todaysWeather.precip ?? 0) - (todaysWeather.snow ?? 0)
+  );
+  const snowfall = todaysWeather.snow;
+  const snowDepth = todaysWeather.snowdepth;
 
   const sunriseData = todaysWeather.sunrise;
   const sunsetData = todaysWeather.sunset;
@@ -21,7 +29,13 @@ const TodaysHighlights = ({
       <div className={styles.todaysHighlights__container}>
         <h2>Today's Highlights</h2>
         <div className={styles.todaysHighlights__contents}>
-          <WindStatus />
+          <Overview
+            humidity={humidity}
+            windSpeed={windSpeed}
+            rainfall={rainfall}
+            snowfall={snowfall}
+            snowDepth={snowDepth}
+          />
           <UVIndex uvIndex={uvIndexData} />
           <SunsetAndSunrise sunrise={sunriseData} sunset={sunsetData} />
         </div>

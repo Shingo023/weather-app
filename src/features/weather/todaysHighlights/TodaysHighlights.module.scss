@@ -19,7 +19,7 @@
   &__contents {
     display: flex;
     gap: 15px;
-    height: 100%;
+    height: calc(100% - 20px);
     padding: 10px 10px 0 10px;
   }
   
