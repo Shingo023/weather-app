@@ -8,37 +8,68 @@ import { FavoriteCity } from "@/types";
 export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLocationAndRedirect = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
+          async (position) => {
             const { latitude, longitude } = position.coords;
-            router.push(`/weather/${latitude}/${longitude}`);
+
+            try {
+              const locationDetailsResponse = await fetch(
+                `/api/location-details?lat=${latitude}&lng=${longitude}`
+              );
+              const locationDetailsData = await locationDetailsResponse.json();
+
+              if (locationDetailsData.cityName && locationDetailsData.address) {
+                const { cityName, address, placeId } = locationDetailsData;
+
+                router.push(
+                  `/weather/${latitude}/${longitude}?place=${encodeURIComponent(
+                    cityName
+                  )}&address=${encodeURIComponent(address)}&id=${placeId}`
+                );
+                // setLoading(false);
+              } else {
+                console.error("Failed to retrieve necessary location details.");
+                // setLoading(false);
+              }
+            } catch (error) {
+              console.error("Error fetching location details:", error);
+              // setLoading(false);
+            }
           },
           (error) => {
             console.error("Error getting geolocation:", error);
-            setLoading(false);
+            // setLoading(false);
           }
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
     const fetchDefaultCityAndRedirect = async (userId: string) => {
       try {
         const response = await fetch(`/api/users/${userId}/default-city`);
+
+        if (!response.ok) {
+          throw new Error("Default city not found");
+        }
+
         const data: FavoriteCity = await response.json();
 
         if (data) {
-          const { latitude, longitude, cityName, address, placeId } = data;
+          const { latitude, longitude, customName, address, placeId } = data;
           router.push(
-            `/weather/${latitude}/${longitude}?place=${cityName}&address=${address}&id=${placeId}`
+            `/weather/${latitude}/${longitude}?place=${encodeURIComponent(
+              customName
+            )}&address=${encodeURIComponent(address)}&id=${placeId}`
           );
+          // setLoading(false);
         } else {
           fetchLocationAndRedirect();
         }
@@ -58,9 +89,9 @@ export default function Home() {
     }
   }, [router, session, status]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return null;
 }

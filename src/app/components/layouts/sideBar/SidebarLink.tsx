@@ -26,20 +26,14 @@ const SidebarLink = ({
   const isActive = pathname.includes(path);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (isActive || (path === "/favorite-list" && !session)) {
+    if (!session && path === "/favorite-list") {
       e.preventDefault();
-      if (!session && path === "/favorite-list") {
-        alert("Please log in to access the favorite cities feature.");
-      }
+      alert("Please log in to access the favorite cities feature.");
     }
   };
 
   return (
-    <Link
-      className={`${styles.link} ${isActive ? styles.disabled : ""}`}
-      href={isActive ? "#" : path}
-      onClick={handleClick}
-    >
+    <Link className={styles.link} href={path} onClick={handleClick}>
       <Image
         src={isActive ? icon : iconPale}
         alt={alt}

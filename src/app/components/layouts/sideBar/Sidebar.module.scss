@@ -1,16 +1,97 @@
 @import "src/app/variables.module.scss";
 
 .sidebar {
-  margin: 24px;
-  padding: 24px;
-  max-width: 40px;
+  padding: 24px 10px;
+  width: 115px;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: $background-color;
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   text-align: center;
   gap: 24px;
+
+  &__links {
+    margin-top: 20px;
+  }
+
+  &__user {
+    margin-bottom: 40px;
+    p {
+      font-size: 16px;
+    }
+  }
+  &__userIcon {
+    height: 40px;
+    width: 40px;
+  }
+
+  &__bottom {
+    width: 100%;
+  }
+
+  &__log {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 3px;
+    border-radius: 6px;
+    transition: all 0.3s ease; 
+    &:hover {
+      background-color: rgba(180, 180, 180, 0.5);
+      cursor: pointer;
+    }
+  }
+  &__logIcon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+// Skeletons
+.skeleton {
+  padding: 24px 10px;
+  width: 115px;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #e0e0e0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+
+  &__link,
+  &__log {
+    background-image: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &__link {
+    width: 69px;
+    height: 65px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+  }
+
+  &__log {
+    width: 90px;
+    height: 25px;
+    border-radius: 6px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
 }

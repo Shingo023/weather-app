@@ -1,0 +1,14 @@
+.weatherPage {
+  display: flex;
+  height: 100%;
+
+  &__leftContent {
+  width: 65%;
+  height: 100%;
+  }
+
+  &__rightContent {
+  width: 35%;
+  padding: 69px 30px 0 26px;
+  }
+}

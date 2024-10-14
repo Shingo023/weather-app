@@ -3,8 +3,9 @@ export const getCurrentTimeAndDate = (timeZone: string) => {
     const currentDate = new Date();
     const options: Intl.DateTimeFormatOptions = {
       timeZone,
-      month: "short", // Abbreviated month name (e.g., "Sep")
-      day: "numeric", // Numeric day (e.g., "5")
+      weekday: "short", // Abbreviated weekday (e.g., "Wed")
+      month: "short", // Abbreviated month name (e.g., "Oct")
+      day: "numeric", // Numeric day (e.g., "9")
       hour: "numeric", // Hour
       minute: "numeric", // Minute
       hour12: true, // 12-hour format
