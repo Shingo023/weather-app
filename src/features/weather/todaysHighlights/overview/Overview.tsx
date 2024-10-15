@@ -1,6 +1,11 @@
-import { CloudRain, Droplet, Snowflake, Wind } from "lucide-react";
+import {
+  ArrowUpToLine,
+  CloudRain,
+  CloudSnow,
+  Droplet,
+  Wind,
+} from "lucide-react";
 import styles from "./Overview.module.scss";
-import React from "react";
 import {
   getRainfallIntensity,
   getWindStrength,
@@ -10,8 +15,8 @@ type TodaysWeatherOverviewType = {
   humidity: number;
   windSpeed: number;
   rainfall: number;
-  snowfall: number | null;
-  snowDepth: number | null;
+  snowfall: number;
+  snowDepth: number;
 };
 
 const Overview = ({
@@ -23,7 +28,57 @@ const Overview = ({
 }: TodaysWeatherOverviewType) => {
   return (
     <div className={styles.overview}>
-      <div className={styles.overview__top}>
+      <div className={styles.overview__container}>
+        {(snowfall > 0 || snowDepth > 0) && (
+          <div className={styles.overview__snowfall}>
+            <h5>Snowfall</h5>
+            <div>
+              <CloudSnow className={styles.overview__icon} />
+              <p>
+                <span className={styles.overview__numberData}>{snowfall}</span>
+                mm/d
+              </p>
+            </div>
+
+            {snowfall > 0 && (
+              <p className={styles.overview__weatherIndex}>
+                {getRainfallIntensity(snowfall)}
+              </p>
+            )}
+          </div>
+        )}
+
+        {(snowfall > 0 || snowDepth > 0) && (
+          <div className={styles.overview__snowDepth}>
+            <h5>Snow Depth</h5>
+            <div>
+              <ArrowUpToLine className={styles.overview__icon} />
+              <p>
+                <span className={styles.overview__numberData}>{snowDepth}</span>
+                cm
+              </p>
+            </div>
+          </div>
+        )}
+
+        {rainfall > 0 && (
+          <div className={styles.overview__rainfall}>
+            <h5>Rainfall</h5>
+
+            <div>
+              <CloudRain className={styles.overview__icon} />
+              <p>
+                <span className={styles.overview__numberData}>{rainfall}</span>
+                mm/d
+              </p>
+            </div>
+
+            <p className={styles.overview__weatherIndex}>
+              {getRainfallIntensity(rainfall)}
+            </p>
+          </div>
+        )}
+
         <div className={styles.overview__humidity}>
           <h5>Humidity</h5>
 
@@ -51,67 +106,6 @@ const Overview = ({
             </p>
           )}
         </div>
-      </div>
-
-      <div className={styles.overview__bottom}>
-        <div className={styles.overview__snowfall}>
-          <h5>Precip</h5>
-          <div>
-            <Snowflake className={styles.overview__icon} />
-            <p>
-              <span className={styles.overview__numberData}>{snowfall}</span>
-              mm/d
-            </p>
-          </div>
-
-          {snowfall !== 0 && (
-            <p className={styles.overview__weatherIndex}>
-              {getRainfallIntensity(snowfall)}
-            </p>
-          )}
-          <p>
-            <span className={styles.overview__snowDepth}>{snowDepth}</span> cm
-          </p>
-        </div>
-
-        {/* 
-        {snowfall || snowDepth ? (
-          <div className={styles.overview__snowfall}>
-            <div>
-              <Snowflake className={styles.overview__icon} />
-              <h5>Snowfall</h5>
-            </div>
-            <p>
-              <span className={styles.overview__numberData}>{snowfall}</span>
-              mm/d
-            </p>
-            {snowfall !== 0 && (
-              <p className={styles.overview__weatherIndex}>
-                {getRainfallIntensity(snowfall)}
-              </p>
-            )}
-            <p>
-              <span className={styles.overview__snowDepth}>{snowDepth}</span> cm
-            </p>
-          </div>
-        ) : null}
-
-        {rainfall ? (
-          <div className={styles.overview__rainfall}>
-            <div>
-              <CloudRain className={styles.overview__icon} />
-              <h5>Rainfall</h5>
-            </div>
-
-            <p>
-              <span className={styles.overview__numberData}>{rainfall}</span>
-              mm/d
-            </p>
-            <p className={styles.overview__weatherIndex}>
-              {getRainfallIntensity(rainfall)}
-            </p>
-          </div>
-        ) : null} */}
       </div>
     </div>
   );

@@ -1,7 +1,4 @@
 .overview {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   background-color: #F9F9F9;
   border-radius: 10px;
   flex: 1;
@@ -19,28 +16,21 @@
     font-weight: normal;
   }
 
-  &__top {
+  &__container {
     display: flex;
     gap: 8px;
-    flex: 1 1;
-    flex-wrap: wrap;
-  }
-  &__bottom {
-    display: flex;
-    gap: 8px;
-    flex: 1 1;
     flex-wrap: wrap;
   }
 
   &__humidity,
   &__wind,
   &__rainfall,
-  &__snowfall {
-    min-width: 80px;
+  &__snowfall,
+  &__snowDepth {
     flex: 1 1;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    padding: 4px;
+    padding: 4px 6px;
 
     div {
       display: flex;
@@ -55,10 +45,26 @@
     }
   }
 
+  &__humidity {
+    min-width: 65px;
+  }
+  &__wind {
+    min-width: 85px;
+  }
+  &__snowDepth {
+    min-width: 82px;
+  }
+  &__snowfall {
+    min-width: 90px;
+  }
+  &__rainfall {
+    min-width: 90px;
+  }
+
   &__numberData {
     font-size: 16px;
     font-weight: 600;
-    margin-right: 3px;
+    margin-right: 1px;
   }
   &__snowDepth {
     font-size: 12px;
