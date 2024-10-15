@@ -3,6 +3,11 @@ import UVIndex from "./uvIndex/UVIndex";
 import styles from "./TodaysHighlights.module.scss";
 import { WeatherDay } from "@/types";
 import Overview from "./overview/Overview";
+import {
+  getRainfallIntensity,
+  getWindStrength,
+} from "../../../utils/weatherUtils";
+import React from "react";
 
 const TodaysHighlights = ({
   todaysWeather,
@@ -16,7 +21,7 @@ const TodaysHighlights = ({
   const rainfall = Math.round(
     (todaysWeather.precip ?? 0) - (todaysWeather.snow ?? 0)
   );
-  const snowfall = todaysWeather.snow;
+  const snowfall = todaysWeather.snow ?? 0;
   const snowDepth = todaysWeather.snowdepth;
 
   const sunriseData = todaysWeather.sunrise;
