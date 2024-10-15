@@ -5,17 +5,20 @@ const UVIndex = ({ uvIndex }: { uvIndex: number }) => {
     let message = "";
 
     switch (true) {
-      case uvPercentage <= 25:
-        message = "Low: Minimal risk of harm";
+      case uvPercentage <= 2:
+        message = "Low";
         break;
-      case uvPercentage <= 50:
-        message = "";
+      case uvPercentage <= 5:
+        message = "Moderate";
         break;
-      case uvPercentage <= 75:
-        message = "";
+      case uvPercentage <= 7:
+        message = "High";
         break;
-      case uvPercentage <= 100:
-        message = "";
+      case uvPercentage <= 10:
+        message = "Very high";
+        break;
+      case uvPercentage >= 11:
+        message = "Extreme";
         break;
       default:
         message = "Error, please try again later";
@@ -26,7 +29,7 @@ const UVIndex = ({ uvIndex }: { uvIndex: number }) => {
   };
 
   const UVpercentage = {
-    transform: `rotate(${(uvIndex * 100) / 10 / 180}deg`,
+    transform: `rotate(${(16.36 * (uvIndex * 100)) / 10 / 180}deg`,
   };
 
   return (
@@ -37,7 +40,7 @@ const UVIndex = ({ uvIndex }: { uvIndex: number }) => {
           <div className={styles.gaugeBody}>
             <div className={styles.gaugeFill} style={UVpercentage}></div>
             <div className={styles.gaugeCover}>
-              <p>{((uvIndex * 100) / 10 / 180).toFixed(1)} %</p>
+              <p>{(uvIndex * 100) / 10 / 180} uv</p>
             </div>
           </div>
         </div>

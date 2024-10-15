@@ -8,10 +8,12 @@ const SunsetAndSunrise = ({
   sunrise,
   sunset,
   sunCurrentLocation,
+  isNight,
 }: {
   sunrise: string;
   sunset: string;
   sunCurrentLocation: number;
+  isNight: boolean;
 }) => {
   const sunPathPercentage = {
     transform: `rotate(${sunCurrentLocation}deg`,
@@ -28,16 +30,31 @@ const SunsetAndSunrise = ({
         <div className={styles.circles}>
           <div className={styles.gaugeSun}>
             <div className={styles.gaugeBodySun}>
-              <div
-                className={styles.gaugeFillSun}
-                style={sunPathPercentage}
-              ></div>
-              <div
-                className={styles.gaugeCoverSun}
-                style={sunIconPathPercentage}
-              >
-                <Image className={styles.sunIcon} src={sun} alt="" />
-              </div>
+              {isNight ? (
+                <>
+                  <div
+                    className={styles.gaugeFillMoon}
+                    style={{ transform: `rotate(${180}deg` }}
+                  ></div>
+                  <div
+                    className={styles.gaugeCoverSun}
+                    style={sunIconPathPercentage}
+                  ></div>
+                </>
+              ) : (
+                <>
+                  <div
+                    className={styles.gaugeFillSun}
+                    style={sunPathPercentage}
+                  ></div>
+                  <div
+                    className={styles.gaugeCoverSun}
+                    style={sunIconPathPercentage}
+                  >
+                    <Image className={styles.sunIcon} src={sun} alt="" />
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className={styles.hoursContainer}>

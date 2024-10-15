@@ -1,4 +1,5 @@
 .sunsetAndSunrise {
+  padding: 10px;
   background-color: #f9f9f9;
   border-radius: 10px;
   flex: 1;
@@ -52,6 +53,18 @@
   transition: transform 0.2s ease-out;
 }
 
+.gaugeFillMoon {
+  position: absolute;
+  top: 100%;
+  left: -12px;
+  width: 110%;
+  height: 100%;
+  background-color: #2f009d;
+  border-bottom: none;
+  transform-origin: center top;
+  transition: transform 0.2s ease-out;
+}
+
 .gaugeCoverSun {
   width: 90%;
   height: 175%;
@@ -87,5 +100,5 @@
 
 .sunIcon {
   position: absolute;
-  left: -14px;
+  left: -9px;
 }
