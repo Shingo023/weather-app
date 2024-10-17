@@ -10,14 +10,7 @@ import {
   getRainfallIntensity,
   getWindStrength,
 } from "../../../../utils/weatherUtils";
-
-type TodaysWeatherOverviewType = {
-  humidity: number;
-  windSpeed: number;
-  rainfall: number;
-  snowfall: number;
-  snowDepth: number;
-};
+import { TodaysWeatherOverviewType } from "@/types";
 
 const Overview = ({
   humidity,

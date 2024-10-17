@@ -300,6 +300,7 @@ export type CurrentDateAndTimePropsType = {
   setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
   latitude: string;
   longitude: string;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
 export type StarIconPropsType = {
@@ -321,4 +322,12 @@ export type UserFavoriteCity = {
   customName: string | null;
   isDefault: boolean;
   favoriteCity: FavoriteCity;
+};
+
+export type TodaysWeatherOverviewType = {
+  humidity: number;
+  windSpeed: number;
+  rainfall: number;
+  snowfall: number;
+  snowDepth: number;
 };
