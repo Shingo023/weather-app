@@ -1,47 +1,44 @@
-import {
-  ArrowUpToLine,
-  CloudRain,
-  CloudSnow,
-  Droplet,
-  Wind,
-} from "lucide-react";
+import { ArrowUpToLine, Droplet, EyeOff, Thermometer } from "lucide-react";
 import styles from "./Overview.module.scss";
-import {
-  getRainfallIntensity,
-  getWindStrength,
-} from "../../../../utils/weatherUtils";
 import { TodaysWeatherOverviewType } from "@/types";
+import { getVisibilityIndex } from "@/utils/weatherUtils";
 
 const Overview = ({
   humidity,
-  windSpeed,
-  rainfall,
-  snowfall,
   snowDepth,
+  weatherOverview,
+  visibility,
+  feelsLikeTempMax,
+  feelsLikeTempMin,
 }: TodaysWeatherOverviewType) => {
   return (
     <div className={styles.overview}>
       <div className={styles.overview__container}>
-        {(snowfall > 0 || snowDepth > 0) && (
-          <div className={styles.overview__snowfall}>
-            <h5>Snowfall</h5>
-            <div>
-              <CloudSnow className={styles.overview__icon} />
-              <p>
-                <span className={styles.overview__numberData}>{snowfall}</span>
-                mm/d
-              </p>
-            </div>
-
-            {snowfall > 0 && (
-              <p className={styles.overview__weatherIndex}>
-                {getRainfallIntensity(snowfall)}
-              </p>
-            )}
+        <div className={styles.overview__weatherOverview}>
+          <h5>Overview</h5>
+          <div>
+            <p>{weatherOverview}</p>
           </div>
-        )}
+        </div>
 
-        {(snowfall > 0 || snowDepth > 0) && (
+        <div className={styles.overview__feelsLikeTemps}>
+          <h5>Feels-like temp</h5>
+          <div>
+            <Thermometer className={styles.overview__icon} />
+            <p>
+              <span className={styles.overview__numberData}>
+                {feelsLikeTempMax}
+              </span>
+              ° /{" "}
+              <span className={styles.overview__numberData}>
+                {feelsLikeTempMin}
+              </span>
+              °
+            </p>
+          </div>
+        </div>
+
+        {snowDepth > 0 && (
           <div className={styles.overview__snowDepth}>
             <h5>Snow Depth</h5>
             <div>
@@ -54,27 +51,8 @@ const Overview = ({
           </div>
         )}
 
-        {rainfall > 0 && (
-          <div className={styles.overview__rainfall}>
-            <h5>Rainfall</h5>
-
-            <div>
-              <CloudRain className={styles.overview__icon} />
-              <p>
-                <span className={styles.overview__numberData}>{rainfall}</span>
-                mm/d
-              </p>
-            </div>
-
-            <p className={styles.overview__weatherIndex}>
-              {getRainfallIntensity(rainfall)}
-            </p>
-          </div>
-        )}
-
         <div className={styles.overview__humidity}>
           <h5>Humidity</h5>
-
           <div>
             <Droplet className={styles.overview__icon} />
             <p>
@@ -83,22 +61,24 @@ const Overview = ({
           </div>
         </div>
 
-        <div className={styles.overview__wind}>
-          <h5>Wind</h5>
-          <div>
-            <Wind className={styles.overview__icon} />
-            <p>
-              <span className={styles.overview__numberData}>{windSpeed}</span>
-              k/h
+        {visibility < 4 && (
+          <div className={styles.overview__visibility}>
+            <h5>Visibility</h5>
+            <div>
+              <EyeOff className={styles.overview__icon} />
+              <p>
+                <span className={styles.overview__numberData}>
+                  {visibility}
+                </span>
+                km
+              </p>
+            </div>
+
+            <p className={styles.overview__weatherIndex}>
+              {getVisibilityIndex(visibility)}
             </p>
           </div>
-
-          {windSpeed && (
-            <p className={styles.overview__weatherIndex}>
-              {getWindStrength(windSpeed)}
-            </p>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

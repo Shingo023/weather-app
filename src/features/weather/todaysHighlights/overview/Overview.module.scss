@@ -11,6 +11,7 @@
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 2.5px;
+    flex-grow: 0;
   }
 
   &__container {
@@ -20,10 +21,12 @@
   }
 
   &__humidity,
-  &__wind,
-  &__rainfall,
-  &__snowfall,
-  &__snowDepth {
+  &__snowDepth,
+  &__weatherOverview,
+  &__visibility,
+  &__feelsLikeTemps {
+    display: flex;
+    flex-direction: column;
     flex: 1 1;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -35,6 +38,7 @@
       justify-content: center;
       gap: 4px;
       margin-bottom: 2.5px;
+      flex-grow: 1;
     }
     p {
       text-align: center;
@@ -44,18 +48,20 @@
 
   &__humidity {
     min-width: 65px;
-  }
-  &__wind {
-    min-width: 85px;
+    max-width: 50%;
   }
   &__snowDepth {
     min-width: 82px;
   }
-  &__snowfall {
-    min-width: 90px;
+  &__weatherOverview {
+    min-width: 100px;
+    p {
+      text-align: left;
+    }
   }
-  &__rainfall {
-    min-width: 90px;
+  &__feelsLikeTemps {
+    min-width: 100px;
+    max-width: 50%;
   }
 
   &__numberData {

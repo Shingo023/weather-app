@@ -12,12 +12,11 @@ const TodaysHighlights = ({
   if (!todaysWeather) return;
 
   const humidity = Math.round(todaysWeather.humidity);
-  const windSpeed = todaysWeather.windspeed;
-  const rainfall =
-    Math.round(((todaysWeather.precip ?? 0) - (todaysWeather.snow ?? 0)) * 10) /
-    10;
-  const snowfall = todaysWeather.snow ?? 0;
   const snowDepth = todaysWeather.snowdepth ?? 0;
+  const weatherOverview = todaysWeather.description;
+  const visibility = todaysWeather.visibility;
+  const feelsLikeTempMax = Math.round(todaysWeather.feelslikemax);
+  const feelsLikeTempMin = Math.round(todaysWeather.feelslikemin);
 
   const sunriseData = todaysWeather.sunrise;
   const sunsetData = todaysWeather.sunset;
@@ -31,10 +30,11 @@ const TodaysHighlights = ({
         <div className={styles.todaysHighlights__contents}>
           <Overview
             humidity={humidity}
-            windSpeed={windSpeed}
-            rainfall={rainfall}
-            snowfall={snowfall}
             snowDepth={snowDepth}
+            weatherOverview={weatherOverview}
+            visibility={visibility}
+            feelsLikeTempMax={feelsLikeTempMax}
+            feelsLikeTempMin={feelsLikeTempMin}
           />
           <UVIndex uvIndex={uvIndexData} />
           <SunsetAndSunrise sunrise={sunriseData} sunset={sunsetData} />

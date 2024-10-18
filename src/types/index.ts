@@ -100,7 +100,6 @@ export type WeatherData = {
   longitude: number;
   address: string;
   timezone: string;
-  description: string;
   days: WeatherDay[];
   currentConditions: {
     datetime: string;
@@ -116,6 +115,8 @@ export type WeatherDay = {
   tempmin: number;
   temp: number;
   feelslike: number;
+  feelslikemax: number;
+  feelslikemin: number;
   humidity: number;
   precip: number | null;
   precipprob: number;
@@ -132,6 +133,7 @@ export type WeatherDay = {
   conditions: string;
   icon: string;
   hours: WeatherHour[];
+  visibility: number;
 };
 
 export type WeatherHour = {
@@ -149,6 +151,7 @@ export type WeatherHour = {
   uvindex: number;
   conditions: string;
   icon: string;
+  visibility: number;
 };
 
 // Weather types for the favorites list
@@ -326,8 +329,9 @@ export type UserFavoriteCity = {
 
 export type TodaysWeatherOverviewType = {
   humidity: number;
-  windSpeed: number;
-  rainfall: number;
-  snowfall: number;
   snowDepth: number;
+  weatherOverview: string;
+  visibility: number;
+  feelsLikeTempMax: number;
+  feelsLikeTempMin: number;
 };
