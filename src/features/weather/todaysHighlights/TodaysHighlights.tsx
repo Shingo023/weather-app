@@ -4,13 +4,16 @@ import styles from "./TodaysHighlights.module.scss";
 import { WeatherDay } from "@/types";
 import Overview from "./overview/Overview";
 import { formatDate } from "@/utils/dateUtils";
+import TodaysHighlightsSkeleton from "./TodaysHighlightsSkeleton";
 
 const TodaysHighlights = ({
   todaysWeather,
 }: {
   todaysWeather: WeatherDay | null;
 }) => {
-  if (!todaysWeather) return;
+  if (!todaysWeather) {
+    return <TodaysHighlightsSkeleton />;
+  }
 
   const date = formatDate(todaysWeather.datetime);
 
