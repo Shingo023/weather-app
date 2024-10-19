@@ -4,6 +4,7 @@ import { iconMapping } from "@/utils/weatherIconMapping";
 import React, { useEffect, useState } from "react";
 import WeatherIcon from "@/app/components/elements/weatherIcon/WeatherIcon";
 import { Droplet, Umbrella } from "lucide-react";
+import { formatDate } from "@/utils/dateUtils";
 
 export const WeeklyComponent = ({
   displayedCityWeather,
@@ -12,8 +13,7 @@ export const WeeklyComponent = ({
 }) => {
   const [loading, setLoading] = useState(true);
 
-  const weeklyWeather: WeatherDay[] | undefined =
-    displayedCityWeather?.days.slice(0, 7);
+  const weeklyWeather: WeatherDay[] | undefined = displayedCityWeather?.days;
 
   const isCurrentDate = (dateString: string): boolean => {
     // Create a Date object from the date string
@@ -91,27 +91,32 @@ export const WeeklyComponent = ({
 
               return (
                 <li className={styles.WeeklyComponentItem} key={index}>
-                  <div className={styles.WeeklyComponentItem__left}>
-                    <p className={styles.WeeklyComponentDay}>
-                      {getWeekday(dailyWeather.datetime)}
-                    </p>
-                    <div>
-                      <WeatherIcon
-                        weatherIcon={dailyWeatherIcon}
-                        width={60}
-                        height={60}
-                      />
+                  <p className={styles.WeeklyComponentDay}>
+                    {formatDate(dailyWeather.datetime)}
+                  </p>
+                  <div className={styles.WeeklyComponentItem__weatherInfo}>
+                    <div
+                      className={styles.WeeklyComponentItem__weatherInfoLeft}
+                    >
+                      <div>
+                        <WeatherIcon
+                          weatherIcon={dailyWeatherIcon}
+                          width={60}
+                          height={60}
+                        />
+                      </div>
                     </div>
-                  </div>
-
-                  <div className={styles.WeeklyComponentItem__right}>
-                    <p>
-                      {Math.round(dailyWeather.tempmax)}°/
-                      {Math.round(dailyWeather.tempmin)}°
-                    </p>
-                    <div className={styles.chanceOfRain}>
-                      <Umbrella className={styles.chanceOfRain__icon} />
-                      <p>{Math.round(dailyWeather.precipprob / 5) * 5}%</p>
+                    <div
+                      className={styles.WeeklyComponentItem__weatherInfoRight}
+                    >
+                      <p>
+                        {Math.round(dailyWeather.tempmax)}°/
+                        {Math.round(dailyWeather.tempmin)}°
+                      </p>
+                      <div className={styles.chanceOfRain}>
+                        <Umbrella className={styles.chanceOfRain__icon} />
+                        <p>{Math.round(dailyWeather.precipprob / 5) * 5}%</p>
+                      </div>
                     </div>
                   </div>
                 </li>
