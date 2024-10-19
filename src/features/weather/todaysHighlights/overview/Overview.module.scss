@@ -46,7 +46,8 @@
     }
   }
 
-  &__humidity {
+  &__humidity,
+  &__visibility {
     min-width: 65px;
     max-width: 50%;
   }
@@ -54,14 +55,14 @@
     min-width: 82px;
   }
   &__weatherOverview {
-    min-width: 100px;
+    min-width: 120px;
     p {
       text-align: left;
     }
   }
   &__feelsLikeTemps {
     min-width: 100px;
-    max-width: 50%;
+    // max-width: 50%;
   }
 
   &__numberData {

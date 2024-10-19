@@ -3,6 +3,7 @@ import UVIndex from "./uvIndex/UVIndex";
 import styles from "./TodaysHighlights.module.scss";
 import { WeatherDay } from "@/types";
 import Overview from "./overview/Overview";
+import { formatDate } from "@/utils/dateUtils";
 
 const TodaysHighlights = ({
   todaysWeather,
@@ -10,6 +11,8 @@ const TodaysHighlights = ({
   todaysWeather: WeatherDay | null;
 }) => {
   if (!todaysWeather) return;
+
+  const date = formatDate(todaysWeather.datetime);
 
   const humidity = Math.round(todaysWeather.humidity);
   const snowDepth = todaysWeather.snowdepth ?? 0;
@@ -26,7 +29,18 @@ const TodaysHighlights = ({
   return (
     <div className={styles.todaysHighlights}>
       <div className={styles.todaysHighlights__container}>
-        <h2>Today's Highlights</h2>
+        <h2>
+          Daily Highlights
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "normal",
+              marginLeft: "8px",
+            }}
+          >
+            {date}
+          </span>
+        </h2>
         <div className={styles.todaysHighlights__contents}>
           <Overview
             humidity={humidity}

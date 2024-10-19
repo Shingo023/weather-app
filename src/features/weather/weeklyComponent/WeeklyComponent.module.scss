@@ -33,8 +33,18 @@
   flex-direction: column;
   justify-content: flex-end;
   border-bottom: 1px solid rgb(188, 188, 188);
+  transition: all 0.3s ease;
   &:last-child {
     border-bottom: none;
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: #BFBFBF; 
+    border-radius: 6px;
+  }
+
+  &__date {
+    margin-left: 8px;
   }
 
   &__weatherInfo {
@@ -42,7 +52,6 @@
     justify-content: space-around;
   }
   &__weatherInfoLeft {
-    // width: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,16 +60,18 @@
     }
   }
   &__weatherInfoRight {
-    // width: 70%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
-    // padding-left: 15%;
     p {
       min-width: 60px;
     }
   }
+}
+.active {
+  background-color: #BFBFBF; 
+  border-radius: 6px;
 }
 
 .chanceOfRain {
@@ -78,51 +89,53 @@
 }
 
 // Skeletons
-.skeleton {
-  background-color: #e0e0e0; 
-  width: 100%;
-  height: 100%;
-  padding: 28px 34px 20px 34px;
-  border-radius: 10px;
+.WeeklyComponent__headerSkeleton {
+  height: 20px;
+  width: 150px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
 
-  h2,
-  &__WeeklyComponentDay,
-  &__WeeklyComponentWeatherIcon,
-  &__temps,
-  &__chanceOfRain {
+.WeeklyComponentItem {
+  &__dateSkeleton,
+  &__weatherIconSkeleton,
+  &__tempsSkeleton,
+  &__chanceOfRainSkeleton {
     background-image: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite linear;
   }
 
-  h2 {
-    margin-bottom: 20px;
-    height: 20px;
-    width: 150px;
+  &__dateSkeleton {
+    height: 14px;
+    width: 80px;
+    margin-left: 8px;
     border-radius: 6px;
   }
 
-  &__WeeklyComponentDay {
-    height: 14px;
-    width: 35px;
-    border-radius: 6px;
-  }
-
-  &__WeeklyComponentWeatherIcon {
-    height: 35px;
-    width: 35px;
+  &__weatherIconSkeleton {
+    height: 30px;
+    width: 30px;
+    margin: 15px;
     border-radius: 6px;    
   }
 
-  &__temps {
+  &__tempsSkeletonWrapper,
+  &__chanceOfRainSkeletonSkeletonWrapper {
+    min-width: 60px;
+  }
+  &__tempsSkeleton {
     height: 14px;
     width: 45px;
-    border-radius: 6px;    
+    border-radius: 6px;   
   }
 
-  &__chanceOfRain {
+  &__chanceOfRainSkeleton {
     height: 14px;
-    width: 45px;
+    width: 55px;
     border-radius: 6px;    
   }
 }

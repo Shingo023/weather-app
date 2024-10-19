@@ -1,4 +1,4 @@
-import { ArrowUpToLine, Droplet, EyeOff, Thermometer } from "lucide-react";
+import { ArrowUpToLine, Droplet, Eye, Thermometer } from "lucide-react";
 import styles from "./Overview.module.scss";
 import { TodaysWeatherOverviewType } from "@/types";
 import { getVisibilityIndex } from "@/utils/weatherUtils";
@@ -65,7 +65,7 @@ const Overview = ({
           <div className={styles.overview__visibility}>
             <h5>Visibility</h5>
             <div>
-              <EyeOff className={styles.overview__icon} />
+              <Eye className={styles.overview__icon} />
               <p>
                 <span className={styles.overview__numberData}>
                   {visibility}
