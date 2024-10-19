@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { FavoriteCity } from "@/types";
+import styles from "./page.module.scss";
 
 export default function Home() {
   const router = useRouter();
@@ -90,7 +91,12 @@ export default function Home() {
   }, [router, session, status]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p className={styles.loadingMessage}>Loading weather data...</p>
+      </div>
+    );
   }
 
   return null;
