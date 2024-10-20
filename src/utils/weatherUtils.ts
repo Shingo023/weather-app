@@ -21,7 +21,7 @@ export const getWindStrength = (windspeed: number) => {
   } else if (windspeed >= 89 && windspeed <= 102) {
     return "Stormy"; // 89–102 kph
   } else if (windspeed >= 103) {
-    return "Hurricane"; // 103+ kph
+    return "Fierce"; // 103+ kph
   } else {
     return "Unknown"; // Catch-all for unexpected values
   }
