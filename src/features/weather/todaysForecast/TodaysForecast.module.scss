@@ -14,4 +14,8 @@
       margin-bottom: 10px;
     }
   }
+
+  &__hourlyWeatherCards {
+    height: calc(100% - 34px);
+  }
 }

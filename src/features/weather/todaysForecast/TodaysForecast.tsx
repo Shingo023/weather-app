@@ -6,7 +6,9 @@ const TodaysForecast = () => {
     <div className={styles.todaysForecast}>
       <div className={styles.todaysForecast__container}>
         <h2>Daily Forecast</h2>
-        <HourlyWeatherCard />
+        <div className={styles.todaysForecast__hourlyWeatherCards}>
+          <HourlyWeatherCard />
+        </div>
       </div>
     </div>
   );
