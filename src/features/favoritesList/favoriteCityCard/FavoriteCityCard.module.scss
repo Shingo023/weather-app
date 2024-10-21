@@ -1,11 +1,11 @@
 @import "@/style/base/variables.scss";
 
 .cityCard {
-  height: 205px;
+  height: 230px;
   background-color: #D9D9D9;
   margin-bottom: 15px;
   border-radius: 10px;
-  padding: 25px 15px;
+  padding: 20px 15px 17px 15px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   &:hover {
     background-color: #BFBFBF; 
@@ -82,13 +82,21 @@
 
   // Weather section
   &__weather {
+    display: flex;
+    height: calc(100% - 44px);
+    margin-top: 8px;
     margin-left: 34px;
   }
-  &__currentDateTime {
-    font-weight: 500;
-    margin-top: 10px;
-  }
 
+  &__currentInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 200px;
+  }
+  &__currentDateTime {
+    font-weight: 500; 
+  }
   &__currentWeather {
     display: flex;
     align-items: center;
@@ -102,12 +110,17 @@
     font-size: 58px;
     font-weight: 500;
   }
-
   // Button
   &__buttons {
-    margin-left: 34px;
+    margin-left: 25px;
+    margin-bottom: 10px;
   }
   &__weatherDetailBtn {
     cursor: pointer;
+  }
+
+  &__hourlyWeather {
+    width: 100%;
+    overflow-y: auto;
   }
 }

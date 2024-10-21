@@ -182,6 +182,7 @@ export type WeatherHourForFavoritesList = {
   precip: number | null;
   precipprob: number;
   icon: string;
+  windspeed: number;
 };
 export type WeatherIconType =
   | "clear-day"
@@ -258,6 +259,7 @@ export type FavoriteCityContainerPropsType = {
   setHomeLocationId: (homeLocationId: number | null) => void;
   cityLat: number;
   cityLng: number;
+  twentyFourHoursWeather: WeatherHour[];
 };
 
 export type FavoriteCityCardPropsType = {
@@ -275,6 +277,7 @@ export type FavoriteCityCardPropsType = {
   cityLng: number;
   placeNameToDisplay: string;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  twentyFourHoursWeather: WeatherHour[];
 };
 
 export type EditPlaceNameModalPropsType = {

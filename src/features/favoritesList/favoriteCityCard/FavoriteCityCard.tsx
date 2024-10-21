@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import DateAndTime from "./DateAndTime";
+import DailyForecast from "./dailyForecast/DailyForecast";
 
 const FavoriteCityCard = React.memo(
   ({
@@ -27,6 +28,7 @@ const FavoriteCityCard = React.memo(
     cityLng,
     placeNameToDisplay,
     setIsModalOpen,
+    twentyFourHoursWeather,
   }: FavoriteCityCardPropsType) => {
     const currentWeatherIcon =
       currentWeather !== undefined ? iconMapping[currentWeather] : null;
@@ -134,17 +136,16 @@ const FavoriteCityCard = React.memo(
               </div>
               <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>
             </div>
+            <div className={styles.cityCard__buttons}>
+              <button
+                className={styles.cityCard__weatherDetailBtn}
+                onClick={handleDetailsClick}
+              >
+                Weather Details
+              </button>
+            </div>
           </div>
-          <div className={styles.cityCard__hourlyWeather}></div>
-        </div>
-
-        <div className={styles.cityCard__buttons}>
-          <button
-            className={styles.cityCard__weatherDetailBtn}
-            onClick={handleDetailsClick}
-          >
-            Weather Details
-          </button>
+          <DailyForecast twentyFourHoursWeather={twentyFourHoursWeather} />
         </div>
       </div>
     );

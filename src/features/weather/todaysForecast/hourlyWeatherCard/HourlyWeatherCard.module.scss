@@ -1,12 +1,12 @@
-.dailyWeather {
+.hourlyWeather {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100% - 34px);
+  align-items: center;
+  height: 100%;
   width: 130px;
   min-width: 130px;
   border-right: rgb(188, 188, 188) 1px solid;
-  padding: 0 5px;
   p {
     font-size: 14px;
   }
@@ -28,8 +28,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
-    width: 60px;
   }
   &__temp {
     font-size: 16px;
@@ -39,13 +37,13 @@
   // card bottom
   &__precipProb {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
   }
 
   &__precip,
   &__wind {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-top: 5px;
   }
   

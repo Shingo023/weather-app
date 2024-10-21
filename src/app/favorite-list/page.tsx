@@ -10,6 +10,7 @@ import {
 } from "@/types";
 import FavoriteCityContainer from "@/features/favoritesList/favoriteCityContainer/FavoriteCityContainer";
 import styles from "./page.module.scss";
+import { getCurrentHourInTimeZone } from "@/utils/dateUtils";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
@@ -121,6 +122,15 @@ const FavoriteList = () => {
         const cityLat = favoriteCityWithWeather.favoriteCity.latitude;
         const cityLng = favoriteCityWithWeather.favoriteCity.longitude;
 
+        const todaysWeather = favoriteCityWithWeather.weather.days[0].hours;
+        const tomorrowsWeather = favoriteCityWithWeather.weather.days[1].hours;
+        const fortyEightHoursWeather = [...todaysWeather, ...tomorrowsWeather];
+        const currentHour = getCurrentHourInTimeZone(timeZone);
+        const twentyFourHoursWeather = fortyEightHoursWeather.slice(
+          currentHour,
+          currentHour + 24
+        );
+
         return (
           <FavoriteCityContainer
             key={userFavoriteCityId}
@@ -136,6 +146,7 @@ const FavoriteList = () => {
             setHomeLocationId={setHomeLocationId}
             cityLat={cityLat}
             cityLng={cityLng}
+            twentyFourHoursWeather={twentyFourHoursWeather}
           />
         );
       })}

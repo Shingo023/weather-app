@@ -1,4 +1,4 @@
-import DailyWeatherCard from "./dailyWeatherCard/DailyWeatherCard";
+import HourlyWeatherCard from "./hourlyWeatherCard/HourlyWeatherCard";
 import styles from "./TodaysForecast.module.scss";
 
 const TodaysForecast = () => {
@@ -6,7 +6,7 @@ const TodaysForecast = () => {
     <div className={styles.todaysForecast}>
       <div className={styles.todaysForecast__container}>
         <h2>Daily Forecast</h2>
-        <DailyWeatherCard />
+        <HourlyWeatherCard />
       </div>
     </div>
   );
