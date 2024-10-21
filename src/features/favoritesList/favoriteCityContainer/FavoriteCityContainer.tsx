@@ -16,6 +16,7 @@ const FavoriteCityContainer = ({
   setHomeLocationId,
   cityLat,
   cityLng,
+  twentyFourHoursWeather,
 }: FavoriteCityContainerPropsType) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [placeNameToDisplay, setPlaceNameToDisplay] = useState(cityName);
@@ -37,6 +38,7 @@ const FavoriteCityContainer = ({
         cityLng={cityLng}
         placeNameToDisplay={placeNameToDisplay}
         setIsModalOpen={setIsModalOpen}
+        twentyFourHoursWeather={twentyFourHoursWeather}
       />
       <EditPlaceNameModal
         cityName={cityName}

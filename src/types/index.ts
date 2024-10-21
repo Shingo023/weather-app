@@ -100,7 +100,6 @@ export type WeatherData = {
   longitude: number;
   address: string;
   timezone: string;
-  description: string;
   days: WeatherDay[];
   currentConditions: {
     datetime: string;
@@ -116,6 +115,8 @@ export type WeatherDay = {
   tempmin: number;
   temp: number;
   feelslike: number;
+  feelslikemax: number;
+  feelslikemin: number;
   humidity: number;
   precip: number | null;
   precipprob: number;
@@ -132,6 +133,7 @@ export type WeatherDay = {
   conditions: string;
   icon: string;
   hours: WeatherHour[];
+  visibility: number;
 };
 
 export type WeatherHour = {
@@ -149,6 +151,7 @@ export type WeatherHour = {
   uvindex: number;
   conditions: string;
   icon: string;
+  visibility: number;
 };
 
 // Weather types for the favorites list
@@ -179,6 +182,7 @@ export type WeatherHourForFavoritesList = {
   precip: number | null;
   precipprob: number;
   icon: string;
+  windspeed: number;
 };
 export type WeatherIconType =
   | "clear-day"
@@ -255,6 +259,7 @@ export type FavoriteCityContainerPropsType = {
   setHomeLocationId: (homeLocationId: number | null) => void;
   cityLat: number;
   cityLng: number;
+  twentyFourHoursWeather: WeatherHour[];
 };
 
 export type FavoriteCityCardPropsType = {
@@ -272,6 +277,7 @@ export type FavoriteCityCardPropsType = {
   cityLng: number;
   placeNameToDisplay: string;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  twentyFourHoursWeather: WeatherHour[];
 };
 
 export type EditPlaceNameModalPropsType = {
@@ -300,6 +306,7 @@ export type CurrentDateAndTimePropsType = {
   setDisplayedCityWeather: (weatherData: WeatherData | null) => void;
   latitude: string;
   longitude: string;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
 export type StarIconPropsType = {
@@ -321,4 +328,13 @@ export type UserFavoriteCity = {
   customName: string | null;
   isDefault: boolean;
   favoriteCity: FavoriteCity;
+};
+
+export type TodaysWeatherOverviewType = {
+  humidity: number;
+  snowDepth: number;
+  weatherOverview: string;
+  visibility: number;
+  feelsLikeTempMax: number;
+  feelsLikeTempMin: number;
 };
