@@ -90,7 +90,7 @@ export default function WeatherPage() {
           longitude={lng as string}
         />
         <TodaysForecast />
-        <TodaysHighlights todaysWeather={todaysWeather} />
+        <TodaysHighlights todaysWeather={todaysWeather} timeZone={displayedCityWeather?.timezone} />
       </div>
       <div className={styles.weatherPage__rightContent}>
         <WeeklyComponent
