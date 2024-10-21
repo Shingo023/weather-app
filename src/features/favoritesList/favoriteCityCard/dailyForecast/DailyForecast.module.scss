@@ -1,5 +1,89 @@
+/* New non-scrollable wrapper for positioning the arrows */
+.dailyForecastWrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+
+}
+
+/* Scrollable content */
 .dailyForecast {
   display: flex;
   width: 100%;
-  overflow-y: auto;
+  overflow-x: auto;
+  scroll-behavior: smooth;
 }
+
+.arrowLeft, .arrowRight {
+  position: absolute; /* Fix arrows relative to the wrapper */
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10; /* Ensure arrows stay above content */
+}
+
+.arrowLeft {
+  left: 0; /* Left arrow fixed at the left */
+}
+
+.arrowRight {
+  right: 0; /* Right arrow fixed at the right */
+}
+
+.arrowLeft:hover, .arrowRight:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.arrowIcon {
+  width: 45px;
+  height: 45px;
+  fill: rgba(255, 255, 255, 0.5);
+  stroke-width: 2px;
+  color: rgba(29, 29, 29, 0.5);
+  transition: color 0.3s ease;
+}
+
+.arrowIcon:hover {
+  color: rgba(29, 29, 29, 0.8);
+}
+
+
+// .dailyForecast {
+//   display: flex;
+//   width: 100%;
+//   overflow-x: auto; 
+//   position: relative;
+//   scroll-behavior: smooth;
+// }
+
+// .arrowLeft, .arrowRight {
+//   position: sticky; 
+//   top: 50%;
+//   padding-top: 49.5px;
+//   width: 0;
+// }
+
+// .arrowLeft {
+//   left: 5px; 
+// }
+
+// .arrowRight {
+//   right: 55px; 
+// }
+
+// .arrowIcon {
+//   width: 45px;
+//   height: 45px;
+//   stroke-width: 2px;
+//   fill: rgba(255, 255, 255, 0.5);
+//   color: rgba(29, 29, 29, 0.5);
+//   transition: all 0.3s ease;
+//   cursor: pointer;
+
+//   &:hover {
+//     color: rgba(29, 29, 29, 0.8);
+//   }
+// }

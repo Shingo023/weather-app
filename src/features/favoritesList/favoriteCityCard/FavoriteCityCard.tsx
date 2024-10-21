@@ -8,9 +8,10 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import DateAndTime from "./DateAndTime";
 import DailyForecast from "./dailyForecast/DailyForecast";
+import Button from "@/app/components/elements/button/Button";
 
 const FavoriteCityCard = React.memo(
   ({
@@ -137,12 +138,11 @@ const FavoriteCityCard = React.memo(
               <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>
             </div>
             <div className={styles.cityCard__buttons}>
-              <button
-                className={styles.cityCard__weatherDetailBtn}
+              <Button
+                text="Weather Details"
+                type="button"
                 onClick={handleDetailsClick}
-              >
-                Weather Details
-              </button>
+              />
             </div>
           </div>
           <DailyForecast twentyFourHoursWeather={twentyFourHoursWeather} />
