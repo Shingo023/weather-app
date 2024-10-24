@@ -18,6 +18,7 @@ const FavoriteList = () => {
   >([]);
   const [homeLocationId, setHomeLocationId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [draggedCityId, setDraggedCityId] = useState<number | null>(null);
 
   const { data: session, status } = useSession();
 
@@ -49,7 +50,9 @@ const FavoriteList = () => {
               }
             )
           );
-          favoriteCitiesWithWeatherData.sort((a, b) => a.id - b.id);
+          favoriteCitiesWithWeatherData.sort(
+            (a, b) => a.displayOrder - b.displayOrder
+          );
           setFavoriteCitiesWithWeather(favoriteCitiesWithWeatherData);
         } catch (error) {
           console.error("Error fetching favorite cities:", error);
@@ -65,6 +68,56 @@ const FavoriteList = () => {
       fetchFavoriteCitiesWithWeather();
     }
   }, [status, session?.user?.id]);
+
+  // Handle drag events
+  const handleDragStart = (userFavoriteCityId: number) => {
+    setDraggedCityId(userFavoriteCityId);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (targetUserFavoriteCityId: number) => {
+    if (draggedCityId === null) return;
+
+    const updatedCities = [...favoriteCitiesWithWeather];
+    const draggedCityIndex = updatedCities.findIndex(
+      (city) => city.id === draggedCityId
+    );
+    const targetCityIndex = updatedCities.findIndex(
+      (city) => city.id === targetUserFavoriteCityId
+    );
+
+    // Reorder the cities
+    const [draggedCity] = updatedCities.splice(draggedCityIndex, 1);
+    updatedCities.splice(targetCityIndex, 0, draggedCity);
+
+    setFavoriteCitiesWithWeather(updatedCities);
+    setDraggedCityId(null);
+
+    // Save the new order to the database
+    const response = await fetch(`/api/update-favorite-cities-order`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user.id,
+        cityOrder: updatedCities.map((city) => city.id),
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Request failed with status:", response.status);
+    } else {
+      try {
+        const data = await response.json();
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    }
+  };
 
   // Render skeletons while loading
   if (loading) {
@@ -135,7 +188,7 @@ const FavoriteList = () => {
           <FavoriteCityContainer
             key={userFavoriteCityId}
             userId={userId}
-            favoriteCityId={userFavoriteCityId}
+            userFavoriteCityId={userFavoriteCityId}
             cityName={cityName}
             cityAddress={cityAddress}
             cityPlaceId={favoriteCityPlaceId}
@@ -147,6 +200,9 @@ const FavoriteList = () => {
             cityLat={cityLat}
             cityLng={cityLng}
             twentyFourHoursWeather={twentyFourHoursWeather}
+            handleDragStart={handleDragStart}
+            handleDrop={handleDrop}
+            handleDragOver={handleDragOver}
           />
         );
       })}

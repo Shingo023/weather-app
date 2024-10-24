@@ -247,7 +247,7 @@ export type autocompleteSuggestion = {
 };
 
 export type FavoriteCityContainerPropsType = {
-  favoriteCityId: number;
+  userFavoriteCityId: number;
   userId: string | undefined;
   cityName: string;
   cityAddress: string;
@@ -260,10 +260,13 @@ export type FavoriteCityContainerPropsType = {
   cityLat: number;
   cityLng: number;
   twentyFourHoursWeather: WeatherHour[];
+  handleDragStart: (cityId: number) => void;
+  handleDrop: (targetCityId: number) => Promise<void>;
+  handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 };
 
 export type FavoriteCityCardPropsType = {
-  favoriteCityId: number;
+  userFavoriteCityId: number;
   userId: string | undefined;
   cityName: string;
   cityAddress: string;
@@ -278,6 +281,9 @@ export type FavoriteCityCardPropsType = {
   placeNameToDisplay: string;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   twentyFourHoursWeather: WeatherHour[];
+  handleDragStart: (cityId: number) => void;
+  handleDrop: (targetCityId: number) => Promise<void>;
+  handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
 };
 
 export type EditPlaceNameModalPropsType = {
@@ -285,7 +291,7 @@ export type EditPlaceNameModalPropsType = {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   setPlaceNameToDisplay: (name: string) => void;
-  favoriteCityId: number;
+  userFavoriteCityId: number;
   cityAddress: string;
 };
 

@@ -1,5 +1,10 @@
 @import "@/style/base/variables.scss";
 
+
+.dragging {
+  background-color: #e0e0e0; /* Highlight dragged item */
+  opacity: 0.7; /* Make it slightly transparent */
+}
 .cityCard {
   height: 230px;
   background-color: #D9D9D9;
@@ -7,10 +12,14 @@
   border-radius: 10px;
   padding: 20px 15px 17px 15px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  // &:hover {
-  //   background-color: #BFBFBF; 
-  //   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  // }
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+  &:hover {
+    background-color: #BFBFBF; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
 
   // Place[City] section
   &__cityInfo {
