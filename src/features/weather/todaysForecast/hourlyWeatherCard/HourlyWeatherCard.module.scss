@@ -38,6 +38,15 @@
   &__precipProb {
     display: flex;
     align-items: flex-end;
+    height: 17px;
+    &.precipProbActive {
+      color: #191970;
+      font-weight: 600;
+  
+      .hourlyWeather__icon {
+        fill: #191970;
+      }
+    }
   }
 
   &__precip,
@@ -45,6 +54,7 @@
     display: flex;
     align-items: flex-end;
     margin-top: 5px;
+    height: 17px;
   }
   
   &__icon {
@@ -58,5 +68,64 @@
     font-weight: 500;
     color: #4F4F4F;
     margin-left: 4px;
+  }
+}
+
+// Skeleton
+.hourlyWeather {
+  &__timeSkeleton,
+  &__weatherIconSkeleton,
+  &__tempSkeleton,
+  &__precipProbSkeleton,
+  &__precipSkeleton,
+  &__windSkeleton  {
+    background-image: linear-gradient(90deg, #f0f0f0 25%, #fafafa 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 6px;
+  }
+
+  &__timeSkeleton {
+    width: 62px;
+    height: 17px;
+  }
+
+  &__weatherIconSkeleton {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  &__tempSkeleton {
+    width: 28px;
+    height: 17px;
+    margin-bottom: 3px;
+  }
+
+  &__precipProbSkeleton {
+    width: 50px;
+    height: 14px;
+    margin-bottom: 3px;
+  }
+
+  &__precipSkeleton {
+    width: 70px;
+    height: 14px;
+    margin-bottom: 3px;
+  }
+
+  &__windSkeleton {
+    width: 90px;
+    height: 14px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
   }
 }

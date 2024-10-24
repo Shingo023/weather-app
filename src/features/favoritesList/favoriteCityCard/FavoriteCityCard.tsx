@@ -22,7 +22,7 @@ const FavoriteCityCard = React.memo(
     cityPlaceId,
     currentTemp,
     currentWeather,
-    timeZone,
+    currentDateTime,
     homeLocationId,
     setHomeLocationId,
     cityLat,
@@ -141,10 +141,13 @@ const FavoriteCityCard = React.memo(
 
         <div className={styles.cityCard__weather}>
           <div className={styles.cityCard__currentInfo}>
-            <DateAndTime
+            <div className={styles.cityCard__currentDateTime}>
+              {currentDateTime}
+            </div>
+            {/* <DateAndTime
               timeZone={timeZone}
               className={styles.cityCard__currentDateTime}
-            />
+            /> */}
             <div className={styles.cityCard__currentWeather}>
               <div className={styles.cityCard__currentWeatherIconContainer}>
                 <WeatherIcon

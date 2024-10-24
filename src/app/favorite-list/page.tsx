@@ -10,7 +10,11 @@ import {
 } from "@/types";
 import FavoriteCityContainer from "@/features/favoritesList/favoriteCityContainer/FavoriteCityContainer";
 import styles from "./page.module.scss";
-import { getCurrentHourInTimeZone } from "@/utils/dateUtils";
+import {
+  getCurrentHourInTimeZone,
+  getCurrentTimeAndDate,
+} from "@/utils/dateUtils";
+import FavoriteCityCardSkeleton from "@/features/favoritesList/favoriteCityCard/FavoriteCityCardSkeleton";
 
 const FavoriteList = () => {
   const [favoriteCitiesWithWeather, setFavoriteCitiesWithWeather] = useState<
@@ -121,37 +125,12 @@ const FavoriteList = () => {
 
   // Render skeletons while loading
   if (loading) {
-    const skeletons = Array(4).fill(null);
+    const skeletons = Array(3).fill(null);
 
     return (
       <div className={styles.favoritesList}>
         {skeletons.map((_, index) => (
-          <div key={index} className={styles.skeleton}>
-            <div className={styles.cityCard__cityInfo}>
-              <div className={styles.cityCard__homeIconContainer}>
-                <div className={styles.skeleton__homeIcon} />
-              </div>
-              <div className={styles.skeleton__cityName} />
-              <div className={styles.skeleton__cityAddress} />
-            </div>
-
-            <div className={styles.cityCard__weather}>
-              <div className={styles.cityCard__currentInfo}>
-                <div className={styles.skeleton__dateAndTime} />
-                <div className={styles.cityCard__currentWeather}>
-                  <div className={styles.cityCard__currentWeatherIconContainer}>
-                    <div className={styles.skeleton__weatherIcon} />
-                  </div>
-                  <div className={styles.skeleton__currentTemp} />
-                </div>
-              </div>
-              <div className={styles.cityCard__hourlyWeather}></div>
-            </div>
-
-            <div className={styles.cityCard__buttons}>
-              <div className={styles.skeleton__weatherDetailBtn} />
-            </div>
-          </div>
+          <FavoriteCityCardSkeleton key={index} />
         ))}
       </div>
     );
@@ -172,6 +151,7 @@ const FavoriteList = () => {
         const currentWeather = favoriteCityWithWeather.weather.currentConditions
           .icon as WeatherIconType;
         const timeZone = favoriteCityWithWeather.favoriteCity.timeZone;
+        const currentDateTime = getCurrentTimeAndDate(timeZone);
         const cityLat = favoriteCityWithWeather.favoriteCity.latitude;
         const cityLng = favoriteCityWithWeather.favoriteCity.longitude;
 
@@ -194,7 +174,7 @@ const FavoriteList = () => {
             cityPlaceId={favoriteCityPlaceId}
             currentTemp={currentTemp}
             currentWeather={currentWeather}
-            timeZone={timeZone}
+            currentDateTime={currentDateTime}
             homeLocationId={homeLocationId}
             setHomeLocationId={setHomeLocationId}
             cityLat={cityLat}

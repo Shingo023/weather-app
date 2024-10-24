@@ -37,7 +37,11 @@ const HourlyWeatherCard = ({
       </div>
 
       <div className={styles.hourlyWeather__bottom}>
-        <div className={styles.hourlyWeather__precipProb}>
+        <div
+          className={`${styles.hourlyWeather__precipProb} ${
+            precipProb > 0 ? styles.precipProbActive : ""
+          }`}
+        >
           <Umbrella className={styles.hourlyWeather__icon} />
           <p>
             {precipProb}

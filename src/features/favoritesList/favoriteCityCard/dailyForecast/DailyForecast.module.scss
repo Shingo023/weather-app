@@ -1,9 +1,8 @@
-/* New non-scrollable wrapper for positioning the arrows */
+/* Non-scrollable wrapper for positioning the arrows */
 .dailyForecastWrapper {
   position: relative;
   width: 100%;
   overflow-x: auto;
-
 }
 
 /* Scrollable content */
@@ -15,22 +14,22 @@
 }
 
 .arrowLeft, .arrowRight {
-  position: absolute; /* Fix arrows relative to the wrapper */
+  position: absolute; 
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.5);
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
-  z-index: 10; /* Ensure arrows stay above content */
+  z-index: 10; 
 }
 
 .arrowLeft {
-  left: 0; /* Left arrow fixed at the left */
+  left: 0; 
 }
 
 .arrowRight {
-  right: 0; /* Right arrow fixed at the right */
+  right: 0; 
 }
 
 .arrowLeft:hover, .arrowRight:hover {
@@ -49,41 +48,3 @@
 .arrowIcon:hover {
   color: rgba(29, 29, 29, 0.8);
 }
-
-
-// .dailyForecast {
-//   display: flex;
-//   width: 100%;
-//   overflow-x: auto; 
-//   position: relative;
-//   scroll-behavior: smooth;
-// }
-
-// .arrowLeft, .arrowRight {
-//   position: sticky; 
-//   top: 50%;
-//   padding-top: 49.5px;
-//   width: 0;
-// }
-
-// .arrowLeft {
-//   left: 5px; 
-// }
-
-// .arrowRight {
-//   right: 55px; 
-// }
-
-// .arrowIcon {
-//   width: 45px;
-//   height: 45px;
-//   stroke-width: 2px;
-//   fill: rgba(255, 255, 255, 0.5);
-//   color: rgba(29, 29, 29, 0.5);
-//   transition: all 0.3s ease;
-//   cursor: pointer;
-
-//   &:hover {
-//     color: rgba(29, 29, 29, 0.8);
-//   }
-// }
