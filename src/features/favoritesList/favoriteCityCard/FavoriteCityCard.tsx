@@ -8,26 +8,34 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import DateAndTime from "./DateAndTime";
+import DailyForecast from "./dailyForecast/DailyForecast";
+import Button from "@/app/components/elements/button/Button";
 
 const FavoriteCityCard = React.memo(
   ({
-    favoriteCityId,
+    userFavoriteCityId,
     userId,
     cityName,
     cityAddress,
     cityPlaceId,
     currentTemp,
     currentWeather,
-    timeZone,
+    currentDateTime,
     homeLocationId,
     setHomeLocationId,
     cityLat,
     cityLng,
     placeNameToDisplay,
     setIsModalOpen,
+    twentyFourHoursWeather,
+    handleDragStart,
+    handleDrop,
+    handleDragOver,
   }: FavoriteCityCardPropsType) => {
+    const [isDragging, setIsDragging] = useState(false);
+
     const currentWeatherIcon =
       currentWeather !== undefined ? iconMapping[currentWeather] : null;
     const router = useRouter();
@@ -76,10 +84,10 @@ const FavoriteCityCard = React.memo(
 
     const handleIconClick = (event: React.MouseEvent<SVGSVGElement>) => {
       event.stopPropagation();
-      if (favoriteCityId === homeLocationId) {
+      if (userFavoriteCityId === homeLocationId) {
         unsetHomeLocation();
       } else {
-        updateHomeLocation(favoriteCityId);
+        updateHomeLocation(userFavoriteCityId);
       }
     };
 
@@ -90,17 +98,30 @@ const FavoriteCityCard = React.memo(
     };
 
     return (
-      <div className={styles.cityCard}>
+      <div
+        className={`${styles.cityCard} ${isDragging ? styles.dragging : ""}`}
+        draggable
+        onDragStart={() => {
+          setIsDragging(true);
+          handleDragStart(userFavoriteCityId);
+        }}
+        onDragEnd={() => setIsDragging(false)}
+        onDragOver={handleDragOver}
+        onDrop={() => {
+          setIsDragging(false);
+          handleDrop(userFavoriteCityId);
+        }}
+      >
         <div className={styles.cityCard__cityInfo}>
           <div className={styles.cityCard__homeIconContainer}>
             <MapPinIcon
               className={`${styles.cityCard__homeIcon} ${
-                favoriteCityId === homeLocationId ? styles.active : ""
+                userFavoriteCityId === homeLocationId ? styles.active : ""
               }`}
               onClick={handleIconClick}
             />
             <span className={styles.cityCard__homeIconTooltip}>
-              {favoriteCityId === homeLocationId
+              {userFavoriteCityId === homeLocationId
                 ? "Unset home location"
                 : "Set as home location"}
             </span>
@@ -120,10 +141,13 @@ const FavoriteCityCard = React.memo(
 
         <div className={styles.cityCard__weather}>
           <div className={styles.cityCard__currentInfo}>
-            <DateAndTime
+            <div className={styles.cityCard__currentDateTime}>
+              {currentDateTime}
+            </div>
+            {/* <DateAndTime
               timeZone={timeZone}
               className={styles.cityCard__currentDateTime}
-            />
+            /> */}
             <div className={styles.cityCard__currentWeather}>
               <div className={styles.cityCard__currentWeatherIconContainer}>
                 <WeatherIcon
@@ -134,17 +158,15 @@ const FavoriteCityCard = React.memo(
               </div>
               <div className={styles.cityCard__currentTemp}>{currentTemp}°</div>
             </div>
+            <div className={styles.cityCard__buttons}>
+              <Button
+                text="Weather Details"
+                type="button"
+                onClick={handleDetailsClick}
+              />
+            </div>
           </div>
-          <div className={styles.cityCard__hourlyWeather}></div>
-        </div>
-
-        <div className={styles.cityCard__buttons}>
-          <button
-            className={styles.cityCard__weatherDetailBtn}
-            onClick={handleDetailsClick}
-          >
-            Weather Details
-          </button>
+          <DailyForecast twentyFourHoursWeather={twentyFourHoursWeather} />
         </div>
       </div>
     );
